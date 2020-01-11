@@ -20,6 +20,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
         }
 
 
+        /// <summary>
+        /// Test for the R-Type detection test based on Opcode 0C
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionDetectionTest1()
         {
@@ -38,6 +41,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
 
         }
 
+        /// <summary>
+        /// Test for the R-Type decoding test based on Opcode 0C
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionPayloadTest1()
         {
@@ -58,6 +64,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(payload1.Funct7, 0);
         }
 
+        /// <summary>
+        /// Test for the R-Type and I-Type detection test based on Opcode 0C and 04
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionDetectionTest2()
         {
@@ -81,6 +90,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.IsFalse(instruction2.IsHint);
         }
 
+        /// <summary>
+        /// Test for the R-Type and I-Type decoding test based on Opcode 0C and 04
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionPayloadTest2()
         {
@@ -107,6 +119,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(payload2.SignedImmediate,8);
         }
 
+        /// <summary>
+        /// Test for the U-Type detection test based on LUI
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionDetectionTest3()
         {
@@ -123,6 +138,9 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(ins1.RegisterDestination, 1);
         }
 
+        /// <summary>
+        /// Test for the U-Type decoding test based on LUI
+        /// </summary>
         [Test]
         public void BootStrapCoreInstructionPayloadTest3()
         {
