@@ -15,23 +15,35 @@ namespace RiscVSim.Environment.Decoder
         private byte INSTRUCTON_VALID = 0x1F;       // 0001 1111 = False!
         private byte OPCODE_FILTER = 0x7C;          // 0111 1100 = OPCODE!
 
-        private List<int> opCodeTypeRList;
-        private List<int> opCodeTypeIList;
-        private List<int> opCodeTypeUList;
-        private List<int> opCodeTypeSList;
-
+        private Dictionary<int, InstructionType> opCodeDict;
 
         public InstructionDecoder()
         {
-            opCodeTypeRList = new List<int>();
-            opCodeTypeIList = new List<int>();
-            opCodeTypeUList = new List<int>();
-            opCodeTypeSList = new List<int>();
+            opCodeDict = new Dictionary<int, InstructionType>();
 
-            AddRType(opCodeTypeRList);
-            AddIType(opCodeTypeIList);
-            AddUType(opCodeTypeUList);
-            AddSType(opCodeTypeSList);
+            //
+            //  R-Type
+            //
+            opCodeDict.Add(0x0C, InstructionType.R_Type);
+
+            //
+            //  I-Type
+            //
+            opCodeDict.Add(0x04, InstructionType.I_Type);
+
+            //
+            //  U-Type
+            //
+            opCodeDict.Add(0x0D, InstructionType.U_Type);
+            opCodeDict.Add(0x05, InstructionType.U_Type);
+
+            //
+            //  J-Type
+            //
+
+            //
+            //  S-Type
+            //
         }
 
 
@@ -47,24 +59,9 @@ namespace RiscVSim.Environment.Decoder
             var rd = GetDestinationRegister(instructionCoding);
 
             InstructionType type = InstructionType.Unknown;
-            if (opCodeTypeRList.Contains(opCode))
+            if (opCodeDict.ContainsKey(opCode))
             {
-                type = InstructionType.R_Type;
-            }
-
-            if (opCodeTypeIList.Contains(opCode))
-            {
-                type = InstructionType.I_Type;
-            }
-
-            if (opCodeTypeUList.Contains(opCode))
-            {
-                type = InstructionType.U_Type;
-            }
-
-            if (opCodeTypeSList.Contains(opCode))
-            {
-                type = InstructionType.S_Type;
+                type = opCodeDict[opCode];
             }
 
             var instruction = new Instruction(type, opCode, rd,instructionCoding);
@@ -93,26 +90,5 @@ namespace RiscVSim.Environment.Decoder
             return opCode;
         }
 
-        private void AddRType(List<int> list)
-        {
-            list.Add(0x0C);
-
-        }
-
-        private void AddIType(List<int> list)
-        {
-            list.Add(0x04);
-        }
-
-        private void AddUType(List<int> list)
-        {
-            list.Add(0x0D);
-            list.Add(0x05);
-        }
-
-        private void AddSType(List<int> list)
-        {
-
-        }
     }
 }
