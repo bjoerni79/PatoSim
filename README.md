@@ -16,4 +16,7 @@ lala
 
 | Feature | Status | Comment |
 | ------- | ------ | ------- |
-| RV32I | In Progress | |
+| RV32I | In Progress | Version 2.1 |
+| CSR | Planned | |
+| M | Planned | |
+| A | Plammed | |
