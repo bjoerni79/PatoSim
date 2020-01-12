@@ -14,6 +14,7 @@ namespace RiscVSim.Environment.Opcode
 
         void AssignRegister(Register register);
 
+        void AssignHint(Hint hint);
         void Init();
     }
 }

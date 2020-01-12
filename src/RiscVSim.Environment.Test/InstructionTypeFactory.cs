@@ -87,6 +87,12 @@ namespace RiscVSim.Environment.Test
             return BuildInstruction(buffer);
         }
 
+        public static IEnumerable<byte> CreateNop()
+        {
+            var nop = CreateIType(Constant.opOPIMM, 0, Constant.opOPIMMaddi, 0, 0);
+            return nop;
+        }
+
         private static IEnumerable<byte> BuildInstruction(uint buffer)
         {
             // Build the instruction
@@ -106,5 +112,6 @@ namespace RiscVSim.Environment.Test
             instruction[3] = Convert.ToByte(b1);
             return instruction;
         }
+
     }
 }

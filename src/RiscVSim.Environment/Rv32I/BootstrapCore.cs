@@ -16,6 +16,8 @@ namespace RiscVSim.Environment.Rv32I
 
         public Register Register { get; set; }
 
+        public Hint Hint { get; set; }
+
         public uint BaseAddres { get; set; }
 
         public List<Instruction> InstructionsProcessed { get; set; }
@@ -26,6 +28,7 @@ namespace RiscVSim.Environment.Rv32I
         {
             Memory = Factory.CreateDynamicMemory(Architecture.Rv32I);
             Register = Factory.CreateRv32IRegister();
+            Hint = new Hint();
             BaseAddres = 0x100;
 
             InstructionsProcessed = new List<Instruction>();
@@ -44,6 +47,7 @@ namespace RiscVSim.Environment.Rv32I
             var cpu = new BootstrapCpu();
             cpu.AssignMemory(Memory);
             cpu.AssignRegister(Register);
+            cpu.AssignHint(Hint);
             cpu.Init();
 
             // Fetch the first instruction and run the loop

@@ -12,10 +12,16 @@ namespace RiscVSim.Environment.Opcode
         private IMemory memory;
         private Register register;
         private OpCodeRegistry opCodeRegistry;
+        private Hint hint;
 
         public BootstrapCpu()
         {
             opCodeRegistry = new OpCodeRegistry();
+        }
+
+        public void AssignHint(Hint hint)
+        {
+            this.hint = hint;
         }
 
         public void AssignMemory(IMemory memory)
@@ -40,20 +46,34 @@ namespace RiscVSim.Environment.Opcode
 
             if (rd == 0)
             {
-                // HINT Instruction. It is not allowed to write to x0!
-                // TODO: Ignore or Forward the content
+                if (hint != null)
+                {
+                    // If this is a NOP then increase counter else TODO
+                    bool isNop = (payload.SignedImmediate == 0) && (payload.Rs1 == 0) && (payload.OpCode == 0x4) && (payload.Funct3 == 0);
+                    if (isNop)
+                    {
+                        hint.IncreaseNopCounter();
+                    }
+                }
+                else
+                {
+                    // TODO!
+                }
             }
-
-            // Execute the command now
-            var opCodeCommand = opCodeRegistry.Get(curOpCode);
-            
-            if (opCodeCommand == null)
+            else
             {
-                string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
-                throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
+                // Execute the command now
+                var opCodeCommand = opCodeRegistry.Get(curOpCode);
+
+                if (opCodeCommand == null)
+                {
+                    string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
+                    throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
+                }
+
+                opCodeCommand.Execute(instruction, payload);
             }
 
-            opCodeCommand.Execute(instruction, payload);
         }
 
         public void Init()
