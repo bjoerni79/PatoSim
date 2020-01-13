@@ -106,10 +106,10 @@ namespace RiscVSim.Environment.Test
             b4 >>= 24;
 
             var instruction = new byte[4];
-            instruction[0] = Convert.ToByte(b4);
-            instruction[1] = Convert.ToByte(b3);
-            instruction[2] = Convert.ToByte(b2);
-            instruction[3] = Convert.ToByte(b1);
+            instruction[0] = Convert.ToByte(b1);
+            instruction[1] = Convert.ToByte(b2);
+            instruction[2] = Convert.ToByte(b3);
+            instruction[3] = Convert.ToByte(b4);
             return instruction;
         }
 

@@ -31,7 +31,17 @@ namespace RiscVSim.Environment
 
         public Architecture Architecture { get; private set; }
 
-        public IEnumerable<byte> FetchInstruction(uint address)
+        public IEnumerable<byte> GetDoubleWord(uint address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<byte> GetWord(uint address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<byte> Old_Fetch(uint address)
         {
             throw new NotImplementedException();
         }

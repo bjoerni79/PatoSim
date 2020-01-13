@@ -12,7 +12,30 @@ namespace RiscVSim.Environment.Decoder
         {
         }
 
-        public InstructionPayload DecodeTypeR(Instruction instruction)
+        public InstructionPayload DecodeType (Instruction instruction, IEnumerable<byte> inst32Coding)
+        {
+            InstructionPayload payload;
+            switch (instruction.Type)
+            {
+                case InstructionType.R_Type:
+                    payload = DecodeTypeR(instruction, inst32Coding);
+                    break;
+                case InstructionType.I_Type:
+                    payload = DecodeTypeI(instruction, inst32Coding);
+                    break;
+                case InstructionType.U_Type:
+                    payload = DecodeTypeU(instruction, inst32Coding);
+                    break;
+
+
+                default:
+                    throw new EncodingException("Unknown Type Encoding detected!");
+            }
+
+            return payload;
+        }
+
+        private InstructionPayload DecodeTypeR(Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             if (instruction == null)
             {
@@ -20,7 +43,7 @@ namespace RiscVSim.Environment.Decoder
             }
 
             var payload = new InstructionPayload(instruction);
-            var bytes = instruction.Coding;
+            var bytes = inst32Coding;
             uint workingBuffer;
 
             // b4   (bit 0...7)
@@ -35,9 +58,9 @@ namespace RiscVSim.Environment.Decoder
             // rs2      = 20 ... 24
             // funct7   = 25 ... 31
 
-            var b4 = bytes.First();
-            var b3 = bytes.ElementAt(1);
-            var b2 = bytes.ElementAt(2);
+            var b4 = bytes.ElementAt(3);
+            var b3 = bytes.ElementAt(2);
+            var b2 = bytes.ElementAt(1);
 
             // decode funct3
             workingBuffer = b2;
@@ -74,7 +97,7 @@ namespace RiscVSim.Environment.Decoder
             return payload;
         }
 
-        public InstructionPayload DecodeTypeI (Instruction instruction)
+        private InstructionPayload DecodeTypeI (Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             if (instruction == null)
             {
@@ -82,7 +105,7 @@ namespace RiscVSim.Environment.Decoder
             }
 
             var payload = new InstructionPayload(instruction);
-            var bytes = instruction.Coding;
+            var bytes = inst32Coding;
             uint workingBuffer;
 
             // b4   (bit 0...7)
@@ -97,9 +120,9 @@ namespace RiscVSim.Environment.Decoder
             // Imm.     = 20 ... 31
 
 
-            var b4 = bytes.First();
-            var b3 = bytes.ElementAt(1);
-            var b2 = bytes.ElementAt(2);
+            var b4 = bytes.ElementAt(3);
+            var b3 = bytes.ElementAt(2);
+            var b2 = bytes.ElementAt(1);
 
             // decode funct3
             workingBuffer = b2;
@@ -128,7 +151,7 @@ namespace RiscVSim.Environment.Decoder
             return payload;
         }
 
-        public InstructionPayload DecodeTypeU(Instruction instruction)
+        private InstructionPayload DecodeTypeU(Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             if (instruction == null)
             {
@@ -136,7 +159,7 @@ namespace RiscVSim.Environment.Decoder
             }
 
             var payload = new InstructionPayload(instruction);
-            var bytes = instruction.Coding;
+            var bytes = inst32Coding;
             uint workingBuffer;
 
             // b4   (bit 0...7)
@@ -151,9 +174,9 @@ namespace RiscVSim.Environment.Decoder
             // Imm.     = 20 ... 31
 
 
-            var b4 = bytes.First();
-            var b3 = bytes.ElementAt(1);
-            var b2 = bytes.ElementAt(2);
+            var b4 = bytes.ElementAt(3);
+            var b3 = bytes.ElementAt(2);
+            var b2 = bytes.ElementAt(1);
 
             // fill the buffer with b4 b3 b2
             workingBuffer = b4;

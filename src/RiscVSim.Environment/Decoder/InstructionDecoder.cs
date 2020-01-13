@@ -8,17 +8,31 @@ namespace RiscVSim.Environment.Decoder
 
     /// <summary>
     /// Decodes the opcode of the incoming instruction and ...
+    /// 
+    ///
+    /// See chapter 1.5 , Base Instruction Length Encoding
+    ///
+    /// xxxxxxxx xxxxxxxx  |  xxxxxxxx xxxbbb11 = 32 Bit bbb != 111
+    ///
+    /// xxxxxxxx xxxxxxaa = 16 Bit aa != 11
+    ///
+    ///        B+2                    B
+    ///
     /// </summary>
     public class InstructionDecoder
     {
-        private byte INSTRUCION__PREFIX_OK = 0x03;  // 0000 0011 = OK
-        private byte INSTRUCTON_VALID = 0x1F;       // 0001 1111 = False!
-        private byte OPCODE_FILTER = 0x7C;          // 0111 1100 = OPCODE!
+
+        private byte OPCODE_FILTER = 0x7C;       // 0111 1100 = OPCODE!
+
+        private byte OPCODE_FILTER_32 = 0x03;     // 0000 0011  => 0000 00aa where a != 11
+
 
         private Dictionary<int, InstructionType> opCodeDict;
+        private EndianType endianType;
 
-        public InstructionDecoder()
+        public InstructionDecoder(EndianType endianType)
         {
+            this.endianType = endianType;
             opCodeDict = new Dictionary<int, InstructionType>();
 
             //
@@ -49,14 +63,33 @@ namespace RiscVSim.Environment.Decoder
 
         public Instruction Decode (IEnumerable<byte> instructionCoding)
         {
-            if (instructionCoding.Count() != 4)
+            if (instructionCoding == null)
             {
-                throw new RiscVSimException("Invalid Instruction: An instruction must have 4 bytes");
+                throw new ArgumentNullException("instructionCoding");
             }
 
+            if (endianType == EndianType.Big)
+            {
+                throw new EncodingException("Big Endian is currently not supported!");
+            }
+
+            IEnumerable<byte> decodingBuffer = instructionCoding;
+            //if (endianType == EndianType.Big)
+            //{
+            //    // Convert to Little Endian first!
+            //    decodingBuffer = instructionCoding.Reverse();
+            //}
+            //else
+            //{
+            //    decodingBuffer = instructionCoding;
+            //}
+
+            int instLength = GetInstructionLength(decodingBuffer);
+
+
             //TODO: Add Instruction Check (See patterns in the declaration!)
-            var opCode = GetOpCode(instructionCoding);
-            var rd = GetDestinationRegister(instructionCoding);
+            var opCode = GetOpCode(decodingBuffer);
+            var rd = GetDestinationRegister(decodingBuffer);
 
             InstructionType type = InstructionType.Unknown;
             if (opCodeDict.ContainsKey(opCode))
@@ -64,15 +97,39 @@ namespace RiscVSim.Environment.Decoder
                 type = opCodeDict[opCode];
             }
 
-            var instruction = new Instruction(type, opCode, rd,instructionCoding);
+            var instruction = new Instruction(type, opCode, rd,instLength);
             return instruction;
         }
 
 
+        private int GetInstructionLength(IEnumerable<byte> instruction)
+        {
+            byte opCodeByte;
+            int length;
+
+            opCodeByte = instruction.First();
+
+
+            //
+            //  If the bits 000b bbaa == 11, then we have b != 111 and aa=11 and a 32 bit instruction
+            //
+            var isInst32 = opCodeByte & OPCODE_FILTER_32;
+            if (isInst32 == 0x03)
+            {
+                length = 4;
+            }
+            else
+            {
+                length = 2;
+            }
+
+            return length;
+        }
+
         private int GetDestinationRegister(IEnumerable<byte> instruction)
         {
-            int rd = instruction.ElementAt(2);
-            byte opCodeByte = instruction.Last();
+            int rd = instruction.ElementAt(1);
+            byte opCodeByte = instruction.First();
 
             rd <<= 8;
             rd |= opCodeByte;
@@ -84,7 +141,7 @@ namespace RiscVSim.Environment.Decoder
 
         private int GetOpCode(IEnumerable<byte> instruction)
         {
-            byte opCodeByte = instruction.Last();
+            byte opCodeByte = instruction.First();
             var opCode = (opCodeByte & OPCODE_FILTER) >> 2;
 
             return opCode;

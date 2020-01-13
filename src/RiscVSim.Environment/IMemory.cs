@@ -8,14 +8,20 @@ namespace RiscVSim.Environment
     {
         Architecture Architecture { get; }
 
-
+        /// <summary>
+        /// Gets a word (= 16 Bit, 2 Byte) from the memory
+        /// </summary>
+        /// <param name="address">the address</param>
+        /// <returns>An IEnumerable with the bytes</returns>
+        IEnumerable<byte> GetWord(uint address);
 
         /// <summary>
-        /// Fetches 4 Bytes ( = 32 Bit = 4 Byte Instruction).  Old Implementation and kept for backwards testing in the Unit Tests.
+        /// Gets a double word (= 32 Bit, 4 Byte = Instruction) from memory
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IEnumerable<byte> FetchInstruction(uint address);
+        IEnumerable<byte> GetDoubleWord(uint address);
+
 
         void Write(uint baseAddress, IEnumerable<byte> content);
 

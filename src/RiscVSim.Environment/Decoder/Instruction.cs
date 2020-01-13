@@ -9,14 +9,15 @@ namespace RiscVSim.Environment.Decoder
         private InstructionType type;
         private int opCode;
         private int rd;
+        private int instLength;
         private IEnumerable<byte> coding;
 
-        internal Instruction(InstructionType type, int opCode, int rd, IEnumerable<byte> coding)
+        internal Instruction(InstructionType type, int opCode, int rd,int instLength)
         {
             this.type = type;
             this.opCode = opCode;
             this.rd = rd;
-            this.coding = coding;
+            this.instLength = instLength;
         }
 
         public InstructionType Type 
@@ -43,16 +44,19 @@ namespace RiscVSim.Environment.Decoder
             }
         }
 
-        public IEnumerable<byte> Coding
-        {
-            get { return coding; }
-        }
-
         public bool IsHint
         {
             get
             {
                 return rd == 0;
+            }
+        }
+
+        public int InstructionLength
+        {
+            get
+            {
+                return instLength;
             }
         }
     }

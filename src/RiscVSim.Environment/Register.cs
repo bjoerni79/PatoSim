@@ -95,11 +95,12 @@ namespace RiscVSim.Environment
             register[index].WriteUnsignedInteger(value);
         }
 
-        // Go to the next instruction (PC + 4)
-        public void NextInstruction()
+        // Go to the next instruction (PC + offset)
+        public void NextInstruction(int offset)
         {
+
             var current = ReadUnsignedInt(ProgramCounter);
-            WriteUnsignedInt(ProgramCounter, current + 4);
+            WriteUnsignedInt(ProgramCounter, current + Convert.ToUInt32(offset));
         }
 
         #endregion

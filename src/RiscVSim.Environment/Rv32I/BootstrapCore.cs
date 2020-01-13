@@ -24,12 +24,15 @@ namespace RiscVSim.Environment.Rv32I
 
         public List<InstructionPayload> InstructionPayloads { get; set; }
 
+        public EndianType EndianCoding { get; set; }
+
         public BootstrapCore()
         {
             Memory = Factory.CreateDynamicMemory(Architecture.Rv32I);
             Register = Factory.CreateRv32IRegister();
             Hint = new Hint();
             BaseAddres = 0x100;
+            EndianCoding = EndianType.Little;
 
             InstructionsProcessed = new List<Instruction>();
             InstructionPayloads = new List<InstructionPayload>();
@@ -40,7 +43,7 @@ namespace RiscVSim.Environment.Rv32I
             // Init the core
             Memory.Write(BaseAddres, program);
             Register.WriteUnsignedInt(Register.ProgramCounter, BaseAddres);
-            var decoder = new InstructionDecoder();
+            var decoder = new InstructionDecoder(EndianCoding);
             var typeDecoder = new TypeDecoder();
 
             // Create a simple bootstrap CPU
@@ -52,7 +55,9 @@ namespace RiscVSim.Environment.Rv32I
 
             // Fetch the first instruction and run the loop
             var pc = Register.ReadUnsignedInt(Register.ProgramCounter);
-            var instructionCoding = Memory.FetchInstruction(pc);
+
+            // Get the first 2 Bytes from the Base Address aka PC
+            var instructionCoding = Memory.GetWord(pc);
             while (ContinueIfValid(instructionCoding))
             {
                 // Loop for the commands
@@ -62,51 +67,42 @@ namespace RiscVSim.Environment.Rv32I
                 // If the decoder cannot decode the parameter pattern, throw an exception
                 if (instruction.Type == InstructionType.Unknown)
                 {
-                    string unknownOpCodeErrorMessage = String.Format("Error:  OpCode = {0}",instruction.OpCode);
+                    string unknownOpCodeErrorMessage = String.Format("Error:  OpCode = {0}", instruction.OpCode);
                     throw new OpCodeNotSupportedException(unknownOpCodeErrorMessage)
-                        { Coding = instruction.Coding, 
-                          Type = instruction.Type, 
-                          OpCode = instruction.OpCode, 
-                          RegisterDestination = instruction.RegisterDestination
+                    {
+                        Coding = instructionCoding,
+                        Type = instruction.Type,
+                        OpCode = instruction.OpCode,
+                        RegisterDestination = instruction.RegisterDestination
                     };
                 }
 
-                // Ready to go!
-                InstructionPayload payload = null;
-                if (instruction.Type == InstructionType.R_Type)
+                // Reload the other bytes if required!
+
+                if (instruction.InstructionLength == 4)
                 {
-                    payload = typeDecoder.DecodeTypeR(instruction);
+                    // Read the complete 32 Bit instruction set for the decoding
+
+                    var inst32Coding = Memory.GetDoubleWord(pc);
+                    var payload = typeDecoder.DecodeType(instruction, inst32Coding);
+
+                    if (payload == null)
+                    {
+                        throw new RiscVSimException("No Payload available!");
+                    }
+
+                    // For UnitTesting:  Add the result to the list
+                    InstructionPayloads.Add(payload);
+
+
+                    // Execute the command
+                    cpu.Execute(instruction, payload);
                 }
-
-                if (instruction.Type == InstructionType.I_Type)
-                {
-                    payload = typeDecoder.DecodeTypeI(instruction);
-                }
-                
-                //TODO: Add S-Type
-
-                if (instruction.Type == InstructionType.U_Type)
-                {
-                    payload = typeDecoder.DecodeTypeU(instruction);
-                }
-
-                if (payload == null)
-                {
-                    throw new RiscVSimException ("No Payload available!");
-                }
-
-                // For UnitTesting:  Add the result to the list
-                InstructionPayloads.Add(payload);
-
-
-                // Execute the command
-                cpu.Execute(instruction, payload);
-
 
                 // Done. Next run.
-                Register.NextInstruction();
+                Register.NextInstruction(instruction.InstructionLength);
                 pc = Register.ReadUnsignedInt(Register.ProgramCounter);
-                instructionCoding = Memory.FetchInstruction(pc);
+                instructionCoding = Memory.GetWord(pc);
             }
         }
 

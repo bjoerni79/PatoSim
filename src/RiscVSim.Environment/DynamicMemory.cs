@@ -27,10 +27,22 @@ namespace RiscVSim.Environment
             }
         }
 
-        public IEnumerable<byte> FetchInstruction(uint address)
+        public IEnumerable<byte> Old_Fetch(uint address)
         {
             var instruction = ReadBlock(address, 4);
             return instruction;
+        }
+
+        public IEnumerable<byte> GetWord(uint address)
+        {
+            var word = ReadBlock(address, 2);
+            return word;
+        }
+
+        public IEnumerable<byte> GetDoubleWord(uint address)
+        {
+            var word = ReadBlock(address, 4);
+            return word;
         }
 
         public IEnumerable<byte> Read(uint baseAddress, int count)
@@ -97,6 +109,10 @@ namespace RiscVSim.Environment
 
             return memoryDict[address];
         }
+
+
+
+
 
 
         #endregion
