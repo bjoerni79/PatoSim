@@ -36,57 +36,49 @@ namespace RiscVSim.Environment.Opcode
 
         public void Execute(Instruction instruction, InstructionPayload payload)
         {
-            if (opCodeRegistry.IsInitialized)
+            if (!opCodeRegistry.IsInitialized)
             {
                 new RiscVSimException("CPU is not initialized: Please call init() first!");
             }
 
             var curOpCode = instruction.OpCode;
-            var rd = instruction.RegisterDestination;
 
-            if (rd == 0)
+            // Execute the command now
+            var opCodeCommand = opCodeRegistry.Get(curOpCode);
+
+            if (opCodeCommand == null)
             {
-                if (hint != null)
-                {
-                    // If this is a NOP then increase counter else TODO
-                    bool isNop = (payload.SignedImmediate == 0) && (payload.Rs1 == 0) && (payload.OpCode == 0x4) && (payload.Funct3 == 0);
-                    if (isNop)
-                    {
-                        hint.IncreaseNopCounter();
-                    }
-                }
-                else
-                {
-                    // TODO!
-                }
-            }
-            else
-            {
-                // Execute the command now
-                var opCodeCommand = opCodeRegistry.Get(curOpCode);
-
-                if (opCodeCommand == null)
-                {
-                    string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
-                    throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
-                }
-
-                opCodeCommand.Execute(instruction, payload);
+                string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
+                throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
             }
 
+            opCodeCommand.Execute(instruction, payload);
+
+            //
+            //  TODO TODO TODO !!!! This is only workaround.
+            //
+            var opcode = instruction.OpCode;
+            var preventPcInc = (opcode == 0x1B) || (opcode == 0x19);
+            if (!preventPcInc)
+            {
+                register.NextInstruction(instruction.InstructionLength);
+            }
+            
+           
         }
 
         public void Init()
         {
             // Add opcode=04
-            opCodeRegistry.Add(0x04, new OpCodeId04(memory, register));
+            opCodeRegistry.Add(0x04, new OpCodeId04(memory, register, hint));
 
             // Add opcode=0C, 0D and 05
             opCodeRegistry.Add(0x0C, new OpCode0C(memory, register));
             opCodeRegistry.Add(0x0D, new OpCode0D(memory, register));
             opCodeRegistry.Add(0x05, new OpCode05(memory, register));
 
-            // Add abc
+            // Add opcode 1B
+            opCodeRegistry.Add(0x1B, new OpCode1B(memory, register));
 
             // Add def
 

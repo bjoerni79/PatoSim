@@ -9,8 +9,12 @@ namespace RiscVSim.Environment.Opcode
 {
     public sealed class OpCodeId04 : OpCodeCommand
     {
-        public OpCodeId04(IMemory memory, Register register) : base(memory, register)
+        private Hint hint;
+
+        public OpCodeId04(IMemory memory, Register register, Hint hint) : base(memory, register)
         {
+
+            this.hint = hint;
             // memry and register are stored in the base class
         }
 
@@ -42,6 +46,24 @@ namespace RiscVSim.Environment.Opcode
         public override int Opcode => 0x04;
 
         public override void Execute(Instruction instruction, InstructionPayload payload)
+        {
+            if (instruction.RegisterDestination == 0)
+            {
+                // Test for a NOP operation
+                var isNop = (payload.Rs1 == 0) && (payload.SignedImmediate ==0) && (payload.Funct3==0);
+                if (isNop && hint != null)
+                {
+                    hint.IncreaseNopCounter();
+                }
+            }
+            else
+            {
+                Run(instruction, payload);
+            }
+            
+        }
+
+        private void Run(Instruction instruction, InstructionPayload payload)
         {
             // preload some content ...
             int rd = payload.Rd;

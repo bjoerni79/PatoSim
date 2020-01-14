@@ -45,6 +45,13 @@ namespace RiscVSim.Environment.Opcode
             int rs2SignedValue = Register.ReadSignedInt(rs2);
             uint rs2UnsignedValue = Register.ReadUnsignedInt(rs2);
 
+
+            RunOp(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+
+        }
+
+        private void RunOp(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
+        {
             int signedResult;
             uint unsignedResult;
 
@@ -60,7 +67,7 @@ namespace RiscVSim.Environment.Opcode
 
                         result = rs2SignedValue - rs1SignedValue;
                     }
-                    else if(funct7 == 0x00)
+                    else if (funct7 == 0x00)
                     {
                         // add
                         result = rs1SignedValue + rs2SignedValue;

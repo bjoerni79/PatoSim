@@ -54,6 +54,7 @@ namespace RiscVSim.Environment.Decoder
             //
             //  J-Type
             //
+            opCodeDict.Add(0x1B, InstructionType.J_Type);
 
             //
             //  S-Type

@@ -99,8 +99,8 @@ namespace RiscVSim.Environment.Rv32I
                     cpu.Execute(instruction, payload);
                 }
 
+
                 // Done. Next run.
-                Register.NextInstruction(instruction.InstructionLength);
                 pc = Register.ReadUnsignedInt(Register.ProgramCounter);
                 instructionCoding = Memory.GetWord(pc);
             }

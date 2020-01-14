@@ -26,12 +26,86 @@ namespace RiscVSim.Environment.Decoder
                 case InstructionType.U_Type:
                     payload = DecodeTypeU(instruction, inst32Coding);
                     break;
-
+                case InstructionType.J_Type:
+                    payload = DecodeTypeJ(instruction, inst32Coding);
+                    break;
 
                 default:
                     throw new EncodingException("Unknown Type Encoding detected!");
             }
 
+            return payload;
+        }
+
+        private InstructionPayload DecodeTypeJ (Instruction instruction, IEnumerable<byte> inst32Coding)
+        {
+            if (instruction == null)
+            {
+                throw new ArgumentNullException("instruction");
+            }
+
+            var payload = new InstructionPayload(instruction);
+            var bytes = inst32Coding;
+            int workingBuffer;
+
+            var b4 = bytes.ElementAt(3);
+            var b3 = bytes.ElementAt(2);
+            var b2 = bytes.ElementAt(1);
+
+            // fill the buffer with b4 b3 b2
+            workingBuffer = b4;
+            workingBuffer <<= 8;
+            workingBuffer |= b3;
+            workingBuffer <<= 8;
+            workingBuffer |= b2;
+
+            //
+            // Always a multiplier of 2  => first bit = 0.
+            //
+            // Imm 1...10 : 21...30
+            // Imm     11 : 20
+            // Imm 12..19 : 12 ... 19
+            // Imm     20 : Signed Bit
+            //
+
+            // Right shift and remove the rd bytes
+            workingBuffer >>= 4;
+
+            // Ready. Now extract the pieces of the immediate
+
+            var block3 = workingBuffer & 0xFF; // Imm[19:12]
+            workingBuffer >>= 8;
+            block3 <<= 9;
+
+            var block2 = workingBuffer & 0x01; // Imm[11];
+            workingBuffer >>= 1;
+            block2 <<= 8;
+
+            var block1 = workingBuffer & 0x3FF; // Imm[1:20]
+            workingBuffer >>= 10;
+
+            var block4 = workingBuffer & 0x01; // Imm[20] / Signed Bit
+
+            // Step 1:  Block1
+            int immediate = block1;
+
+            // Step 2:  Add the bit Imm[11] at the correct position
+            immediate |= block2;
+
+            // Step 3:
+            immediate |= block3;
+
+            // Step 4:
+            if (block4 == 0x01)
+            {
+                immediate *= -1;
+            }
+
+            // shift by left for guaranteeing that we have 2 byte multiplier
+            immediate <<= 1;
+
+
+            payload.SignedImmediate = immediate;
             return payload;
         }
 
