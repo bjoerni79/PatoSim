@@ -13,6 +13,7 @@ namespace RiscVSim.Environment.Opcode
         private Register register;
         private OpCodeRegistry opCodeRegistry;
         private Hint hint;
+        private Stack<uint> rasStack;
 
         public BootstrapCpu()
         {
@@ -32,6 +33,11 @@ namespace RiscVSim.Environment.Opcode
         public void AssignRegister(Register register)
         {
             this.register = register;
+        }
+
+        public void AssignRasStack(Stack<uint> rasStack)
+        {
+            this.rasStack = rasStack;
         }
 
         public void Execute(Instruction instruction, InstructionPayload payload)
@@ -77,8 +83,9 @@ namespace RiscVSim.Environment.Opcode
             opCodeRegistry.Add(0x0D, new OpCode0D(memory, register));
             opCodeRegistry.Add(0x05, new OpCode05(memory, register));
 
-            // Add opcode 1B
-            opCodeRegistry.Add(0x1B, new OpCode1B(memory, register));
+            // Add opcode 1B (JAL) and 19 (JALR)
+            opCodeRegistry.Add(0x1B, new OpCode1B(memory, register, rasStack));
+            opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
 
             // Add def
 

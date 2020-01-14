@@ -44,6 +44,7 @@ namespace RiscVSim.Environment.Decoder
             //  I-Type
             //
             opCodeDict.Add(0x04, InstructionType.I_Type);
+            opCodeDict.Add(0x19, InstructionType.I_Type);  // JALR
 
             //
             //  U-Type
@@ -54,7 +55,7 @@ namespace RiscVSim.Environment.Decoder
             //
             //  J-Type
             //
-            opCodeDict.Add(0x1B, InstructionType.J_Type);
+            opCodeDict.Add(0x1B, InstructionType.J_Type); // JAL
 
             //
             //  S-Type

@@ -46,6 +46,10 @@ namespace RiscVSim.Environment.Test
         // OpCode OP = 0D
         //
         public const int opOPLUI = 0x0D;
-        
+
+        //
+        // OpCode OP = 19
+        //
+        public const int OPJALR = 0x19;
     }
 }

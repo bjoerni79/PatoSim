@@ -26,10 +26,13 @@ namespace RiscVSim.Environment.Rv32I
 
         public EndianType EndianCoding { get; set; }
 
+        public Stack<uint> RasStack { get; set; }
+
         public BootstrapCore()
         {
             Memory = Factory.CreateDynamicMemory(Architecture.Rv32I);
             Register = Factory.CreateRv32IRegister();
+            RasStack = new Stack<uint>();
             Hint = new Hint();
             BaseAddres = 0x100;
             EndianCoding = EndianType.Little;
@@ -51,6 +54,7 @@ namespace RiscVSim.Environment.Rv32I
             cpu.AssignMemory(Memory);
             cpu.AssignRegister(Register);
             cpu.AssignHint(Hint);
+            cpu.AssignRasStack(RasStack);
             cpu.Init();
 
             // Fetch the first instruction and run the loop

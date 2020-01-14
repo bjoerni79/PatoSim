@@ -11,9 +11,11 @@ namespace RiscVSim.Environment.Opcode
     /// </summary>
     public class OpCode1B : OpCodeCommand
     {
-        public OpCode1B (IMemory memory, Register register) : base(memory, register)
+        private Stack<uint> rasStack;
+
+        public OpCode1B (IMemory memory, Register register, Stack<uint> rasStack) : base(memory, register)
         {
-            // see base()
+            this.rasStack = rasStack;
         }
 
         public override int Opcode => 0x1B;
@@ -45,7 +47,10 @@ namespace RiscVSim.Environment.Opcode
                 int pcIndex = Register.ProgramCounter;
                 var currentPc = Register.ReadUnsignedInt(pcIndex);
 
-                Register.WriteUnsignedInt(rd, currentPc + 4);
+                // Write the next address the RAS (Return Address Stack) and the register
+                var nextPc = currentPc + 4;
+                rasStack.Push(nextPc);
+                Register.WriteUnsignedInt(rd, nextPc );
             }
 
             Jump(payload);
