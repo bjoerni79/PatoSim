@@ -87,7 +87,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             // 4. Von dort springe zurück
             // 5. Addiere x10 und x11 mit rd = 12
 
-            // Testen
+            // Testen der Register
 
             TestHelper.NotImplementedYet();
         }

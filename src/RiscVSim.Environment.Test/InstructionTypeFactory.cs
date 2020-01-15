@@ -41,6 +41,8 @@ namespace RiscVSim.Environment.Test
             return BuildInstruction(buffer);
         }
 
+
+
         public static IEnumerable<byte> CreateIType (uint opcode, uint rd, uint funct3, uint rs1, uint immediate)
         {
             // opcode = 4

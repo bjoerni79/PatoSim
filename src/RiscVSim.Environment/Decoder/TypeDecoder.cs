@@ -29,6 +29,9 @@ namespace RiscVSim.Environment.Decoder
                 case InstructionType.J_Type:
                     payload = DecodeTypeJ(instruction, inst32Coding);
                     break;
+                case InstructionType.B_Type:
+                    payload = DecodeTypeB(instruction, inst32Coding);
+                    break;
 
                 default:
                     throw new EncodingException("Unknown Type Encoding detected!");
@@ -168,6 +171,104 @@ namespace RiscVSim.Environment.Decoder
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
             payload.Funct7 = funct7;
+            return payload;
+        }
+
+        private InstructionPayload DecodeTypeB(Instruction instruction, IEnumerable<byte> inst32Coding)
+        {
+            if (instruction == null)
+            {
+                throw new ArgumentNullException("instruction");
+            }
+
+            var payload = new InstructionPayload(instruction);
+            var bytes = inst32Coding;
+            int workingBuffer;
+
+            // b4   (bit 0...7)
+            // b3   (bit 8...15)
+            // b2   (bit 16...23)
+            // b1   (bit 24...31)
+            //
+            // Opcode   = 0  ... 6
+            // rd       = 7  ... 11
+            // funct3   = 12 ... 14
+            // rs1      = 15 ... 19
+            // rs2      = 20 ... 24
+            // funct7   = 25 ... 31
+
+            var b4 = bytes.ElementAt(3);
+            var b3 = bytes.ElementAt(2);
+            var b2 = bytes.ElementAt(1);
+            var b1 = bytes.ElementAt(0);
+
+            // decode funct3
+            workingBuffer = b2;
+            workingBuffer >>= 4;
+            int funct3 = workingBuffer & 0x7;
+
+            // decode rs1
+            workingBuffer = b3;
+            workingBuffer <<= 8;
+            workingBuffer |= b2;
+            //  working Buffer = b3b2;
+            workingBuffer >>= 7;
+            workingBuffer &= 0x1F;
+            int rs1 = workingBuffer;
+
+            // decode rs2
+            workingBuffer = b4;
+            workingBuffer <<= 8;
+            workingBuffer |= b3;
+            workingBuffer >>= 4;
+            workingBuffer &= 0x1F;
+            int rs2 = workingBuffer;
+
+            // compute the 12 bit signed integer
+            int immediate;
+
+            // buffer = b4
+            workingBuffer = b4;
+
+            var block4 = (workingBuffer & 0x80) >> 7; // Imm[12]
+            var block2 = (workingBuffer & 0x7E) >> 1; // Imm[10:5]
+
+            // buffer = b2b1
+            workingBuffer = b2;
+            workingBuffer <<= 8;
+            workingBuffer |= b1;
+
+            // remove the op codes
+            workingBuffer >>= 7;
+            var block3 = workingBuffer & 0x01;
+            workingBuffer >>= 1;
+            var block1 = workingBuffer & 0x0F;
+
+            immediate = block1;
+
+            //TODO: Add Block2
+            block2 <<= 4;
+            immediate |= block2;
+
+            //TODO: Add Block3
+            block3 <<= 10;
+            immediate |= block3;
+
+            //TODO: Add Block4
+            if (block4 == 0x01)
+            {
+                immediate *= -1;
+            }
+
+
+            // Finally a left shift to the immediate for making sure it is based on a multiple of 2.
+            // All in all a 12 Bit Signed Int
+            immediate <<= 1;
+
+            payload.Funct3 = funct3;
+            payload.Rs1 = rs1;
+            payload.Rs2 = rs2;
+            payload.SignedImmediate = immediate;
             return payload;
         }
 

@@ -36,30 +36,35 @@ namespace RiscVSim.Environment.Decoder
             opCodeDict = new Dictionary<int, InstructionType>();
 
             //
-            //  R-Type
+            // R-Type
             //
             opCodeDict.Add(0x0C, InstructionType.R_Type);
 
             //
-            //  I-Type
+            // I-Type
             //
             opCodeDict.Add(0x04, InstructionType.I_Type);
             opCodeDict.Add(0x19, InstructionType.I_Type);  // JALR
 
             //
-            //  U-Type
+            // U-Type
             //
             opCodeDict.Add(0x0D, InstructionType.U_Type);
             opCodeDict.Add(0x05, InstructionType.U_Type);
 
             //
-            //  J-Type
+            // J-Type
             //
             opCodeDict.Add(0x1B, InstructionType.J_Type); // JAL
 
             //
-            //  S-Type
+            // S-Type
             //
+
+            //
+            // B-Type
+            //
+            opCodeDict.Add(0x18, InstructionType.B_Type); // BNE..
         }
 
 

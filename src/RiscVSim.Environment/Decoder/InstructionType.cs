@@ -11,6 +11,7 @@ namespace RiscVSim.Environment.Decoder
         I_Type,
         U_Type,
         S_Type,
-        J_Type
+        J_Type,
+        B_Type
     }
 }

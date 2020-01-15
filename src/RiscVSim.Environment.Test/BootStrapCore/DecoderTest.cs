@@ -190,5 +190,86 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(payload5.Rd, 1);
             Assert.AreEqual(payload5.UnsignedImmediate, 0x000fffff);
         }
+
+        /// <summary>
+        /// B-Type detection test with BNE and OpCode 18
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionDetectionTest4()
+        {
+            var program = new byte[] { 0x63, 0x8F, 0x20, 0x00 };
+
+            core.Run(program);
+            var instructions = core.InstructionsProcessed;
+
+            Assert.IsTrue(instructions.Count == 1);
+
+            var ins1 = instructions.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+        }
+
+        /// <summary>
+        /// B-Type payload test with BNE and OpCode 18
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionPayloadTest4()
+        {
+            var program = new byte[] { 0x63, 0x8F, 0x20, 0x00};
+
+            core.Run(program);
+            var payloads = core.InstructionPayloads;
+
+            Assert.IsTrue(payloads.Count == 1);
+
+            var ins1 = payloads.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+            Assert.AreEqual(ins1.Rs1, 1);
+            Assert.AreEqual(ins1.Rs2, 2);
+            Assert.AreEqual(ins1.SignedImmediate, 0x1E);
+        }
+
+        /// <summary>
+        /// B-Type payload test with BNE and OpCode 18
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionPayloadTest5()
+        {
+            var program = new byte[] { 0xE3, 0x8F, 0x20, 0x7E };
+
+            core.Run(program);
+            var payloads = core.InstructionPayloads;
+
+            Assert.IsTrue(payloads.Count == 1);
+
+            var ins1 = payloads.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+            Assert.AreEqual(ins1.Rs1, 1);
+            Assert.AreEqual(ins1.Rs2, 2);
+            Assert.AreEqual(ins1.SignedImmediate, 0xFFE);
+        }
+
+        /// <summary>
+        /// B-Type payload test with BNE and OpCode 18
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionPayloadTest6()
+        {
+            var program = new byte[] { 0xE3, 0x8F, 0x20, 0xFE };
+
+            core.Run(program);
+            var payloads = core.InstructionPayloads;
+
+            Assert.IsTrue(payloads.Count == 1);
+
+            var ins1 = payloads.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+            Assert.AreEqual(ins1.Rs1, 1);
+            Assert.AreEqual(ins1.Rs2, 2);
+            Assert.AreEqual(ins1.SignedImmediate, -0xFFE);
+        }
     }
 }

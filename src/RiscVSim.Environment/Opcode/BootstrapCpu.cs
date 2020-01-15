@@ -83,11 +83,13 @@ namespace RiscVSim.Environment.Opcode
             opCodeRegistry.Add(0x0D, new OpCode0D(memory, register));
             opCodeRegistry.Add(0x05, new OpCode05(memory, register));
 
-            // Add opcode 1B (JAL) and 19 (JALR)
+            // Jump Opcodes:
+            //
+            // opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
             opCodeRegistry.Add(0x1B, new OpCode1B(memory, register, rasStack));
             opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
+            opCodeRegistry.Add(0x18, new OpCode18(memory, register));
 
-            // Add def
 
         }
     }
