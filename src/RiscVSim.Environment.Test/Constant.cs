@@ -61,5 +61,13 @@ namespace RiscVSim.Environment.Test
         public const int OPBbltu = 6;
         public const int OPBbgeu = 7;
 
+        // Load, Opcode = 0
+        public const int OPLOAD = 0;
+        public const int OPLOADlh = 1;
+        public const int OPLOADlw = 2;
+        public const int OPLOADlhu = 5;
+        public const int OPLOADlb = 0;
+        public const int OPLOADlbu = 4;
+        public const int OPLOADlwu = 6;
     }
 }

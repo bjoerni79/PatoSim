@@ -9,19 +9,20 @@ namespace RiscVSim.Environment
         Architecture Architecture { get; }
 
         /// <summary>
-        /// Gets a word (= 16 Bit, 2 Byte) from the memory
+        /// Gets a half word (= 16 Bit, 2 Byte) from the memory
         /// </summary>
         /// <param name="address">the address</param>
         /// <returns>An IEnumerable with the bytes</returns>
-        IEnumerable<byte> GetWord(uint address);
+        IEnumerable<byte> GetHalfWord(uint address);
 
         /// <summary>
-        /// Gets a double word (= 32 Bit, 4 Byte = Instruction) from memory
+        /// Gets a word (= 32 Bit, 4 Byte = Instruction) from memory
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IEnumerable<byte> GetDoubleWord(uint address);
+        IEnumerable<byte> GetWord(uint address);
 
+        IEnumerable<byte> GetByte(uint address);
 
         void Write(uint baseAddress, IEnumerable<byte> content);
 

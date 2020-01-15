@@ -84,6 +84,11 @@ namespace RiscVSim.Environment.Opcode
             opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
             opCodeRegistry.Add(0x18, new OpCode18(memory, register, rasStack));
 
+            //
+            // Load and Store
+            //
+            opCodeRegistry.Add(0x00, new OpCode00(memory, register));
+            opCodeRegistry.Add(0x08, new OpCode08(memory, register));
 
         }
     }

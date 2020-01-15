@@ -41,6 +41,11 @@ namespace RiscVSim.Environment.Rv32I
             InstructionPayloads = new List<InstructionPayload>();
         }
 
+        public void Load(uint address, IEnumerable<byte> data)
+        {
+            Memory.Write(address, data);
+        }
+
         public void Run(IEnumerable<byte> program)
         {
             // Init the core
@@ -61,7 +66,7 @@ namespace RiscVSim.Environment.Rv32I
             var pc = Register.ReadUnsignedInt(Register.ProgramCounter);
 
             // Get the first 2 Bytes from the Base Address aka PC
-            var instructionCoding = Memory.GetWord(pc);
+            var instructionCoding = Memory.GetHalfWord(pc);
             while (ContinueIfValid(instructionCoding))
             {
                 // Loop for the commands
@@ -87,7 +92,7 @@ namespace RiscVSim.Environment.Rv32I
                 {
                     // Read the complete 32 Bit instruction set for the decoding
 
-                    var inst32Coding = Memory.GetDoubleWord(pc);
+                    var inst32Coding = Memory.GetWord(pc);
                     var payload = typeDecoder.DecodeType(instruction, inst32Coding);
 
                     if (payload == null)
@@ -106,7 +111,7 @@ namespace RiscVSim.Environment.Rv32I
 
                 // Done. Next run.
                 pc = Register.ReadUnsignedInt(Register.ProgramCounter);
-                instructionCoding = Memory.GetWord(pc);
+                instructionCoding = Memory.GetHalfWord(pc);
             }
         }
 

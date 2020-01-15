@@ -31,12 +31,17 @@ namespace RiscVSim.Environment
 
         public Architecture Architecture { get; private set; }
 
-        public IEnumerable<byte> GetDoubleWord(uint address)
+        public IEnumerable<byte> GetByte(uint address)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<byte> GetWord(uint address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<byte> GetHalfWord(uint address)
         {
             throw new NotImplementedException();
         }

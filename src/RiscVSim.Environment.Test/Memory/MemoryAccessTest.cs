@@ -24,13 +24,13 @@ namespace RiscVSim.Environment.Test.Memory
             var instructionEmpty = new byte[4];
 
             // The memory is empty. 0 0 0 0 is expected.
-            var instruction1 = memory.GetDoubleWord(baseAddress);
+            var instruction1 = memory.GetWord(baseAddress);
             Assert.AreEqual(instruction1, instructionEmpty);
 
             // Now fill the memory and test again..
 
             memory.Write(baseAddress, instruction);
-            var instruction2 = memory.GetDoubleWord(baseAddress);
+            var instruction2 = memory.GetWord(baseAddress);
             Assert.AreEqual(instruction2, instruction);
         }
 
