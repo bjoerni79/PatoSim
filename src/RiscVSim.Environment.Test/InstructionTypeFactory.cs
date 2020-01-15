@@ -41,6 +41,45 @@ namespace RiscVSim.Environment.Test
             return BuildInstruction(buffer);
         }
 
+        public static IEnumerable<byte> CreateSType(uint opcode, uint funct3, uint rs1, uint rs2, int immediate)
+        {
+            //
+            // funct7   = 7 Bits
+            // rs2      = 5 Bits
+            // 
+            //
+
+            var firstPart = immediate & 0x1F;
+            var secondPart = immediate;
+            secondPart >>= 5;
+
+
+            uint buffer;
+
+            // Write funct7
+            buffer = Convert.ToUInt32(secondPart);
+            // Write RS2
+            buffer <<= 5;
+            buffer |= rs2;
+            // Write RS1
+            buffer <<= 5;
+            buffer |= rs1;
+            // Write funct3
+            buffer <<= 3;
+            buffer |= funct3;
+            // Write RD
+            buffer <<= 5;
+            buffer |= Convert.ToUInt32(firstPart);
+            // Write Opcode
+            buffer <<= 5;
+            buffer |= opcode;
+            // Write 11 (32 Bit pattern)
+            buffer <<= 2;
+            buffer |= 3;
+
+            return BuildInstruction(buffer);
+        }
+
         public static IEnumerable<byte> CreateBType (uint opcode, uint rs1, uint rs2, uint funct3, int immediate)
         {
             uint buffer = 0;

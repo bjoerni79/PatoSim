@@ -174,7 +174,7 @@ namespace RiscVSim.Environment.Decoder
             immediate <<= 5;
             immediate |= payload.Rd;
 
-
+            payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
             payload.SignedImmediate = immediate;
