@@ -31,7 +31,7 @@ namespace RiscVSim.Environment.Opcode
 
         public override int Opcode => 0x0C;
 
-        public override void Execute(Instruction instruction, InstructionPayload payload)
+        public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
             int funct3 = payload.Funct3;
             int funct7 = payload.Funct7;
@@ -47,7 +47,7 @@ namespace RiscVSim.Environment.Opcode
 
 
             RunOp(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
-
+            return true;
         }
 
         private void RunOp(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)

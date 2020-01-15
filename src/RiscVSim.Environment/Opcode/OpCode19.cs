@@ -19,7 +19,7 @@ namespace RiscVSim.Environment.Opcode
 
         public override int Opcode => 0x19;
 
-        public override void Execute(Instruction instruction, InstructionPayload payload)
+        public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
             var rd = payload.Rd;
             var rs1 = payload.Rs1;
@@ -88,10 +88,11 @@ namespace RiscVSim.Environment.Opcode
                 {
                     throw new EncodingException("Unknown code path detected in RVI32 JALR");
                 }
-                
+
+
             }
 
-
+            return false;
         }
 
         private void SimpleJump(InstructionPayload payload)

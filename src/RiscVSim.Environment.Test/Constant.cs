@@ -9,7 +9,7 @@ namespace RiscVSim.Environment.Test
         //
         //  OpCode OP-IMM = 04
         //
-        public const uint opOPIMM = 4;
+        public const uint OPIMM = 4;
         public const uint opOPIMMaddi = 0;
         public const uint opOPIMMslli = 1;
         public const uint opOPIMMslti = 2;
@@ -22,7 +22,7 @@ namespace RiscVSim.Environment.Test
         //
         //  Opcode OP = 0C
         //
-        public const uint opOP = 0x0C;
+        public const uint OPOP = 0x0C;
         public const uint opOPaddAndSub = 0;
         public const uint opOPsll = 1;
         public const uint opOPslt = 2;
@@ -40,16 +40,26 @@ namespace RiscVSim.Environment.Test
         //
         //  OpCode OP = 05
         //
-        public const int opOPAUIPC = 0x5;
+        public const int OPAUIPC = 0x5;
 
         //
         // OpCode OP = 0D
         //
-        public const int opOPLUI = 0x0D;
+        public const int OPLUI = 0x0D;
 
         //
         // OpCode OP = 19
         //
         public const int OPJALR = 0x19;
+
+        // OpCode OP = 18
+        public const int OPB = 0x18;
+        public const int OPBbeq = 0;
+        public const int OPBbne = 1;
+        public const int OPBblt = 4;
+        public const int OPBbge = 5;
+        public const int OPBbltu = 6;
+        public const int OPBbgeu = 7;
+
     }
 }

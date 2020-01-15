@@ -20,7 +20,7 @@ namespace RiscVSim.Environment.Opcode
 
         public override int Opcode => 0x1B;
 
-        public override void Execute(Instruction instruction, InstructionPayload payload)
+        public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
             // JAL
             int rd = payload.Rd;
@@ -54,6 +54,7 @@ namespace RiscVSim.Environment.Opcode
             }
 
             Jump(payload);
+            return false;
         }
 
         private void Jump(InstructionPayload payload)

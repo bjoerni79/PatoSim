@@ -45,7 +45,7 @@ namespace RiscVSim.Environment.Opcode
 
         public override int Opcode => 0x04;
 
-        public override void Execute(Instruction instruction, InstructionPayload payload)
+        public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
             if (instruction.RegisterDestination == 0)
             {
@@ -60,7 +60,8 @@ namespace RiscVSim.Environment.Opcode
             {
                 Run(instruction, payload);
             }
-            
+
+            return true;
         }
 
         private void Run(Instruction instruction, InstructionPayload payload)

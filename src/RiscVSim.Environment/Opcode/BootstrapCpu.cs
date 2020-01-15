@@ -58,14 +58,8 @@ namespace RiscVSim.Environment.Opcode
                 throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
             }
 
-            opCodeCommand.Execute(instruction, payload);
-
-            //
-            //  TODO TODO TODO !!!! This is only workaround.
-            //
-            var opcode = instruction.OpCode;
-            var preventPcInc = (opcode == 0x1B) || (opcode == 0x19);
-            if (!preventPcInc)
+            var incPc = opCodeCommand.Execute(instruction, payload);
+            if (incPc)
             {
                 register.NextInstruction(instruction.InstructionLength);
             }
@@ -88,7 +82,7 @@ namespace RiscVSim.Environment.Opcode
             // opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
             opCodeRegistry.Add(0x1B, new OpCode1B(memory, register, rasStack));
             opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
-            opCodeRegistry.Add(0x18, new OpCode18(memory, register));
+            opCodeRegistry.Add(0x18, new OpCode18(memory, register, rasStack));
 
 
         }

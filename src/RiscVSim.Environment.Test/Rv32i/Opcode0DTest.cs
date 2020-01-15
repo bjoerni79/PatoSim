@@ -20,9 +20,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void LuiTest1()
         {
-            var insLui1 = InstructionTypeFactory.CreateUType(Constant.opOPLUI, 1, 0x01);
-            var insLui2 = InstructionTypeFactory.CreateUType(Constant.opOPLUI, 2, 0x100);
-            var insLui3 = InstructionTypeFactory.CreateUType(Constant.opOPLUI, 3, 0xFFF);
+            var insLui1 = InstructionTypeFactory.CreateUType(Constant.OPLUI, 1, 0x01);
+            var insLui2 = InstructionTypeFactory.CreateUType(Constant.OPLUI, 2, 0x100);
+            var insLui3 = InstructionTypeFactory.CreateUType(Constant.OPLUI, 3, 0xFFF);
 
             var program = insLui1.Concat(insLui2).Concat(insLui3);
 

@@ -36,7 +36,7 @@ namespace RiscVSim.Environment.Opcode
         /// </summary>
         /// <param name="instruction">the instruction</param>
         /// <param name="payload">the payload</param>
-        public abstract void Execute(Instruction instruction, InstructionPayload payload);
+        public abstract bool Execute(Instruction instruction, InstructionPayload payload);
 
         /// <summary>
         /// Gets the memory instance for the concrecte implementations

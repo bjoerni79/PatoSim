@@ -25,8 +25,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void AddITest1()
         {
             //var program = new byte[] { 0x00, 0x81, 0x00, 0x93,  };
-            var inst1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 2, 8); // addi : rd(1) = rs(2) + 8
-            var inst2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMaddi, 1, 2); // addi : rd(3) = rs(1) + 2
+            var inst1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 2, 8); // addi : rd(1) = rs(2) + 8
+            var inst2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 2); // addi : rd(3) = rs(1) + 2
 
             var program = inst1.Concat(inst2);
             core.Run(program);
@@ -45,7 +45,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             // addi :  rd = rd-1 + 1
             for (uint rd = 1; rd < 32; rd++)
             {
-                var instruction = InstructionTypeFactory.CreateIType(Constant.opOPIMM, rd, Constant.opOPIMMaddi, rd - 1, 1);
+                var instruction = InstructionTypeFactory.CreateIType(Constant.OPIMM, rd, Constant.opOPIMMaddi, rd - 1, 1);
                 program.AddRange(instruction);
             }
 
@@ -62,10 +62,10 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SltiTest1()
         {
-            var instAddi  = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
-            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMslti, 1, 4); // x2 = x1 < 4 ? 
-            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMslti, 1, 5); // x3 = x1 < 5 ?
-            var instSlti3 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 4, Constant.opOPIMMslti, 1, 6); // x4 = x1 < 6 ?
+            var instAddi  = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
+            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMslti, 1, 4); // x2 = x1 < 4 ? 
+            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMslti, 1, 5); // x3 = x1 < 5 ?
+            var instSlti3 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 4, Constant.opOPIMMslti, 1, 6); // x4 = x1 < 6 ?
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -91,10 +91,10 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SltiuTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
-            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMsltiu, 1, 4); // x2 = x1 < 4 ? 
-            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMsltiu, 1, 5); // x3 = x1 < 5 ?
-            var instSlti3 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 4, Constant.opOPIMMsltiu, 1, 6); // x4 = x1 < 6 ?
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
+            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMsltiu, 1, 4); // x2 = x1 < 4 ? 
+            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMsltiu, 1, 5); // x3 = x1 < 5 ?
+            var instSlti3 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 4, Constant.opOPIMMsltiu, 1, 6); // x4 = x1 < 6 ?
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -124,9 +124,9 @@ namespace RiscVSim.Environment.Test.Rv32i
             //  Tests the SEQZ rd,rs function (...if Immediate = 1...)
             //
 
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
-            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMsltiu, 1, 1); // assembler pseudoinstruction SEQZ rd, rs
-            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMsltiu, 0, 1); // assembler pseudoinstruction SEQZ rd, rs
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
+            var instSlti1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMsltiu, 1, 1); // assembler pseudoinstruction SEQZ rd, rs
+            var instSlti2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMsltiu, 0, 1); // assembler pseudoinstruction SEQZ rd, rs
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -149,8 +149,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void AndITest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x105); 
-            var instAndi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMandi, 1, 0x304);
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x105); 
+            var instAndi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMandi, 1, 0x304);
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -169,8 +169,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void OrITest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x105); 
-            var instAndi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMor, 1, 0x031A);
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x105); 
+            var instAndi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMor, 1, 0x031A);
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -189,8 +189,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void XorITest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x43C); 
-            var instAndi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMxor, 1, 0x4C3);
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x43C); 
+            var instAndi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMxor, 1, 0x4C3);
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -209,8 +209,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void XorIBitwiseComplementTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0xFFF);
-            var instAndi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMxor, 1, 0xffffffff); // I = -1
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0xFFF);
+            var instAndi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMxor, 1, 0xffffffff); // I = -1
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -229,9 +229,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SlliTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x01);
-            var instSlli1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMslli, 1, 0x01);  // Left Shift of x1 with 1
-            var instSlli2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x01);
+            var instSlli1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMslli, 1, 0x01);  // Left Shift of x1 with 1
+            var instSlli2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -253,9 +253,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SrliTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x01);
-            var instSll1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
-            var instSrl1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMsrlisrai, 2, 0x1F);  // And the same back to 01...
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x01);
+            var instSll1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
+            var instSrl1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMsrlisrai, 2, 0x1F);  // And the same back to 01...
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -277,8 +277,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SraiTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x02);
-            var instSrai = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMsrlisrai, 1, 0x401);
+            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x02);
+            var instSrai = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMsrlisrai, 1, 0x401);
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -298,12 +298,12 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SraiTest2()
         {
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 1, Constant.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
-            var instSll1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMslli, 1, 0x1F);  //x2 = x1 << 32;
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 3, Constant.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
+            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
+            var instSll1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMslli, 1, 0x1F);  //x2 = x1 << 32;
+            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
             // OK..  We have a 1 at the MSB and 1 at LSB.  Run the two shift commands now.
-            var instSrai1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 4, Constant.opOPIMMsrlisrai, 3, 0x01);  // slri (logical mode)
-            var instSrai2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 5, Constant.opOPIMMsrlisrai, 3, 0x401); // srai (arithmetic mode)
+            var instSrai1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 4, Constant.opOPIMMsrlisrai, 3, 0x01);  // slri (logical mode)
+            var instSrai2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 5, Constant.opOPIMMsrlisrai, 3, 0x401); // srai (arithmetic mode)
 
             var program = new List<byte>();
             program.AddRange(instAddi1);

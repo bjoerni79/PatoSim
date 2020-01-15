@@ -251,6 +251,8 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(ins1.SignedImmediate, 0xFFE);
         }
 
+
+
         /// <summary>
         /// B-Type payload test with BNE and OpCode 18
         /// </summary>
@@ -258,6 +260,52 @@ namespace RiscVSim.Environment.Test.BootStrapCore
         public void BootStrapCoreInstructionPayloadTest6()
         {
             var program = new byte[] { 0xE3, 0x8F, 0x20, 0xFE };
+
+            core.Run(program);
+            var payloads = core.InstructionPayloads;
+
+            Assert.IsTrue(payloads.Count == 1);
+
+            var ins1 = payloads.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+            Assert.AreEqual(ins1.Rs1, 1);
+            Assert.AreEqual(ins1.Rs2, 2);
+            Assert.AreEqual(ins1.SignedImmediate, -0xFFE);
+        }
+
+        /// <summary>
+        /// B-Type payload test with BNE and OpCode 18. Same test like Nr.6 but here via the factory method
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionPayloadTest7()
+        {
+            //var program = new byte[] { 0xE3, 0x8F, 0x20, 0x7E };
+            var program = InstructionTypeFactory.CreateBType(Constant.OPB, 1, 2, 0, 0xFFE);
+
+            core.Run(program);
+            var payloads = core.InstructionPayloads;
+
+            Assert.IsTrue(payloads.Count == 1);
+
+            var ins1 = payloads.First();
+            Assert.AreEqual(ins1.OpCode, 0x18);
+            Assert.AreEqual(ins1.Type, InstructionType.B_Type);
+            Assert.AreEqual(ins1.Rs1, 1);
+            Assert.AreEqual(ins1.Rs2, 2);
+            Assert.AreEqual(ins1.SignedImmediate, 0xFFE);
+        }
+
+        /// <summary>
+        /// B-Type payload test with BNE and OpCode 18. Same test like Nr.6 but here via the factory method
+        /// </summary>
+        [Test]
+        public void BootStrapCoreInstructionPayloadTest8()
+        {
+            TestHelper.UnderReview();
+
+            //var program = new byte[] { 0xE3, 0x8F, 0x20, 0xFE };
+            var program = InstructionTypeFactory.CreateBType(Constant.OPB, 1, 2, 0, -0xFFE);
 
             core.Run(program);
             var payloads = core.InstructionPayloads;

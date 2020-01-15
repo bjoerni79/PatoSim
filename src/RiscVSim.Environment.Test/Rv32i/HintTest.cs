@@ -21,9 +21,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void NopDetectionTest()
         {
             var nop1 = InstructionTypeFactory.CreateNop();
-            var nop2 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 0, Constant.opOPIMMaddi, 0, 0);
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var nop3 = InstructionTypeFactory.CreateIType(Constant.opOPIMM, 0, Constant.opOPIMMaddi, 0, 0);
+            var nop2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 0, Constant.opOPIMMaddi, 0, 0);
+            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
+            var nop3 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 0, Constant.opOPIMMaddi, 0, 0);
 
             // The CPU shall ignore the NOP instructions and execute the ADDI one
             var program = new List<byte>();

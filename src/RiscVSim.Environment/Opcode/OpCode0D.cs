@@ -15,7 +15,7 @@ namespace RiscVSim.Environment.Opcode
 
         public override int Opcode => 0x0D;
 
-        public override void Execute(Instruction instruction, InstructionPayload payload)
+        public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
             // LUI (load upper immediate) is used to build 32-bit constants and uses the U-type format. 
             // LUI places the U - immediate value in the top 20 bits of the destination register rd, filling in the lowest 12 bits with zeros.
@@ -28,6 +28,8 @@ namespace RiscVSim.Environment.Opcode
             workingBuffer <<= 12;
 
             Register.WriteUnsignedInt(rd, workingBuffer);
+
+            return true;
         }
     }
 }

@@ -23,11 +23,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void AuipcTest1()
         {
-            var insAuipc1 = InstructionTypeFactory.CreateUType(Constant.opOPAUIPC, 1, 0x01);
-            var insAuipc2 = InstructionTypeFactory.CreateUType(Constant.opOPAUIPC, 2, 0x100);
-            var insAuipc3 = InstructionTypeFactory.CreateUType(Constant.opOPAUIPC, 3, 0xFFF);
+            var insAuipc1 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 1, 0x01);
 
-            var program = insAuipc1.Concat(insAuipc2).Concat(insAuipc3);
+            var program = insAuipc1;
 
             // PC = 100
             core.Run(program);
@@ -35,12 +33,42 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             var register = core.Register;
             var x1 = register.ReadUnsignedInt(1);
+            Assert.AreEqual(x1, 0x1100);
+        }
+
+
+        [Test]
+        public void AuipcTest2()
+        {
+            var insAuipc2 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 2, 0x100);
+            var program = insAuipc2;
+
+            // PC = 100
+            core.Run(program);
+            core.BaseAddres = 100;
+
+            var register = core.Register;
             var x2 = register.ReadUnsignedInt(2);
+
+            Assert.AreEqual(x2, 0x100100);
+
+        }
+
+        [Test]
+        public void AuipcTest3()
+        {
+            var insAuipc3 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 3, 0xFFF);
+
+            var program = insAuipc3;
+
+            // PC = 100
+            core.Run(program);
+            core.BaseAddres = 100;
+
+            var register = core.Register;
             var x3 = register.ReadUnsignedInt(3);
 
-            Assert.AreEqual(x1, 0x1100);
-            Assert.AreEqual(x2, 0x100104);
-            Assert.AreEqual(x3, 0xFFF108);
+            Assert.AreEqual(x3, 0xFFF100);
         }
     }
 }
