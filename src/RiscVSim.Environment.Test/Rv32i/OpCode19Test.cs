@@ -77,6 +77,37 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(pc_new, 0x204);
         }
 
+        [Test]
+        public void JalrRasPopTest()
+        {
+            // Idee: 
+            // 1. Springe via JAL zu einer Speicherstelle x1 und schreibe eine 1 in ein Register 10
+            // 2. Von dort springe zurück (via POP)
+            // 3. Springe via JAL zu einer Speicherstelle x2 und schreibe eine 2 in ein Register 11
+            // 4. Von dort springe zurück
+            // 5. Addiere x10 und x11 mit rd = 12
 
+            // Testen
+
+            TestHelper.NotImplementedYet();
+        }
+
+        [Test]
+        public void JalrRasPushTest()
+        {
+            TestHelper.NotImplementedYet();
+        }
+
+        [Test]
+        public void JalrRasPopPushWithRdRS1REqZeroTest()
+        {
+            TestHelper.NotImplementedYet();
+        }
+
+        [Test]
+        public void JalrPushWithRdRs1Eq1Test()
+        {
+            TestHelper.NotImplementedYet();
+        }
     }
 }

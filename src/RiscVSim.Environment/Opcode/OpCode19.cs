@@ -27,41 +27,71 @@ namespace RiscVSim.Environment.Opcode
             // Get the conditions for the Push and Pop operations
             var rdLink = (rd == 1) || (rd == 5);
             var rs1Link = (rs1 == 1) || (rs1 == 5);
-            uint address;
 
             // A simple jump
             if (!rdLink && !rs1Link)
             {
                 SimpleJump(payload);
             }
-
-            if (rdLink && rs1Link)
+            else
             {
-                if (rd == rs1)
+                uint address = 0;
+                if (rdLink && rs1Link)
                 {
-                    // push
+                    if (rd == rs1 && rd==1)
+                    {
+                        // Push operation
+
+                        // Assumption: rd is a valid link register and I have to update it!
+                        // TODO: Review this
+                        address = Convert.ToUInt32(CalculateAddress(payload));
+                        Register.WriteUnsignedInt(rd, address);
+                        rasStack.Push(address);
+                        
+
+                    }
+                    else
+                    {
+                        // pop then push
+
+                        address = rasStack.Pop();
+                        Register.WriteUnsignedInt(rd, address);
+
+                        rasStack.Push(address);
+                    }
                 }
                 else
                 {
                     // pop
-                }
-            }
-            else
-            {
-                // pop
-                if (!rdLink && rs1Link)
-                {
-                    address = rasStack.Pop();
-                    Register.WriteUnsignedInt(Register.ProgramCounter, address);
+                    if (!rdLink && rs1Link)
+                    {
+                        address = rasStack.Pop();
+                        Register.WriteUnsignedInt(rs1, address);
+                    }
+
+                    // push
+                    if (rdLink && !rs1Link)
+                    {
+                        // Assumption:  rs1 is not a link register (x1 or x5) and therfore we just do the push operation and jump
+                        // TODO: Review this!
+                        address = Convert.ToUInt32(CalculateAddress(payload));
+                        rasStack.Push(address);
+                    }
                 }
 
-                // push
-                if (rdLink && !rs1Link)
+                // Jump
+                if (address != 0)
                 {
-                    var pushAddress = CalculateAddress(payload);
-                    Register.WriteSignedInt(Register.ProgramCounter, pushAddress);
+                    Register.WriteUnsignedInt(Register.ProgramCounter, address);
                 }
+                else
+                {
+                    throw new EncodingException("Unknown code path detected in RVI32 JALR");
+                }
+                
             }
+
+
         }
 
         private void SimpleJump(InstructionPayload payload)
