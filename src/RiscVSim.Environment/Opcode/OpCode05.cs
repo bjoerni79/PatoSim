@@ -9,7 +9,7 @@ namespace RiscVSim.Environment.Opcode
     {
 
 
-        public OpCode05(IMemory memory, Register register) : base(memory,register)
+        public OpCode05(IMemory memory, IRegister register) : base(memory,register)
         {
 
         }

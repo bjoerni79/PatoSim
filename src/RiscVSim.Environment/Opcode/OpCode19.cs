@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Opcode
     {
         private Stack<uint> rasStack;
 
-        public OpCode19 (IMemory memory, Register register, Stack<uint> rasStack) : base(memory, register)
+        public OpCode19 (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
         {
             this.rasStack = rasStack;
         }
@@ -44,7 +44,7 @@ namespace RiscVSim.Environment.Opcode
 
                         // Assumption: rd is a valid link register and I have to update it!
                         // TODO: Review this
-                        address = Convert.ToUInt32(CalculateAddress(payload));
+                        address = CalculateAddress(payload);
                         Register.WriteUnsignedInt(rd, address);
                         rasStack.Push(address);
                         
@@ -74,7 +74,7 @@ namespace RiscVSim.Environment.Opcode
                     {
                         // Assumption:  rs1 is not a link register (x1 or x5) and therfore we just do the push operation and jump
                         // TODO: Review this!
-                        address = Convert.ToUInt32(CalculateAddress(payload));
+                        address = CalculateAddress(payload);
                         rasStack.Push(address);
                     }
                 }
@@ -112,19 +112,20 @@ namespace RiscVSim.Environment.Opcode
             }
 
             // Jump!
-            Register.WriteSignedInt(Register.ProgramCounter, address);
+            Register.WriteUnsignedInt(Register.ProgramCounter, address);
         }
 
-        private int CalculateAddress(InstructionPayload payload)
+        private uint CalculateAddress(InstructionPayload payload)
         {
-            int address;
+            uint address;
             var immediate = payload.SignedImmediate;
             int rd = payload.Rd;
             var rs1 = payload.Rs1;
-            var rs1Value = Register.ReadSignedInt(rs1);
+            var rs1Value = Register.ReadUnsignedInt(rs1);
 
             // Make the address a multiplier by 2 !
-            address = rs1Value + immediate;
+            //address = rs1Value + immediate;
+            address = MathHelper.Add(rs1Value, immediate);
             var rest = address % 2;
             if (rest == 1)
             {

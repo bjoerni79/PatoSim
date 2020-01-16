@@ -13,14 +13,14 @@ namespace RiscVSim.Environment.Opcode
     public abstract class OpCodeCommand
     {
         private readonly IMemory memory;
-        private readonly Register register;
+        private readonly IRegister register;
 
         /// <summary>
         /// Creates a new OpCodeCommand
         /// </summary>
         /// <param name="memory">the memory</param>
         /// <param name="register">the register</param>
-        public OpCodeCommand(IMemory memory, Register register)
+        public OpCodeCommand(IMemory memory, IRegister register)
         {
             this.memory = memory;
             this.register = register;
@@ -52,7 +52,7 @@ namespace RiscVSim.Environment.Opcode
         /// <summary>
         /// Gets the registers for the concrecte implementation
         /// </summary>
-        protected Register Register
+        protected IRegister Register
         {
             get
             {

@@ -20,7 +20,7 @@ namespace RiscVSim.Environment
             return memory;
         }
 
-        public static Register CreateRv32IRegister()
+        public static IRegister CreateRv32IRegister()
         {
             return new Register();
         }

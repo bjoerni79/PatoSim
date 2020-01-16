@@ -10,7 +10,7 @@ namespace RiscVSim.Environment.Opcode
     /// </summary>
     public class OpCode00 : OpCodeCommand
     {
-        public OpCode00(IMemory memory, Register register) : base(memory,register)
+        public OpCode00(IMemory memory, IRegister register) : base(memory,register)
         {
             // base...
         }
@@ -43,13 +43,15 @@ namespace RiscVSim.Environment.Opcode
             var rd = payload.Rd;
             var rs1 = payload.Rs1;
             var signedImmediate = payload.SignedImmediate;
-            var rs1Value = Register.ReadSignedInt(rs1);
+            var rs1Value = Register.ReadUnsignedInt(rs1);
 
             IEnumerable<byte> buffer;
             byte[] result;
 
-            var memoryAddress = Convert.ToUInt32(rs1Value + signedImmediate);
-            
+            //var memoryAddress = Convert.ToUInt32(rs1Value + signedImmediate);
+            var memoryAddress = MathHelper.Add(rs1Value, signedImmediate);
+
+
             switch (payload.Funct3)
             {
                 case lh:

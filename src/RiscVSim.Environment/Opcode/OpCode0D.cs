@@ -8,7 +8,7 @@ namespace RiscVSim.Environment.Opcode
     public class OpCode0D : OpCodeCommand
     {
 
-        public OpCode0D(IMemory memory, Register register) : base(memory,register)
+        public OpCode0D(IMemory memory, IRegister register) : base(memory,register)
         {
             // see base();
         }

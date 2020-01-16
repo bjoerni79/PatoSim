@@ -14,7 +14,7 @@ namespace RiscVSim.Environment.Rv32I
     {
         public IMemory Memory { get; set; }
 
-        public Register Register { get; set; }
+        public IRegister Register { get; set; }
 
         public Hint Hint { get; set; }
 

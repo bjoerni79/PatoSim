@@ -10,7 +10,7 @@ namespace RiscVSim.Environment.Opcode
     internal class BootstrapCpu : ICpu
     {
         private IMemory memory;
-        private Register register;
+        private IRegister register;
         private OpCodeRegistry opCodeRegistry;
         private Hint hint;
         private Stack<uint> rasStack;
@@ -30,7 +30,7 @@ namespace RiscVSim.Environment.Opcode
             this.memory = memory;
         }
 
-        public void AssignRegister(Register register)
+        public void AssignRegister(IRegister register)
         {
             this.register = register;
         }

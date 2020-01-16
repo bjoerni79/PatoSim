@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Opcode
     {
         private Stack<uint> ras;
 
-        public OpCode18 (IMemory memory, Register register, Stack<uint> ras) : base (memory,register)
+        public OpCode18 (IMemory memory, IRegister register, Stack<uint> ras) : base (memory,register)
         {
             // base (...)
             this.ras = ras;
@@ -91,16 +91,16 @@ namespace RiscVSim.Environment.Opcode
             if (doJump)
             {
                 var pcIndex = Register.ProgramCounter;
-                var pc = Register.ReadSignedInt(pcIndex);
+                var pc = Register.ReadUnsignedInt(pcIndex);
 
-                var newPc = pc + payload.SignedImmediate;
+                var newPc = MathHelper.Add(pc, payload.SignedImmediate);
                 var rasPc = pc + 4;
 
                 // Write it to X1 and the RAS
-                Register.WriteSignedInt(1, rasPc);
-                ras.Push(Convert.ToUInt32(rasPc));
+                Register.WriteUnsignedInt(1, rasPc);
+                ras.Push(rasPc);
 
-                Register.WriteSignedInt(pcIndex, newPc);
+                Register.WriteUnsignedInt(pcIndex, newPc);
             }
 
             return !doJump;

@@ -8,7 +8,7 @@ namespace RiscVSim.Environment
     /// <summary>
     /// Represents a register set based on Rv32I ISA 
     /// </summary>
-    public sealed class Register
+    public sealed class Register : IRegister
     {
         private RegisterEntry[] register;
         private int pcRegister;

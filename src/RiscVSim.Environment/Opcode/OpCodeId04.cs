@@ -11,7 +11,7 @@ namespace RiscVSim.Environment.Opcode
     {
         private Hint hint;
 
-        public OpCodeId04(IMemory memory, Register register, Hint hint) : base(memory, register)
+        public OpCodeId04(IMemory memory, IRegister register, Hint hint) : base(memory, register)
         {
 
             this.hint = hint;

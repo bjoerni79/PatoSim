@@ -8,7 +8,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 {
     public class RegisterTest1
     {
-        private Register register;
+        private IRegister register;
 
         [SetUp]
         public void Setup()

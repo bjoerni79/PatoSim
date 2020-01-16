@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Opcode
 
         void AssignMemory(IMemory memory);
 
-        void AssignRegister(Register register);
+        void AssignRegister(IRegister register);
 
         void AssignHint(Hint hint);
         void Init();

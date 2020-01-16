@@ -8,7 +8,7 @@ namespace RiscVSim.Environment.Opcode
 {
     public class OpCode08 : OpCodeCommand
     {
-        public OpCode08 (IMemory memory, Register register) : base (memory,register)
+        public OpCode08 (IMemory memory, IRegister register) : base (memory,register)
         {
             // base ()
         }
@@ -32,11 +32,12 @@ namespace RiscVSim.Environment.Opcode
             var rs2 = payload.Rs2;
             var rs1 = payload.Rs1;
             
-            var rs1Value = Register.ReadSignedInt(rs1);
+            var rs1Value = Register.ReadUnsignedInt(rs1);
 
             // memory address = s1 + immediate
             var rs2Block = Register.ReadBlock(rs2);
-            var memoryAddress = Convert.ToUInt32(rs1Value + payload.SignedImmediate);
+            //var memoryAddress = Convert.ToUInt32(rs1Value + payload.SignedImmediate);
+            var memoryAddress = MathHelper.Add(rs1Value, payload.SignedImmediate);
 
             var list = new List<byte>();
 

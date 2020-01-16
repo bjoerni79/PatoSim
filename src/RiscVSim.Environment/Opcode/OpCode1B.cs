@@ -13,7 +13,7 @@ namespace RiscVSim.Environment.Opcode
     {
         private Stack<uint> rasStack;
 
-        public OpCode1B (IMemory memory, Register register, Stack<uint> rasStack) : base(memory, register)
+        public OpCode1B (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
         {
             this.rasStack = rasStack;
         }
@@ -62,9 +62,10 @@ namespace RiscVSim.Environment.Opcode
             var immediate = payload.SignedImmediate;
             var pcIndex = Register.ProgramCounter;
 
-            var pc = Register.ReadSignedInt(pcIndex);
-            var newPc = pc + immediate;
-            Register.WriteSignedInt(pcIndex, newPc);
+            var pc = Register.ReadUnsignedInt(pcIndex);
+            //var newPc = pc + immediate;
+            var newPc = MathHelper.Add(pc, immediate);
+            Register.WriteUnsignedInt(pcIndex, newPc);
         }
     }
 }
