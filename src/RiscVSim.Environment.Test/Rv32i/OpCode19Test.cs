@@ -77,6 +77,18 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(pc_new, 0x204);
         }
 
+        private void InitJalrSubRoutine()
+        {
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 1); // X10 =1
+            var instJalr1 = InstructionTypeFactory.CreateIType(C.OPJALR, 0, 0, 1, 0); // pop and return
+
+            var subRoutine = new List<byte>();
+            subRoutine.AddRange(instAddi1);
+            subRoutine.AddRange(instJalr1);
+
+            core.Load(0x200, subRoutine);
+        }
+
         [Test]
         public void JalrRasPopTest()
         {
@@ -89,13 +101,45 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             // Testen der Register
 
-            TestHelper.NotImplementedYet();
+            var instJal1 = new byte[] { 0xEF, 0x00, 0x00, 0x10 }; // Jump rd = x1 with Offset 0x100
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 1); // X11 = 1;
+            
+            var program = new List<byte>();
+            program.AddRange(instJal1);
+            program.AddRange(instAddi1);
+
+            InitJalrSubRoutine();
+            core.Run(program);
+
+            // Test:  The subroutine writes x10 and after return x11 is written
+            var register = core.Register;
+            var x10 = register.ReadSignedInt(10);
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x10, 1);
+            Assert.AreEqual(x11, 1);
         }
 
         [Test]
         public void JalrRasPushTest()
         {
-            TestHelper.NotImplementedYet();
+            // Idee:
+            // Push the 104 to the stack and jump to 200 (subroutine)
+
+            var instJalr1 = InstructionTypeFactory.CreateIType(C.OPJALR, 1, 0, 0, 0x200);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 1); // X11 = 1;
+
+            var program = new List<byte>();
+            program.AddRange(instJalr1);
+            program.AddRange(instAddi1);
+
+            InitJalrSubRoutine();
+            core.Run(program);
+
+            var register = core.Register;
+            var x10 = register.ReadSignedInt(10);
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x10, 1);
+            Assert.AreEqual(x11, 1);
         }
 
         [Test]

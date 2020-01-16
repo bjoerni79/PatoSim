@@ -38,7 +38,7 @@ namespace RiscVSim.Environment.Opcode
                 uint address = 0;
                 if (rdLink && rs1Link)
                 {
-                    if (rd == rs1 && rd==1)
+                    if (rd == rs1)
                     {
                         // Push operation
 
@@ -75,7 +75,11 @@ namespace RiscVSim.Environment.Opcode
                         // Assumption:  rs1 is not a link register (x1 or x5) and therfore we just do the push operation and jump
                         // TODO: Review this!
                         address = CalculateAddress(payload);
-                        rasStack.Push(address);
+
+                        var currentAddress = Register.ReadUnsignedInt(Register.ProgramCounter);
+                        var returnAddress = currentAddress + 4;
+                        Register.WriteUnsignedInt(payload.Rd, returnAddress);
+                        rasStack.Push(returnAddress);
                     }
                 }
 

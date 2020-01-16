@@ -52,7 +52,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction);
             var bytes = inst32Coding;
-            int workingBuffer;
+            uint workingBuffer;
 
             var b4 = bytes.ElementAt(3);
             var b3 = bytes.ElementAt(2);
@@ -91,9 +91,11 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer >>= 10;
 
             var block4 = workingBuffer & 0x01; // Imm[20] / Signed Bit
+            block4 <<= 20;
+
 
             // Step 1:  Block1
-            int immediate = block1;
+            uint immediate = block1;
 
             // Step 2:  Add the bit Imm[11] at the correct position
             immediate |= block2;
@@ -102,16 +104,14 @@ namespace RiscVSim.Environment.Decoder
             immediate |= block3;
 
             // Step 4:
-            if (block4 == 0x01)
-            {
-                immediate *= -1;
-            }
+            immediate |= block4;
 
             // shift by left for guaranteeing that we have 2 byte multiplier
             immediate <<= 1;
 
 
-            payload.SignedImmediate = immediate;
+
+            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, 20);
             return payload;
         }
 

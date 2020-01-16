@@ -40,7 +40,7 @@ namespace RiscVSim.Environment
             // 3. Convert to Int32 and Multiply the value with -1 
 
             uint scanBitMask = 1;
-            scanBitMask <<= bitLength-1;
+            scanBitMask <<= bitLength;
 
             uint filter = ~scanBitMask;
 
