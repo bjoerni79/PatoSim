@@ -57,23 +57,23 @@ namespace RiscVSim.Environment.Opcode
                 case lh:
                     // LH loads a 16-bit value from memory, then sign-extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = Prepare(buffer.ToArray(), true);
+                    result = MathHelper.Prepare(buffer.ToArray(),4, true);
                     break;
 
                 case lhu:
                     // LHU loads a 16-bit value from memory but then zero extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = Prepare(buffer.ToArray(), false);
+                    result = MathHelper.Prepare(buffer.ToArray(),4, false);
                     break;
 
                 case lb:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = Prepare(buffer.ToArray(), true);
+                    result = MathHelper.Prepare(buffer.ToArray(),4, true);
                     break;
 
                 case lbu:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = Prepare(buffer.ToArray(), false);
+                    result = MathHelper.Prepare(buffer.ToArray(),4, false);
                     break;
 
                 case lw:
@@ -95,39 +95,6 @@ namespace RiscVSim.Environment.Opcode
             return true;
         }
 
-        private byte[] Prepare(byte[] buffer, bool isSigned)
-        {
-            var bufferLength = buffer.Length;
-            // Take care of the signed bit. Save the information and remove it
-            bool signBitDetected = false;
-            if (isSigned)
-            {
-                var last = buffer.Last();
-                if ((last & 0x80) == 0x80)
-                {
-                    // Save this info and remove the signed bit.
-                    buffer[buffer.Length - 1] &= 0x7F; 
-                    signBitDetected = true;
-                }
-            }
 
-            // Fill up to 4 bytes
-            var diff = 4 - bufferLength;
-            List<byte> preparedBuffer = new List<byte>();
-            preparedBuffer.AddRange(buffer);
-
-            for (int zeroIndex=0; zeroIndex < diff; zeroIndex++)
-            {
-                preparedBuffer.Add(0x00);
-            }
-
-            // Add the signed bit at the last position
-            if (isSigned && signBitDetected)
-            {
-                preparedBuffer[3] |= 0x80;
-            }
-
-            return preparedBuffer.ToArray();
-        }
     }
 }

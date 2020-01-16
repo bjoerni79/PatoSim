@@ -123,6 +123,8 @@ namespace RiscVSim.Environment.Test.Rv32i
             uint pc_new = register.ReadUnsignedInt(register.ProgramCounter);
             uint x1 = register.ReadUnsignedInt(1);
 
+            //TODO: The decoder of the type has to take care of signed bit !
+
             Assert.AreEqual(x1, pc_old + 4); // Make sure, that the x1 (link) register is set!
             Assert.AreNotEqual(pc_old, pc_new);
             Assert.AreEqual(pc_new, pc_old - 0x8);
