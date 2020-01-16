@@ -2,6 +2,7 @@
 using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RiscVSim.Environment.Test.Rv32i
@@ -11,10 +12,29 @@ namespace RiscVSim.Environment.Test.Rv32i
 
         private BootstrapCore core;
 
+        private IEnumerable<byte> initBlock;
+
         [SetUp]
         public void Setup()
         {
             core = new BootstrapCore();
+
+            // Adds a jump point with a simple add operation
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi,10,1); // x11 = x10 + 1;
+            core.Load(0x210, instAddi); 
+
+            // Define some values for branch testing
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 15, C.opOPIMMaddi, 0, 5); // x15 = 5
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 16, C.opOPIMMaddi, 0, 5); // x16 = 5
+            var instAddi3 = InstructionTypeFactory.CreateIType(C.OPIMM, 17, C.opOPIMMaddi, 0, 1); // x17 = 1
+            var instAddi4 = InstructionTypeFactory.CreateIType(C.OPIMM, 18, C.opOPIMMaddi, 0, 10); // x18 = 10
+
+            var program = new List<byte>();
+            program.AddRange(instAddi1);
+            program.AddRange(instAddi2);
+            program.AddRange(instAddi3);
+            program.AddRange(instAddi4);
+            initBlock = program;
         }
 
         /*
@@ -28,46 +48,159 @@ namespace RiscVSim.Environment.Test.Rv32i
          */
 
         [Test]
-        public void Playground1()
-        {
-
-        }
-
-
-        [Test]
         public void beqTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 15, 16, C.OPBbeq, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
+        }
+
+        [Test]
+        public void beqTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 15, 17, C.OPBbeq, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
         }
 
         [Test]
         public void bneTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 15, 17, C.OPBbne, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
+        }
+
+        [Test]
+        public void bneTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 15, 16, C.OPBbne, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
         }
 
         [Test]
         public void bltTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 17, 18, C.OPBblt, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
+        }
+
+        [Test]
+        public void bltTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 18, 17, C.OPBblt, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
         }
 
         [Test]
         public void bgeTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 17, 18, C.OPBbge, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
+        }
+
+        [Test]
+        public void bgeTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 18, 17, C.OPBbge, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
         }
 
         [Test]
         public void bltuTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 17, 18, C.OPBbltu, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
+        }
+
+        [Test]
+        public void bltuTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 18, 17, C.OPBbltu, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
         }
 
         [Test]
         public void bgeuTest1()
         {
-            TestHelper.NotImplementedYet();
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 18, 17, C.OPBbgeu, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 1);
+        }
+
+        [Test]
+        public void bgeuTest2()
+        {
+            var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 17, 18, C.OPBbgeu, 0x100);
+            var program = initBlock.Concat(instBeq);
+
+            core.Run(program);
+
+            var register = core.Register;
+            var x11 = register.ReadSignedInt(11);
+            Assert.AreEqual(x11, 0);
         }
     }
 

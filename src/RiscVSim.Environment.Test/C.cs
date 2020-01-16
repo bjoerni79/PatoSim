@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Test
 {
-    public static class Constant
+    public static class C
     {
         //
         //  OpCode OP-IMM = 04

@@ -20,10 +20,10 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SbTest1()
         {
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 10, Constant.opOPIMMaddi, 0, 200);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 11, Constant.opOPIMMaddi, 0, 0xAB);
-            var instStore1 = InstructionTypeFactory.CreateSType(Constant.OPSTORE, Constant.OPSTOREsb, 10, 11, 100);
-            var instLoad1 = InstructionTypeFactory.CreateIType(Constant.OPLOAD, 12, Constant.OPLOADlbu, 10, 100);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 200);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0xAB);
+            var instStore1 = InstructionTypeFactory.CreateSType(C.OPSTORE, C.OPSTOREsb, 10, 11, 100);
+            var instLoad1 = InstructionTypeFactory.CreateIType(C.OPLOAD, 12, C.OPLOADlbu, 10, 100);
 
             var program = new List<byte>();
             program.AddRange(instAddi1);    // x10 = x0 + 200
@@ -47,10 +47,10 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void ShTest1()
         {
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 10, Constant.opOPIMMaddi, 0, 200);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 11, Constant.opOPIMMaddi, 0, 0x0BCD);
-            var instStore1 = InstructionTypeFactory.CreateSType(Constant.OPSTORE, Constant.OPSTOREsh, 10, 11, 100);
-            var instLoad1 = InstructionTypeFactory.CreateIType(Constant.OPLOAD, 12, Constant.OPLOADlhu, 10, 100);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 200);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0x0BCD);
+            var instStore1 = InstructionTypeFactory.CreateSType(C.OPSTORE, C.OPSTOREsh, 10, 11, 100);
+            var instLoad1 = InstructionTypeFactory.CreateIType(C.OPLOAD, 12, C.OPLOADlhu, 10, 100);
 
             var program = new List<byte>();
             program.AddRange(instAddi1);    // x10 = x0 + 200
@@ -74,11 +74,11 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SwTest1()
         {
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 10, Constant.opOPIMMaddi, 0, 200);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 11, Constant.opOPIMMaddi, 0, 0x0FFF);
-            var instLui1 = InstructionTypeFactory.CreateUType(Constant.OPLUI, 11, 0xFFFF);
-            var instStore1 = InstructionTypeFactory.CreateSType(Constant.OPSTORE, Constant.OPSTOREsw, 10, 11, 100);
-            var instLoad1 = InstructionTypeFactory.CreateIType(Constant.OPLOAD, 12, Constant.OPLOADlwu, 10, 100);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 200);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0x0FFF);
+            var instLui1 = InstructionTypeFactory.CreateUType(C.OPLUI, 11, 0xFFFF);
+            var instStore1 = InstructionTypeFactory.CreateSType(C.OPSTORE, C.OPSTOREsw, 10, 11, 100);
+            var instLoad1 = InstructionTypeFactory.CreateIType(C.OPLOAD, 12, C.OPLOADlwu, 10, 100);
 
             var program = new List<byte>();
             program.AddRange(instAddi1);    // x10 = x0 + 200

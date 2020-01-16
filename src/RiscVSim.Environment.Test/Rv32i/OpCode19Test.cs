@@ -23,8 +23,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void JalrTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 25, 0, 0, 0x04);
-            var instJalr = InstructionTypeFactory.CreateIType(Constant.OPJALR, 26, 0, 25, 0x200);
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 25, 0, 0, 0x04);
+            var instJalr = InstructionTypeFactory.CreateIType(C.OPJALR, 26, 0, 25, 0x200);
             var program = instAddi.Concat(instJalr);
 
             var register = core.Register;
@@ -45,8 +45,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void JalrTest2()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 25, 0, 0, 0x04);
-            var instJalr = InstructionTypeFactory.CreateIType(Constant.OPJALR, 0, 0, 25, 0x200);
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 25, 0, 0, 0x04);
+            var instJalr = InstructionTypeFactory.CreateIType(C.OPJALR, 0, 0, 25, 0x200);
             var program = instAddi.Concat(instJalr);
 
             var register = core.Register;
@@ -64,8 +64,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void JalrTest3()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(Constant.OPIMM, 25, 0, 0, 0x05);
-            var instJalr = InstructionTypeFactory.CreateIType(Constant.OPJALR, 0, 0, 25, 0x200);
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 25, 0, 0, 0x05);
+            var instJalr = InstructionTypeFactory.CreateIType(C.OPJALR, 0, 0, 25, 0x200);
             var program = instAddi.Concat(instJalr);
 
             var register = core.Register;

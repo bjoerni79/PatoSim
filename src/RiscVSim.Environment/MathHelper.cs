@@ -13,12 +13,50 @@ namespace RiscVSim.Environment
             uint unsignedOffset = Convert.ToUInt32(offset);
             if (offset > 0)
             {
+                // What about the signed bit???
                 result = baseAddress + unsignedOffset;
             }
             else
             {
                 result = baseAddress - unsignedOffset;
 
+            }
+
+            return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Helper method for dealing with 12 Bit Signed Integer values and converting them to .NET C# Int32 values
+        /// </summary>
+        /// <param name="coding">the uint coding (i.e a I-Type 12 Bit signed int)</param>
+        /// <param name="bitLength">the bit length (12 for an I-Type)</param>
+        /// <returns>a Int32 .NET representation of the coding</returns>
+        internal static int GetSignedInteger (uint coding, int bitLength)
+        {
+            // We get a coding from an instruction and this one has a signed bit. 
+            // 1.  Scan for it
+            // 2. Remove it
+            // 3. Convert to Int32 and Multiply the value with -1 
+
+            uint scanBitMask = 1;
+            scanBitMask <<= bitLength-1;
+
+            uint filter = ~scanBitMask;
+
+            int result;
+            if ((coding & scanBitMask) == scanBitMask)
+            {
+                // Signed bit detected!
+                uint preparedCoding = coding & filter;
+                result = Convert.ToInt32(preparedCoding);
+
+                // Signed bit removed and now multiply it with -1
+                result *= -1;
+            }
+            else
+            {
+                result = Convert.ToInt32(coding);
             }
 
             return result;

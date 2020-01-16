@@ -23,7 +23,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void AuipcTest1()
         {
-            var insAuipc1 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 1, 0x01);
+            var insAuipc1 = InstructionTypeFactory.CreateUType(C.OPAUIPC, 1, 0x01);
 
             var program = insAuipc1;
 
@@ -40,7 +40,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void AuipcTest2()
         {
-            var insAuipc2 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 2, 0x100);
+            var insAuipc2 = InstructionTypeFactory.CreateUType(C.OPAUIPC, 2, 0x100);
             var program = insAuipc2;
 
             // PC = 100
@@ -57,7 +57,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void AuipcTest3()
         {
-            var insAuipc3 = InstructionTypeFactory.CreateUType(Constant.OPAUIPC, 3, 0xFFF);
+            var insAuipc3 = InstructionTypeFactory.CreateUType(C.OPAUIPC, 3, 0xFFF);
 
             var program = insAuipc3;
 

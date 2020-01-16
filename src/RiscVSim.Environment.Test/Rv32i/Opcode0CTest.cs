@@ -26,12 +26,12 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void AddSubTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 4);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 5);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 4);
             // x2 = 5, x3 = 4;
-            var instAdd = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opOPaddAndSub, 2, 3, Constant.opOPf7Add);
-            var instSub1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 5, Constant.opOPaddAndSub, 2, 3, Constant.opOPf7Sub);
-            var instSub2 = InstructionTypeFactory.CreateRType(Constant.OPOP, 6, Constant.opOPaddAndSub, 3, 2, Constant.opOPf7Sub);
+            var instAdd = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPaddAndSub, 2, 3, C.opOPf7Add);
+            var instSub1 = InstructionTypeFactory.CreateRType(C.OPOP, 5, C.opOPaddAndSub, 2, 3, C.opOPf7Sub);
+            var instSub2 = InstructionTypeFactory.CreateRType(C.OPOP, 6, C.opOPaddAndSub, 3, 2, C.opOPf7Sub);
             // x4 = x2 + x3
             // x5 = x3 - x2;
             // x6 = x2 - x3;
@@ -66,10 +66,10 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void SltTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 4);
-            var instSlt1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opOPslt, 2, 3, 0);
-            var instSlt2 = InstructionTypeFactory.CreateRType(Constant.OPOP, 5, Constant.opOPslt, 3, 2, 0);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 5);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 4);
+            var instSlt1 = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPslt, 2, 3, 0);
+            var instSlt2 = InstructionTypeFactory.CreateRType(C.OPOP, 5, C.opOPslt, 3, 2, 0);
             var program = instAddi1.Concat(instAddi2).Concat(instSlt1).Concat(instSlt2);
 
             core.Run(program);
@@ -90,12 +90,12 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void SltuTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 4);
-            var instSlt1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opOPsltu, 2, 3, 0);
-            var instSlt2 = InstructionTypeFactory.CreateRType(Constant.OPOP, 5, Constant.opOPsltu, 3, 2, 0);
-            var instSlt3 = InstructionTypeFactory.CreateRType(Constant.OPOP, 6, Constant.opOPsltu, 0, 2, Constant.opOPf2sra);
-            var instSlt4 = InstructionTypeFactory.CreateRType(Constant.OPOP, 7, Constant.opOPsltu, 0, 10, Constant.opOPf2sra);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 5);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 4);
+            var instSlt1 = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPsltu, 2, 3, 0);
+            var instSlt2 = InstructionTypeFactory.CreateRType(C.OPOP, 5, C.opOPsltu, 3, 2, 0);
+            var instSlt3 = InstructionTypeFactory.CreateRType(C.OPOP, 6, C.opOPsltu, 0, 2, C.opOPf2sra);
+            var instSlt4 = InstructionTypeFactory.CreateRType(C.OPOP, 7, C.opOPsltu, 0, 10, C.opOPf2sra);
             var program = instAddi1.Concat(instAddi2).Concat(instSlt1).Concat(instSlt2).Concat(instSlt3).Concat(instSlt4);
 
             core.Run(program);
@@ -120,9 +120,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void LogicalAddTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 4);
-            var instand1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opOPand, 2, 3, 0);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 5);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 4);
+            var instand1 = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPand, 2, 3, 0);
             var program = instAddi1.Concat(instAddi2).Concat(instand1);
 
             core.Run(program);
@@ -140,9 +140,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void LogicalOrTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 5);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 10);
-            var instor1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opORor, 2, 3, 0);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 5);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 10);
+            var instor1 = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opORor, 2, 3, 0);
             var program = instAddi1.Concat(instAddi2).Concat(instor1);
 
             core.Run(program);
@@ -160,9 +160,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void LogicalXorTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 1, 9);
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 1, 6);
-            var instor1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 4, Constant.opOPxor, 2, 3, 0);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 9);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 6);
+            var instor1 = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPxor, 2, 3, 0);
             var program = instAddi1.Concat(instAddi2).Concat(instor1);
 
             core.Run(program);
@@ -180,9 +180,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void SllTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 1);    // x1 = 1
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 0, 1);   // x2 = 1
-            var instsll1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 3, Constant.opOPsll, 1, 2, 0); //  x1 left shift (x2)
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 1);    // x1 = 1
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 0, 1);   // x2 = 1
+            var instsll1 = InstructionTypeFactory.CreateRType(C.OPOP, 3, C.opOPsll, 1, 2, 0); //  x1 left shift (x2)
             var program = instAddi1.Concat(instAddi2).Concat(instsll1);
             
             core.Run(program);
@@ -201,9 +201,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void SllTest2()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 1);    // x1 = 1
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 0, 4);   // x2 = 1
-            var instsll1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 3, Constant.opOPsll, 1, 2, 0); //  x1 left shift (x2)
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 1);    // x1 = 1
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 0, 4);   // x2 = 1
+            var instsll1 = InstructionTypeFactory.CreateRType(C.OPOP, 3, C.opOPsll, 1, 2, 0); //  x1 left shift (x2)
             var program = instAddi1.Concat(instAddi2).Concat(instsll1);
 
             core.Run(program);
@@ -224,9 +224,9 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void SrlTest1()
         {
             // Not tested by this test. Please go to Opcode04 test if this does not work as expected
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x10);    // x1 = 1
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMaddi, 0, 1);   // x2 = 1
-            var instsll1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 3, Constant.opOPsrlsra, 1, 2, 0); //  x1 left shift (x2)
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x10);    // x1 = 1
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 0, 1);   // x2 = 1
+            var instsll1 = InstructionTypeFactory.CreateRType(C.OPOP, 3, C.opOPsrlsra, 1, 2, 0); //  x1 left shift (x2)
             var program = instAddi1.Concat(instAddi2).Concat(instsll1);
 
             core.Run(program);
@@ -246,11 +246,11 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void SraTest1()
         {
-            var instAddi1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 1, Constant.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
-            var instSll1 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 2, Constant.opOPIMMslli, 1, 0x1F);  //x2 = x1 << 32;
-            var instAddi2 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 3, Constant.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
-            var instAddi3 = InstructionTypeFactory.CreateIType(Constant.OPIMM, 4, Constant.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
-            var instsra1 = InstructionTypeFactory.CreateRType(Constant.OPOP, 5, Constant.opOPsrlsra, 3, 4, Constant.opOPf2sra);
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
+            var instSll1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F);  //x2 = x1 << 32;
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
+            var instAddi3 = InstructionTypeFactory.CreateIType(C.OPIMM, 4, C.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
+            var instsra1 = InstructionTypeFactory.CreateRType(C.OPOP, 5, C.opOPsrlsra, 3, 4, C.opOPf2sra);
 
 
             // OK..  We have a 1 at the MSB and 1 at LSB.  x4 has the shift counter with 1

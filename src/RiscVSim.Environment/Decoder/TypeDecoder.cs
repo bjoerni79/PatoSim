@@ -252,7 +252,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction);
             var bytes = inst32Coding;
-            int workingBuffer;
+            uint workingBuffer;
 
             // b4   (bit 0...7)
             // b3   (bit 8...15)
@@ -274,7 +274,7 @@ namespace RiscVSim.Environment.Decoder
             // decode funct3
             workingBuffer = b2;
             workingBuffer >>= 4;
-            int funct3 = workingBuffer & 0x7;
+            int funct3 = Convert.ToInt32(workingBuffer & 0x7);
 
             // decode rs1
             workingBuffer = b3;
@@ -283,7 +283,7 @@ namespace RiscVSim.Environment.Decoder
             //  working Buffer = b3b2;
             workingBuffer >>= 7;
             workingBuffer &= 0x1F;
-            int rs1 = workingBuffer;
+            int rs1 = Convert.ToInt32(workingBuffer);
 
             // decode rs2
             workingBuffer = b4;
@@ -291,15 +291,17 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer |= b3;
             workingBuffer >>= 4;
             workingBuffer &= 0x1F;
-            int rs2 = workingBuffer;
+            int rs2 = Convert.ToInt32(workingBuffer);
 
             // compute the 12 bit signed integer
-            int immediate;
+            uint immediate;
 
             // buffer = b4
             workingBuffer = b4;
 
             var block4 = (workingBuffer & 0x80) >> 7; // Imm[12]
+            block4 <<= 11; // Shift it to the last byte
+
             var block2 = (workingBuffer & 0x7E) >> 1; // Imm[10:5]
 
             // buffer = b2b1
@@ -315,19 +317,17 @@ namespace RiscVSim.Environment.Decoder
 
             immediate = block1;
 
-            //TODO: Add Block2
+            // Add Block2
             block2 <<= 4;
             immediate |= block2;
 
-            //TODO: Add Block3
+            // Add Block3
             block3 <<= 10;
             immediate |= block3;
 
-            //TODO: Add Block4
-            if (block4 == 0x01)
-            {
-                immediate *= -1;
-            }
+            // Add Block 4
+            immediate |= block4;
+
 
 
             // Finally a left shift to the immediate for making sure it is based on a multiple of 2.
@@ -337,7 +337,7 @@ namespace RiscVSim.Environment.Decoder
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
-            payload.SignedImmediate = immediate;
+            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate,13);
             return payload;
         }
 

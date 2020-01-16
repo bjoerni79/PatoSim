@@ -90,16 +90,19 @@ namespace RiscVSim.Environment.Test
                 block4 = 1;
             }
 
+            // The "zero" bit is  implicit.. Igore it for the computation
             var internalImmediate = immediate >> 1;
 
             var block3 = internalImmediate >> 4;
             block3 &= 0x3F;
 
-            var block2 = internalImmediate & 0x80;
-            block2 >>= 7;
+            //  rd =  [Imm 4:1] [Imm[11]
+            var blockImm4To1 = internalImmediate & 0x0F;
+            blockImm4To1 <<= 1;
 
-            var block1 = internalImmediate & 0x1E;
-            block1 >>= 1;
+            var blockImm11 = internalImmediate & 0x200;
+            blockImm11 >>= 9;
+
 
             // block4, block3
             uint funct7Value = Convert.ToUInt32(block4);
@@ -107,9 +110,8 @@ namespace RiscVSim.Environment.Test
             funct7Value |= Convert.ToUInt32(block3);
 
 
-            uint rdValue = Convert.ToUInt32(block1);
-            rdValue <<= 1;
-            rdValue |= Convert.ToUInt32(block2);
+            uint rdValue = Convert.ToUInt32(blockImm4To1);
+            rdValue |= Convert.ToUInt32(blockImm11);
 
 
 
@@ -197,7 +199,7 @@ namespace RiscVSim.Environment.Test
 
         public static IEnumerable<byte> CreateNop()
         {
-            var nop = CreateIType(Constant.OPIMM, 0, Constant.opOPIMMaddi, 0, 0);
+            var nop = CreateIType(C.OPIMM, 0, C.opOPIMMaddi, 0, 0);
             return nop;
         }
 

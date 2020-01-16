@@ -6,9 +6,33 @@ using System.Text;
 
 namespace RiscVSim.Environment.Test
 {
-    public class EndianTest
+    public class PlaygroundTest
     {
+        [Test]
+        public void SignedIntTest1()
+        {
+            int a = 5;
+            int b = -5;
+            int c = 0x7FFFFFFF;
+            int d = c * -1;
+            int e = d * -1;
 
+
+            var bytesA = BitConverter.GetBytes(a);
+            var bytesB = BitConverter.GetBytes(b);
+            var bytesC = BitConverter.GetBytes(c);
+            var bytesD = BitConverter.GetBytes(d);
+            var bytesE = BitConverter.GetBytes(e);
+
+            Assert.AreEqual(bytesA, new byte[] { 0x05, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(bytesB, new byte[] { 0xFB, 0xFF, 0xFF, 0xFF }); // -5 in complement based on 2
+
+            Assert.AreEqual(bytesC, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F });
+            Assert.AreEqual(bytesD, new byte[] { 0x01, 0x00, 0x00, 0x80 });
+            Assert.AreEqual(bytesE, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F });
+        }
+
+        #region Little Endian Coding Tests
 
         [Test]
         public void DecodingLittleEndianTest1()
@@ -111,6 +135,8 @@ namespace RiscVSim.Environment.Test
             Assert.AreEqual(test1, 0x40);
             Assert.AreEqual(test2, 0x02);
         }
+
+        #endregion
     }
 
 
