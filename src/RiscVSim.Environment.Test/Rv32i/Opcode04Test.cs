@@ -60,6 +60,38 @@ namespace RiscVSim.Environment.Test.Rv32i
         }
 
         [Test]
+        public void AddITest3()
+        {
+            //var program = new byte[] { 0x00, 0x81, 0x00, 0x93,  };
+            var inst1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 2, 0x7FF); // addi : rd(1) = rs(2) + 0x7FF
+
+
+            var program = inst1;
+            core.Run(program);
+
+            var x1Content = core.Register.ReadUnsignedInt(1);
+            var x3Content = core.Register.ReadUnsignedInt(3);
+            Assert.AreEqual(x1Content, 0x7FF);
+        }
+
+        [Test]
+        public void AddITest4()
+        {
+            //var program = new byte[] { 0x00, 0x81, 0x00, 0x93,  };
+            var inst1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 2, 0x7FF); // addi : rd(1) = rs(2) + 0x7FF
+            var inst2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 0xFFF); // addi : rd(1) = rs(2) + 0x7FF
+
+
+            var program = inst1.Concat(inst2);
+            core.Run(program);
+
+            var x1Content = core.Register.ReadUnsignedInt(1);
+            var x3Content = core.Register.ReadUnsignedInt(3);
+            Assert.AreEqual(x1Content, 0x7FF);
+            Assert.AreEqual(x3Content, 0);
+        }
+
+        [Test]
         public void SltiTest1()
         {
             var instAddi  = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 5); // x1 = 0 + 5;
@@ -209,8 +241,8 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void XorIBitwiseComplementTest1()
         {
-            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0xFFF);
-            var instAndi = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMxor, 1, 0xffffffff); // I = -1
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x05);
+            var instAndi = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMxor, 1, 0x0F); 
 
             var program = new List<byte>();
             program.AddRange(instAddi);
@@ -222,8 +254,8 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x1Block = register.ReadBlock(1);
             var x2Block = register.ReadBlock(2);
 
-            Assert.AreEqual(x1Block, new byte[] { 0xFF, 0x0F, 0x00, 0x00 });
-            Assert.AreEqual(x2Block, new byte[] { 0x00, 0xF0, 0xFF, 0xFF });
+            Assert.AreEqual(x1Block, new byte[] { 0x05, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2Block, new byte[] { 0x0A, 0x00, 0x00, 0x00 });
         }
 
         [Test]

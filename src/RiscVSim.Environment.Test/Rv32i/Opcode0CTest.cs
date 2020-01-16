@@ -45,11 +45,11 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             core.Run(program);
 
-            var x2Value = core.Register.ReadUnsignedInt(2);
-            var x3Value = core.Register.ReadUnsignedInt(3);
-            var x4Value = core.Register.ReadUnsignedInt(4);
-            var x5Value = core.Register.ReadUnsignedInt(5);
-            var x6Value = core.Register.ReadUnsignedInt(6);
+            var x2Value = core.Register.ReadSignedInt(2);
+            var x3Value = core.Register.ReadSignedInt(3);
+            var x4Value = core.Register.ReadSignedInt(4);
+            var x5Value = core.Register.ReadSignedInt(5);
+            var x6Value = core.Register.ReadSignedInt(6);
 
             // Check if X2 and X3 are correct
             Assert.AreEqual(x2Value, 5);
@@ -57,8 +57,39 @@ namespace RiscVSim.Environment.Test.Rv32i
             // Check if X4 is correct
             Assert.AreEqual(x4Value, 9);
             // Check if x5 and x6 are correct
-            Assert.AreEqual(x5Value, 0xffffffff);
+            Assert.AreEqual(x5Value, -1);
             Assert.AreEqual(x6Value, 1); 
+
+        }
+
+        [Test]
+        public void AddSubTest2()
+        {
+            // Not tested by this test. Please go to Opcode04 test if this does not work as expected
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMaddi, 1, 0xFFF);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 1, 4);
+            // x2 = 5, x3 = 4;
+            var instAdd = InstructionTypeFactory.CreateRType(C.OPOP, 4, C.opOPaddAndSub, 2, 3, C.opOPf7Add);
+            // x4 = x2 + x3
+            // x5 = x3 - x2;
+            // x6 = x2 - x3;
+
+            List<byte> program = new List<byte>();
+            program.AddRange(instAddi1);
+            program.AddRange(instAddi2);
+            program.AddRange(instAdd);
+
+            core.Run(program);
+
+            var x2Value = core.Register.ReadSignedInt(2);
+            var x3Value = core.Register.ReadSignedInt(3);
+            var x4Value = core.Register.ReadSignedInt(4);
+
+            // Check if X2 and X3 are correct
+            Assert.AreEqual(x2Value, -2047);
+            Assert.AreEqual(x3Value, 4);
+            // Check if X4 is correct
+            Assert.AreEqual(x4Value, -2043);
 
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiscVSim.Environment.Decoder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +11,14 @@ namespace RiscVSim.Environment
         internal static uint Add(uint baseAddress, int offset)
         {
             uint result;
-            uint unsignedOffset = Convert.ToUInt32(offset);
             if (offset > 0)
             {
-                // What about the signed bit???
-                result = baseAddress + unsignedOffset;
+                result = baseAddress + Convert.ToUInt32(offset);
             }
             else
             {
-                result = baseAddress - unsignedOffset;
-
+                int positiveOffset = offset * -1;
+                result = baseAddress - Convert.ToUInt32(positiveOffset);
             }
 
             return result;
@@ -32,14 +31,17 @@ namespace RiscVSim.Environment
         /// <param name="coding">the uint coding (i.e a I-Type 12 Bit signed int)</param>
         /// <param name="bitLength">the bit length (12 for an I-Type)</param>
         /// <returns>a Int32 .NET representation of the coding</returns>
-        internal static int GetSignedInteger (uint coding, int bitLength)
+        internal static int GetSignedInteger (uint coding, InstructionType type)
         {
             // We get a coding from an instruction and this one has a signed bit. 
             // 1.  Scan for it
             // 2. Remove it
             // 3. Convert to Int32 and Multiply the value with -1 
 
+
+
             uint scanBitMask = 1;
+            int bitLength = GetBitLength(type);
             scanBitMask <<= bitLength;
 
             uint filter = ~scanBitMask;
@@ -60,6 +62,25 @@ namespace RiscVSim.Environment
             }
 
             return result;
+        }
+
+        private static int GetBitLength(InstructionType type)
+        {
+            int length;
+            switch (type)
+            {
+                case InstructionType.J_Type:
+                    length = 20;  // 1 Bit already set...
+                    break;
+                case InstructionType.I_Type:
+                    length = 11; // 1 Bit already set, so 12 - 1 = 11
+                    break;
+                default:
+                    length = 12;
+                    break;
+            }
+
+            return length;
         }
 
         internal static byte[] Prepare(byte[] buffer, int bytesRequired, bool isSigned)

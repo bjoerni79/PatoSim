@@ -91,7 +91,7 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer >>= 10;
 
             var block4 = workingBuffer & 0x01; // Imm[20] / Signed Bit
-            block4 <<= 20;
+            block4 <<= 19;
 
 
             // Step 1:  Block1
@@ -111,7 +111,7 @@ namespace RiscVSim.Environment.Decoder
 
 
 
-            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, 20);
+            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, instruction.Type);
             return payload;
         }
 
@@ -337,7 +337,7 @@ namespace RiscVSim.Environment.Decoder
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
-            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate,13);
+            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, InstructionType.B_Type);
             return payload;
         }
 
@@ -387,7 +387,8 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer <<= 8;
             workingBuffer |= b3;
             workingBuffer >>= 4;
-            int immediate = Convert.ToInt32(workingBuffer);
+
+            int immediate = MathHelper.GetSignedInteger(workingBuffer, instruction.Type);
 
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;

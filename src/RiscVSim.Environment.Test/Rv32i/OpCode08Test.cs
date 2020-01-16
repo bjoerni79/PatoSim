@@ -48,7 +48,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         public void ShTest1()
         {
             var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 200);
-            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0x0BCD);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0x07CD);
             var instStore1 = InstructionTypeFactory.CreateSType(C.OPSTORE, C.OPSTOREsh, 10, 11, 100);
             var instLoad1 = InstructionTypeFactory.CreateIType(C.OPLOAD, 12, C.OPLOADlhu, 10, 100);
 
@@ -67,15 +67,15 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x12 = register.ReadBlock(12);
 
             Assert.AreEqual(x10, new byte[] { 0xC8, 0x00, 0x00, 0x00 });
-            Assert.AreEqual(x11, new byte[] { 0xCD, 0x0B, 0x00, 0x00 });
-            Assert.AreEqual(x12, new byte[] { 0xCD, 0x0B, 0x00, 0x00 });
+            Assert.AreEqual(x11, new byte[] { 0xCD, 0x07, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0xCD, 0x07, 0x00, 0x00 });
         }
 
         [Test]
         public void SwTest1()
         {
             var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 10, C.opOPIMMaddi, 0, 200);
-            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0x0FFF);
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi, 0, 0xFFF);
             var instLui1 = InstructionTypeFactory.CreateUType(C.OPLUI, 11, 0xFFFF);
             var instStore1 = InstructionTypeFactory.CreateSType(C.OPSTORE, C.OPSTOREsw, 10, 11, 100);
             var instLoad1 = InstructionTypeFactory.CreateIType(C.OPLOAD, 12, C.OPLOADlwu, 10, 100);

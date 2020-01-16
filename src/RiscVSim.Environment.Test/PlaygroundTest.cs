@@ -16,13 +16,16 @@ namespace RiscVSim.Environment.Test
             int c = 0x7FFFFFFF;
             int d = c * -1;
             int e = d * -1;
-
+            int f = 1;
+            int g = f * -1;
 
             var bytesA = BitConverter.GetBytes(a);
             var bytesB = BitConverter.GetBytes(b);
             var bytesC = BitConverter.GetBytes(c);
             var bytesD = BitConverter.GetBytes(d);
             var bytesE = BitConverter.GetBytes(e);
+            var bytesF = BitConverter.GetBytes(f);
+            var bytesG = BitConverter.GetBytes(g); 
 
             Assert.AreEqual(bytesA, new byte[] { 0x05, 0x00, 0x00, 0x00 });
             Assert.AreEqual(bytesB, new byte[] { 0xFB, 0xFF, 0xFF, 0xFF }); // -5 in complement based on 2
@@ -30,6 +33,8 @@ namespace RiscVSim.Environment.Test
             Assert.AreEqual(bytesC, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F });
             Assert.AreEqual(bytesD, new byte[] { 0x01, 0x00, 0x00, 0x80 });
             Assert.AreEqual(bytesE, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F });
+            Assert.AreEqual(bytesF, new byte[] { 0x01, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(bytesG, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         #region Little Endian Coding Tests
