@@ -8,9 +8,9 @@ namespace RiscVSim.Environment.Rv32I
     /// <summary>
     /// Implements the Load Opcode 00
     /// </summary>
-    public class OpCode00 : OpCodeCommand
+    public class OpCode32Id00 : OpCodeCommand
     {
-        public OpCode00(IMemory memory, IRegister register) : base(memory,register)
+        public OpCode32Id00(IMemory memory, IRegister register) : base(memory,register)
         {
             // base...
         }

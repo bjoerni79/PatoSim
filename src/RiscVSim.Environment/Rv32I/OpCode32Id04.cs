@@ -7,11 +7,11 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    public sealed class OpCodeId04 : OpCodeCommand
+    public sealed class OpCode32Id04 : OpCodeCommand
     {
         private Hint hint;
 
-        public OpCodeId04(IMemory memory, IRegister register, Hint hint) : base(memory, register)
+        public OpCode32Id04(IMemory memory, IRegister register, Hint hint) : base(memory, register)
         {
 
             this.hint = hint;

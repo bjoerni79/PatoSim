@@ -8,11 +8,11 @@ namespace RiscVSim.Environment.Rv32I
     /// <summary>
     /// Implements the RV32I conditional branches BNE...
     /// </summary>
-    public class OpCode18 : OpCodeCommand
+    public class OpCode32Id18 : OpCodeCommand
     {
         private Stack<uint> ras;
 
-        public OpCode18 (IMemory memory, IRegister register, Stack<uint> ras) : base (memory,register)
+        public OpCode32Id18 (IMemory memory, IRegister register, Stack<uint> ras) : base (memory,register)
         {
             // base (...)
             this.ras = ras;

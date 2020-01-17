@@ -9,11 +9,11 @@ namespace RiscVSim.Environment.Rv32I
     /// <summary>
     /// Implements the OpCode 1B, which implements the RV32i JAL (Jump and Link) instruction
     /// </summary>
-    public class OpCode1B : OpCodeCommand
+    public class OpCode32Id1B : OpCodeCommand
     {
         private Stack<uint> rasStack;
 
-        public OpCode1B (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
+        public OpCode32Id1B (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
         {
             this.rasStack = rasStack;
         }

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    public class OpCode0D : OpCodeCommand
+    public class OpCode32Id0D : OpCodeCommand
     {
 
-        public OpCode0D(IMemory memory, IRegister register) : base(memory,register)
+        public OpCode32Id0D(IMemory memory, IRegister register) : base(memory,register)
         {
             // see base();
         }

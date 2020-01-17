@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    internal class Cpu32 : ICpu
+    internal class Cpu32 : ICpu32
     {
         private IMemory memory;
         private IRegister register;
@@ -70,30 +70,30 @@ namespace RiscVSim.Environment.Rv32I
         public void Init()
         {
             // Add opcode=04
-            opCodeRegistry.Add(0x04, new OpCodeId04(memory, register, hint));
+            opCodeRegistry.Add(0x04, new OpCode32Id04(memory, register, hint));
 
             // Add opcode=0C, 0D and 05
-            opCodeRegistry.Add(0x0C, new OpCode0C(memory, register));
-            opCodeRegistry.Add(0x0D, new OpCode0D(memory, register));
-            opCodeRegistry.Add(0x05, new OpCode05(memory, register));
+            opCodeRegistry.Add(0x0C, new OpCode32Id0C(memory, register));
+            opCodeRegistry.Add(0x0D, new OpCode32Id0D(memory, register));
+            opCodeRegistry.Add(0x05, new OpCode32Id05(memory, register));
 
             // Jump Opcodes:
             //
             // opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
-            opCodeRegistry.Add(0x1B, new OpCode1B(memory, register, rasStack));
-            opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
-            opCodeRegistry.Add(0x18, new OpCode18(memory, register, rasStack));
+            opCodeRegistry.Add(0x1B, new OpCode32Id1B(memory, register, rasStack));
+            opCodeRegistry.Add(0x19, new OpCode32Id19(memory, register, rasStack));
+            opCodeRegistry.Add(0x18, new OpCode32Id18(memory, register, rasStack));
 
             //
             // Load and Store
             //
-            opCodeRegistry.Add(0x00, new OpCode00(memory, register));
-            opCodeRegistry.Add(0x08, new OpCode08(memory, register));
+            opCodeRegistry.Add(0x00, new OpCode32Id00(memory, register));
+            opCodeRegistry.Add(0x08, new OpCode32Id08(memory, register));
 
             //
             // FENCE
             //
-            opCodeRegistry.Add(0x03, new OpCode03(memory, register));
+            opCodeRegistry.Add(0x03, new OpCode32Id03(memory, register));
 
             //
             // System
