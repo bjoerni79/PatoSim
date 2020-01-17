@@ -98,7 +98,7 @@ namespace RiscVSim.Environment.Rv32I
             //
             // System
             //
-            opCodeRegistry.Add(0x1C, new OpCode1C(memory, register));
+            opCodeRegistry.Add(0x1C, new OpCode32Id1C(memory, register));
         }
     }
 }

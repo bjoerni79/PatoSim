@@ -72,7 +72,7 @@ namespace RiscVSim.Environment.Rv64I
             opCodeRegistry.Add(0x06, new OpCode64Id06(memory, register));
 
             //// Add opcode=0C, 0D and 05
-            //opCodeRegistry.Add(0x0C, new OpCode0C(memory, register));
+            opCodeRegistry.Add(0x0C, new OpCode64Id0C(memory, register));
             //opCodeRegistry.Add(0x0D, new OpCode0D(memory, register));
             //opCodeRegistry.Add(0x05, new OpCode05(memory, register));
 

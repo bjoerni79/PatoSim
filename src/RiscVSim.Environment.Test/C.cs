@@ -75,5 +75,13 @@ namespace RiscVSim.Environment.Test
         public const int OPSTOREsb = 0;
         public const int OPSTOREsh = 1;
         public const int OPSTOREsw = 2;
+
+        // OP-IMM32, OpCode 06 (64 Bit)
+        public const int OPIMM32 = 0x06;
+        public const int OPIMM32_addiw = 0;
+        public const int OPIMM32_slliw = 1;
+        public const int OPIMM32_srliw_sraiw = 5;
+
+
     }
 }
