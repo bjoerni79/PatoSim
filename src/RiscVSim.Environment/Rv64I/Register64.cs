@@ -32,7 +32,7 @@ namespace RiscVSim.Environment.Rv64I
 
         public IEnumerable<byte> ReadBlock(int index)
         {
-            throw new NotImplementedException();
+            return register[index].ReadBlock();
         }
 
         public int ReadSignedInt(int index)
@@ -77,7 +77,7 @@ namespace RiscVSim.Environment.Rv64I
         {
             CheckForX0(index);
 
-            throw new NotImplementedException();
+            register[index].WriteBlock(block);
         }
 
         public void WriteSignedInt(int index, int value)

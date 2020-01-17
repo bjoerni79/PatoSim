@@ -143,7 +143,7 @@ namespace RiscVSim.Environment.Rv32I
                 // andi
                 //
                 case andi:
-                    resultBuffer = ExecuteLogicalOp(LogicalOp.Add, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Add, rs1block, immediate);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
@@ -151,7 +151,7 @@ namespace RiscVSim.Environment.Rv32I
                 //  ori
                 //
                 case ori:
-                    resultBuffer = ExecuteLogicalOp(LogicalOp.Or, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Or, rs1block, immediate);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
@@ -161,12 +161,12 @@ namespace RiscVSim.Environment.Rv32I
                 case xori:
                     if (immediate == 0xfff) // 12 Bit Immediate with -1
                     {
-                        resultBuffer = ExecuteLogicalOp(LogicalOp.BitwiseInversion, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.BitwiseInversion, rs1block, immediate);
                         Register.WriteBlock(rd, resultBuffer);
                     }
                     else
                     {
-                        resultBuffer = ExecuteLogicalOp(LogicalOp.Xor, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Xor, rs1block, immediate);
                         Register.WriteBlock(rd, resultBuffer);
                     }
 
@@ -210,42 +210,6 @@ namespace RiscVSim.Environment.Rv32I
                 default:
                     throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", instruction.OpCode, funct3));
             }
-        }
-
-        private enum LogicalOp
-        {
-            Add,
-            Or,
-            Xor,
-            BitwiseInversion
-        }
-
-        private IEnumerable<byte> ExecuteLogicalOp(LogicalOp op,IEnumerable<byte> rs1, int immediate)
-        {
-            var buffer = new byte[4];
-            var i = BitConverter.GetBytes(immediate);
-            for (int index = 0; index < 4; index++)
-            {
-                switch (op)
-                {
-                    case LogicalOp.Add:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) & i.ElementAt(index));
-                        break;
-                    case LogicalOp.Or:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) | i.ElementAt(index));
-                        break;
-                    case LogicalOp.Xor:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) ^ i.ElementAt(index));
-                        break;
-                    case LogicalOp.BitwiseInversion:
-                        var value = rs1.ElementAt(index);
-                        var complement  = ~value;
-                        buffer[index] = Convert.ToByte(complement & 0xFF);
-                        break;
-                }
-            }
-
-            return buffer;
         }
 
     }

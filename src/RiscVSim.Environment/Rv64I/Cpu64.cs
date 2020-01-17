@@ -40,6 +40,27 @@ namespace RiscVSim.Environment.Rv64I
 
         public void Execute(Instruction instruction, InstructionPayload payload)
         {
+            if (!opCodeRegistry.IsInitialized)
+            {
+                new RiscVSimException("CPU is not initialized: Please call init() first!");
+            }
+
+            var curOpCode = instruction.OpCode;
+
+            // Execute the command now
+            var opCodeCommand = opCodeRegistry.Get(curOpCode);
+
+            if (opCodeCommand == null)
+            {
+                string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
+                throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
+            }
+
+            var incPc = opCodeCommand.Execute(instruction, payload);
+            if (incPc)
+            {
+                register.NextInstruction(instruction.InstructionLength);
+            }
         }
 
         public void Init()
@@ -47,7 +68,7 @@ namespace RiscVSim.Environment.Rv64I
             // Init the OpCodes here!
 
             // Add opcode=04
-            //opCodeRegistry.Add(0x04, new OpCodeId04(memory, register, hint));
+            opCodeRegistry.Add(0x04, new OpCode64Id04(memory, register, hint));
 
             //// Add opcode=0C, 0D and 05
             //opCodeRegistry.Add(0x0C, new OpCode0C(memory, register));

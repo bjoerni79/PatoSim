@@ -123,5 +123,43 @@ namespace RiscVSim.Environment
 
             return preparedBuffer.ToArray();
         }
+
+        // ---
+
+        internal enum LogicalOp
+        {
+            Add,
+            Or,
+            Xor,
+            BitwiseInversion
+        }
+
+        internal static IEnumerable<byte> ExecuteLogicalOp(LogicalOp op, IEnumerable<byte> rs1, int immediate)
+        {
+            var buffer = new byte[4];
+            var i = BitConverter.GetBytes(immediate);
+            for (int index = 0; index < 4; index++)
+            {
+                switch (op)
+                {
+                    case LogicalOp.Add:
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) & i.ElementAt(index));
+                        break;
+                    case LogicalOp.Or:
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) | i.ElementAt(index));
+                        break;
+                    case LogicalOp.Xor:
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) ^ i.ElementAt(index));
+                        break;
+                    case LogicalOp.BitwiseInversion:
+                        var value = rs1.ElementAt(index);
+                        var complement = ~value;
+                        buffer[index] = Convert.ToByte(complement & 0xFF);
+                        break;
+                }
+            }
+
+            return buffer;
+        }
     }
 }
