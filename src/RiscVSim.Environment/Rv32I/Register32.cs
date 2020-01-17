@@ -122,5 +122,44 @@ namespace RiscVSim.Environment.Rv32I
             return index;
         }
 
+        public long ReadSignedLong(RegisterName name)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public long ReadSignedLong(int index)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public void WriteSignedLong(RegisterName registerName, long value)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public void WriteSignedLong(int index, long value)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public ulong ReadUnsignedLong(RegisterName name)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public ulong ReadUnsignedLong(int name)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public void WriteUnsignedLong(RegisterName name, ulong value)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public void WriteUnsignedLong(int index, ulong value)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
     }
 }

@@ -17,10 +17,7 @@ namespace RiscVSim.Environment.Test.Rv64i
 
         //TODO: Test SignedInt!
 
-        [Test]
-        public void ReadTest1()
-        {
-            var enums = new RegisterName[]
+        private RegisterName[] registerNames =  new RegisterName[]
             {
                 RegisterName.x0,
                 RegisterName.x1,
@@ -57,8 +54,22 @@ namespace RiscVSim.Environment.Test.Rv64i
                 RegisterName.x32,
             };
 
+        [Test]  
+        public void Read32Test1()
+        {
             // The initial value for all register is zero!
-            foreach (var curValue in enums)
+            foreach (var curValue in registerNames)
+            {
+                var initValue = register.ReadUnsignedInt(curValue);
+                Assert.AreEqual(initValue, 0);
+            }
+        }
+
+        [Test]
+        public void Read64Test1()
+        {
+            // The initial value for all register is zero!
+            foreach (var curValue in registerNames)
             {
                 var initValue = register.ReadUnsignedInt(curValue);
                 Assert.AreEqual(initValue, 0);
