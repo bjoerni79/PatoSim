@@ -1,5 +1,4 @@
-﻿using RiscVSim.Environment.Rv32I;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,7 +22,12 @@ namespace RiscVSim.Environment
 
         public static IRegister CreateRegisterRv32()
         {
-            return new Register32();
+            return new Rv32I.Register32();
+        }
+
+        public static IRegister CreateRegisterRv64()
+        {
+            return new Rv64I.Register64();
         }
 
         public static Rv32I.Core CreateRv32ICore()

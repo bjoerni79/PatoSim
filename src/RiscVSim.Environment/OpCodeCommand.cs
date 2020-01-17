@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.Environment
 {
 
     /// <summary>
     /// The RV32I opcode base class 
     /// </summary>
-    public abstract class OpCodeCommand32
+    public abstract class OpCodeCommand
     {
         private readonly IMemory memory;
         private readonly IRegister register;
@@ -20,7 +20,7 @@ namespace RiscVSim.Environment.Rv32I
         /// </summary>
         /// <param name="memory">the memory</param>
         /// <param name="register">the register</param>
-        public OpCodeCommand32(IMemory memory, IRegister register)
+        public OpCodeCommand(IMemory memory, IRegister register)
         {
             this.memory = memory;
             this.register = register;

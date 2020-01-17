@@ -8,7 +8,7 @@ namespace RiscVSim.Environment.Rv32I
     /// <summary>
     /// Implements the JALR (Jump and Link Register) opcode
     /// </summary>
-    public class OpCode19 : OpCodeCommand32
+    public class OpCode19 : OpCodeCommand
     {
         private Stack<uint> rasStack;
 
