@@ -8,9 +8,9 @@ namespace RiscVSim.Environment.Opcode
 {
 
     /// <summary>
-    /// Represents an OpCode and implements the execution part of it. CPUs / Cores can create instances of it and use it for the instruction processing
+    /// The RV32I opcode base class 
     /// </summary>
-    public abstract class OpCodeCommand
+    public abstract class OpCodeCommand32
     {
         private readonly IMemory memory;
         private readonly IRegister register;
@@ -20,11 +20,13 @@ namespace RiscVSim.Environment.Opcode
         /// </summary>
         /// <param name="memory">the memory</param>
         /// <param name="register">the register</param>
-        public OpCodeCommand(IMemory memory, IRegister register)
+        public OpCodeCommand32(IMemory memory, IRegister register)
         {
             this.memory = memory;
             this.register = register;
         }
+
+        public Architecture Architecture => Architecture.Rv32I;
 
         /// <summary>
         /// Returns the Opcode assigned for this set of commands

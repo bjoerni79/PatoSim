@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Opcode
 {
-    public sealed class OpCodeId04 : OpCodeCommand
+    public sealed class OpCodeId04 : OpCodeCommand32
     {
         private Hint hint;
 

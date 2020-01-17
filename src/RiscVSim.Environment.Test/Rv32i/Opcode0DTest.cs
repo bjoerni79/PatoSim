@@ -9,12 +9,12 @@ namespace RiscVSim.Environment.Test.Rv32i
 {
     public class Opcode0DTest
     {
-        private BootstrapCore core;
+        private BootstrapCore32 core;
 
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore();
+            core = new BootstrapCore32();
         }
 
         [Test]

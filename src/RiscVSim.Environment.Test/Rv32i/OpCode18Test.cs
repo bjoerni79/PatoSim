@@ -10,14 +10,14 @@ namespace RiscVSim.Environment.Test.Rv32i
     public class OpCode18Test
     {
 
-        private BootstrapCore core;
+        private BootstrapCore32 core;
 
         private IEnumerable<byte> initBlock;
 
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore();
+            core = new BootstrapCore32();
 
             // Adds a jump point with a simple add operation
             var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 11, C.opOPIMMaddi,10,1); // x11 = x10 + 1;

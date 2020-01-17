@@ -9,12 +9,12 @@ namespace RiscVSim.Environment.Test.Rv64i
 {
     public class PlaygroundTest
     {
-        private BootstrapCore core;
+        private BootstrapCore32 core;
 
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore(Architecture.Rv64I);
+            core = new BootstrapCore32(Architecture.Rv64I);
         }
 
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Opcode
 {
-    public class OpCode05 : OpCodeCommand
+    public class OpCode05 : OpCodeCommand32
     {
 
 

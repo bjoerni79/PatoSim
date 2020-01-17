@@ -10,7 +10,7 @@ namespace RiscVSim.Environment.Rv32I
     /// <summary>
     /// A simple core for testing all components
     /// </summary>
-    public class BootstrapCore
+    public class BootstrapCore32
     {
         public IMemory Memory { get; set; }
 
@@ -28,7 +28,7 @@ namespace RiscVSim.Environment.Rv32I
 
         public Stack<uint> RasStack { get; set; }
 
-        public BootstrapCore(Architecture architecture)
+        public BootstrapCore32(Architecture architecture)
         {
             Memory = Factory.CreateDynamicMemory(architecture);
             Register = Factory.CreateRegister(architecture);
@@ -41,7 +41,7 @@ namespace RiscVSim.Environment.Rv32I
             InstructionPayloads = new List<InstructionPayload>();
         }
 
-        public BootstrapCore() : this(Architecture.Rv32I)
+        public BootstrapCore32() : this(Architecture.Rv32I)
         {
         }
 

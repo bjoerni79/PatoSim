@@ -6,14 +6,14 @@ namespace RiscVSim.Environment.Opcode
 {
     internal class OpCodeRegistry
     {
-        private Dictionary<int, OpCodeCommand> opCodeDict;
+        private Dictionary<int, OpCodeCommand32> opCodeDict;
 
         internal OpCodeRegistry()
         {
-            opCodeDict = new Dictionary<int, OpCodeCommand>();
+            opCodeDict = new Dictionary<int, OpCodeCommand32>();
         }
 
-        public void Add(int opCode, OpCodeCommand command)
+        public void Add(int opCode, OpCodeCommand32 command)
         {
             if (opCodeDict.ContainsKey(opCode))
             {
@@ -23,7 +23,7 @@ namespace RiscVSim.Environment.Opcode
             opCodeDict.Add(opCode, command);
         }
 
-        public OpCodeCommand Get(int opCode)
+        public OpCodeCommand32 Get(int opCode)
         {
             if (!opCodeDict.ContainsKey(opCode))
             {

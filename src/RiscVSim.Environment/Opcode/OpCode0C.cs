@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Opcode
 {
-    public class OpCode0C : OpCodeCommand
+    public class OpCode0C : OpCodeCommand32
     {
         public OpCode0C (IMemory memory, IRegister register) : base(memory,register)
         {

@@ -11,12 +11,12 @@ namespace RiscVSim.Environment.Test.BootStrapCore
 {
     public class DecoderTest
     {
-        private BootstrapCore core;
+        private BootstrapCore32 core;
 
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore();
+            core = new BootstrapCore32();
         }
 
 
