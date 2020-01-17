@@ -22,7 +22,12 @@ namespace RiscVSim.Environment
 
         public static IRegister CreateRv32IRegister()
         {
-            return new Register();
+            return new Register(Architecture.Rv32I);
+        }
+
+        public static IRegister CreateRv32IRegister(Architecture architecture)
+        {
+            return new Register(architecture);
         }
 
         public static Rv32I.Core CreateRv32ICore()

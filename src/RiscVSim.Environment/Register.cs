@@ -12,6 +12,7 @@ namespace RiscVSim.Environment
     {
         private RegisterEntry[] register;
         private int pcRegister;
+        private Architecture architecture;
 
         /*
          * 
@@ -34,18 +35,21 @@ namespace RiscVSim.Environment
 
 
 
-        internal Register()
+        internal Register(Architecture architecture)
         {
+            this.architecture = architecture;
             register = new RegisterEntry[33];  // Register 0,1,2...32
             pcRegister = 32;
 
             for (int index=0; index <= 32; index++)
             {
-                register[index] = new RegisterEntry(Architecture.Rv32I);
+                register[index] = new RegisterEntry(architecture);
             }
         }
 
         public int ProgramCounter { get { return pcRegister; } }
+
+        public Architecture Architecture => architecture;
 
         #region Signed Int
 

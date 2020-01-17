@@ -8,5 +8,6 @@ namespace RiscVSim.Environment
     {
         Unknown = 0,
         Rv32I = 4, // 4 Bytes = 32 Bit
+        Rv64I = 8
     };
 }

@@ -168,16 +168,16 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer = b4;
             workingBuffer >>= 1;
             workingBuffer &= 0x7F;
-            int upperPart = Convert.ToInt32(workingBuffer);
+            uint upperPart = workingBuffer;
 
             var immediate = upperPart;
             immediate <<= 5;
-            immediate |= payload.Rd;
+            immediate |= Convert.ToUInt32(payload.Rd);
 
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
-            payload.SignedImmediate = immediate;
+            payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, instruction.Type);
             return payload;
         }
 

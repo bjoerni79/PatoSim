@@ -8,6 +8,8 @@ namespace RiscVSim.Environment
     {
         int ProgramCounter  { get;  }
 
+        Architecture Architecture { get; }
+
         void WriteSignedInt(int index, int value);
 
         int ReadSignedInt(int index);

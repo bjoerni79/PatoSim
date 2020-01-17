@@ -75,6 +75,12 @@ namespace RiscVSim.Environment
                 case InstructionType.I_Type:
                     length = 11; // 1 Bit already set, so 12 - 1 = 11
                     break;
+                case InstructionType.B_Type:
+                    length = 12; //  +/- 4KByte plus Signed
+                    break;
+                case InstructionType.S_Type:
+                    length = 11; // Similar to I.  12 Bit Signed,  +/- 2KBytes
+                    break;
                 default:
                     length = 12;
                     break;
