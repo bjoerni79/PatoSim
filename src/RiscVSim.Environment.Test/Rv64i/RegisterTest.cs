@@ -1,19 +1,18 @@
 ﻿using NUnit.Framework;
-using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Test.Rv32i
+namespace RiscVSim.Environment.Test.Rv64i
 {
-    public class RegisterTest1
+    public class RegisterTest
     {
         private IRegister register;
 
         [SetUp]
         public void Setup()
         {
-            register = Factory.CreateRegister(Architecture.Rv32I);
+            register = Factory.CreateRegister(Architecture.Rv64I);
         }
 
         //TODO: Test SignedInt!
@@ -133,7 +132,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             foreach (var curValue in enums)
             {
                 var content = register.ReadUnsignedInt(curValue);
-                Assert.AreEqual(content, expectedValue);                
+                Assert.AreEqual(content, expectedValue);
 
                 expectedValue++;
             }

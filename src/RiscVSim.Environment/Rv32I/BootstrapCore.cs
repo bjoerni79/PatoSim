@@ -28,10 +28,10 @@ namespace RiscVSim.Environment.Rv32I
 
         public Stack<uint> RasStack { get; set; }
 
-        public BootstrapCore()
+        public BootstrapCore(Architecture architecture)
         {
-            Memory = Factory.CreateDynamicMemory(Architecture.Rv32I);
-            Register = Factory.CreateRv32IRegister();
+            Memory = Factory.CreateDynamicMemory(architecture);
+            Register = Factory.CreateRegister(architecture);
             RasStack = new Stack<uint>();
             Hint = new Hint();
             BaseAddres = 0x100;
@@ -39,6 +39,10 @@ namespace RiscVSim.Environment.Rv32I
 
             InstructionsProcessed = new List<Instruction>();
             InstructionPayloads = new List<InstructionPayload>();
+        }
+
+        public BootstrapCore() : this(Architecture.Rv32I)
+        {
         }
 
         public void Load(uint address, IEnumerable<byte> data)

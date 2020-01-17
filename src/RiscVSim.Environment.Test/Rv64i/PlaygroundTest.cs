@@ -14,7 +14,7 @@ namespace RiscVSim.Environment.Test.Rv64i
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore();
+            core = new BootstrapCore(Architecture.Rv64I);
         }
 
 
