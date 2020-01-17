@@ -30,7 +30,7 @@ namespace RiscVSim.Environment.Rv32I
         public BootstrapCore32(Architecture architecture)
         {
             Memory = Factory.CreateDynamicMemory(architecture);
-            Register = Factory.CreateRegister(architecture);
+            Register = Factory.CreateRegisterRv32();
             RasStack = new Stack<uint>();
             Hint = new Hint();
             BaseAddres = 0x100;

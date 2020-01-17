@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment
+namespace RiscVSim.Environment.Rv32I
 {
     /// <summary>
     /// Represents a register set based on Rv32I ISA 
     /// </summary>
-    public sealed class Register : IRegister
+    public sealed class Register32 : IRegister
     {
         private RegisterEntry[] register;
         private int pcRegister;
-        private Architecture architecture;
 
         /*
          * 
@@ -35,21 +34,19 @@ namespace RiscVSim.Environment
 
 
 
-        internal Register(Architecture architecture)
+        internal Register32()
         {
-            this.architecture = architecture;
             register = new RegisterEntry[33];  // Register 0,1,2...32
             pcRegister = 32;
 
             for (int index=0; index <= 32; index++)
             {
-                register[index] = new RegisterEntry(architecture);
+                register[index] = new RegisterEntry(Architecture.Rv32I);
             }
         }
 
         public int ProgramCounter { get { return pcRegister; } }
 
-        public Architecture Architecture => architecture;
 
         #region Signed Int
 

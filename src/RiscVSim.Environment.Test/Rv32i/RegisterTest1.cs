@@ -13,7 +13,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [SetUp]
         public void Setup()
         {
-            register = Factory.CreateRegister(Architecture.Rv32I);
+            register = Factory.CreateRegisterRv32();
         }
 
         //TODO: Test SignedInt!
