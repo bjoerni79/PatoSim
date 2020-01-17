@@ -42,6 +42,18 @@ namespace RiscVSim.Environment
             WriteBlock(bytes);
         }
 
+        public void WriteLong (long value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            WriteBlock(bytes);
+        }
+
+        public void WriteUnsignedLong (ulong value)
+        {
+            var bytes = BitConverter.GetBytes(value);
+            WriteBlock(bytes);
+        }
+
         public void WriteBlock(IEnumerable<byte> blockValue)
         {
             // Store it in a RISC - V compatible way
@@ -53,6 +65,7 @@ namespace RiscVSim.Environment
             var count = blockValue.Count();
             if (count <= registerSize)
             {
+                // Reset the byte array and write the result as little endian coding ( B0 B1 B2 B3 ...  where B0 ist the lowest byte)
                 Clear();
 
                 for (int i = 0; i<count; i++)
@@ -65,37 +78,6 @@ namespace RiscVSim.Environment
         private void Clear()
         {
             content = new byte[registerSize];
-        }
-
-        /// <summary>
-        /// TODO: This works for now , but must be improved later!!!
-        /// </summary>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        private IEnumerable<byte> CutTrailingZero(IEnumerable<byte> content)
-        {
-            var result = new List<byte>();
-            var reversed = content; //.Reverse();
-            var keepZeroes = false;
-
-            foreach (var curByte in reversed)
-            {
-                if (curByte != 0)
-                {
-                    result.Add(curByte);
-                    keepZeroes = true;
-                }
-                else
-                {
-                    // Zero detected)
-                    if (keepZeroes)
-                    {
-                        result.Add(00);
-                    }
-                }
-            }
-
-            return result;
         }
 
 
@@ -116,6 +98,18 @@ namespace RiscVSim.Environment
         {
             var value = BitConverter.ToUInt32(content, 0);
 
+            return value;
+        }
+
+        public long ReadLong()
+        {
+            var value = BitConverter.ToInt64(content, 0);
+            return value;
+        }
+
+        public ulong ReadUnsignedLong()
+        {
+            var value = BitConverter.ToUInt64(content, 0);
             return value;
         }
 

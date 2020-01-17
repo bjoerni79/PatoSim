@@ -15,8 +15,6 @@ namespace RiscVSim.Environment.Test.Rv64i
             register = Factory.CreateRegisterRv64();
         }
 
-        //TODO: Test SignedInt!
-
         private RegisterName[] registerNames =  new RegisterName[]
             {
                 RegisterName.x0,
@@ -71,7 +69,7 @@ namespace RiscVSim.Environment.Test.Rv64i
             // The initial value for all register is zero!
             foreach (var curValue in registerNames)
             {
-                var initValue = register.ReadUnsignedInt(curValue);
+                var initValue = register.ReadUnsignedLong(curValue);
                 Assert.AreEqual(initValue, 0);
             }
         }
@@ -153,11 +151,11 @@ namespace RiscVSim.Environment.Test.Rv64i
         [Test]
         public void ProgramCounterTest()
         {
-            uint programCounterValue = 100;
+            ulong programCounterValue = 0x1F0000;
 
-            register.WriteUnsignedInt(RegisterName.x32, programCounterValue);
+            register.WriteUnsignedLong(RegisterName.x32, programCounterValue);
 
-            uint programCounterValue1 = register.ReadUnsignedInt(register.ProgramCounter); ;
+            ulong programCounterValue1 = register.ReadUnsignedInt(register.ProgramCounter); ;
             Assert.AreEqual(programCounterValue, programCounterValue1);
 
         }

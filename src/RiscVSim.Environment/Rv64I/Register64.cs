@@ -6,11 +6,28 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class Register64 : IRegister
     {
+        private RegisterEntry[] register;
+        private int pcRegister;
+
         public int ProgramCounter => 32; // x0 ....x31, x32 = PC
+
+        internal Register64()
+        {
+            register = new RegisterEntry[33];  // Register 0,1,2...32
+            pcRegister = 32;
+
+            for (int index = 0; index <= 32; index++)
+            {
+                register[index] = new RegisterEntry(Architecture.Rv64I);
+            }
+        }
 
         public void NextInstruction(int offset)
         {
-            throw new NotImplementedException();
+            var currentProgrammCounter = ReadUnsignedLong(ProgramCounter);
+            ulong newProgramCounter = currentProgrammCounter + Convert.ToUInt64(offset);
+
+            WriteUnsignedLong(ProgramCounter, newProgramCounter);
         }
 
         public IEnumerable<byte> ReadBlock(int index)
@@ -20,77 +37,106 @@ namespace RiscVSim.Environment.Rv64I
 
         public int ReadSignedInt(int index)
         {
-            throw new NotImplementedException();
+            return register[index].ReadInteger();
         }
 
         public long ReadSignedLong(RegisterName name)
         {
-            throw new NotImplementedException();
+            var index = ToInt(name);
+            return ReadSignedLong(index);
         }
 
         public long ReadSignedLong(int index)
         {
-            throw new NotImplementedException();
+            return register[index].ReadLong();
         }
 
         public uint ReadUnsignedInt(RegisterName name)
         {
-            throw new NotImplementedException();
+            var index = ToInt(name);
+            return ReadUnsignedInt(index);
         }
 
         public uint ReadUnsignedInt(int index)
         {
-            throw new NotImplementedException();
+            return register[index].ReadUnsignedInteger();
         }
 
         public ulong ReadUnsignedLong(RegisterName name)
         {
-            throw new NotImplementedException();
+            var index = ToInt(name);
+            return ReadUnsignedLong(index);
         }
 
-        public ulong ReadUnsignedLong(int name)
+        public ulong ReadUnsignedLong(int index)
         {
-            throw new NotImplementedException();
+            return register[index].ReadUnsignedLong();
         }
 
         public void WriteBlock(int index, IEnumerable<byte> block)
         {
+            CheckForX0(index);
+
             throw new NotImplementedException();
         }
 
         public void WriteSignedInt(int index, int value)
         {
-            throw new NotImplementedException();
+            CheckForX0(index);
+
+            register[index].WriteInteger(value);
         }
 
         public void WriteSignedLong(RegisterName registerName, long value)
         {
-            throw new NotImplementedException();
+            var index = ToInt(registerName);
+            WriteSignedLong(index, value);
         }
 
         public void WriteSignedLong(int index, long value)
         {
-            throw new NotImplementedException();
+            CheckForX0(index);
+
+            register[index].WriteLong(value);
         }
 
-        public void WriteUnsignedInt(RegisterName name, uint value)
+        public void WriteUnsignedInt(RegisterName registerName, uint value)
         {
-            throw new NotImplementedException();
+            var index = ToInt(registerName);
+            WriteUnsignedInt(index, value);
         }
 
         public void WriteUnsignedInt(int index, uint value)
         {
-            throw new NotImplementedException();
+            CheckForX0(index);
+            register[index].WriteUnsignedInteger(value);
         }
 
-        public void WriteUnsignedLong(RegisterName name, ulong value)
+        public void WriteUnsignedLong(RegisterName registerName, ulong value)
         {
-            throw new NotImplementedException();
+            var index = ToInt(registerName);
+            WriteUnsignedLong(index, value);
         }
 
         public void WriteUnsignedLong(int index, ulong value)
         {
-            throw new NotImplementedException();
+            CheckForX0(index);
+
+            register[index].WriteUnsignedLong(value);
+        }
+
+        private void CheckForX0(int index)
+        {
+            if (index==0)
+            {
+                throw new RiscVSimException("Register X0 is only readable!");
+            }
+        }
+
+        private int ToInt(RegisterName name)
+        {
+            var index = Convert.ToInt32(name);
+            return index;
         }
     }
 }
