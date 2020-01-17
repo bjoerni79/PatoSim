@@ -143,7 +143,7 @@ namespace RiscVSim.Environment.Rv32I
                 // andi
                 //
                 case andi:
-                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Add, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Add, rs1block, immediate, Architecture.Rv32I);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
@@ -151,7 +151,7 @@ namespace RiscVSim.Environment.Rv32I
                 //  ori
                 //
                 case ori:
-                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Or, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Or, rs1block, immediate, Architecture.Rv32I);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
@@ -161,12 +161,12 @@ namespace RiscVSim.Environment.Rv32I
                 case xori:
                     if (immediate == 0xfff) // 12 Bit Immediate with -1
                     {
-                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.BitwiseInversion, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.BitwiseInversion, rs1block, immediate, Architecture.Rv32I);
                         Register.WriteBlock(rd, resultBuffer);
                     }
                     else
                     {
-                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Xor, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Xor, rs1block, immediate, Architecture.Rv32I);
                         Register.WriteBlock(rd, resultBuffer);
                     }
 

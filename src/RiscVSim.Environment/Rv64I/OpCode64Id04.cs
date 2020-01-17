@@ -114,13 +114,13 @@ namespace RiscVSim.Environment.Rv64I
 
                 // ANDI (logical and)
                 case andi:
-                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Add, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Add, rs1block, immediate, Architecture.Rv64I);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
                 // ORI (logical or)
                 case ori:
-                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Or, rs1block, immediate);
+                    resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Or, rs1block, immediate, Architecture.Rv64I);
                     Register.WriteBlock(rd, resultBuffer);
                     break;
 
@@ -128,15 +128,40 @@ namespace RiscVSim.Environment.Rv64I
                 case xori:
                     if (immediate == 0xfff) // 12 Bit Immediate with -1
                     {
-                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.BitwiseInversion, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.BitwiseInversion, rs1block, immediate, Architecture.Rv64I);
                         Register.WriteBlock(rd, resultBuffer);
                     }
                     else
                     {
-                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Xor, rs1block, immediate);
+                        resultBuffer = MathHelper.ExecuteLogicalOp(MathHelper.LogicalOp.Xor, rs1block, immediate, Architecture.Rv64I);
                         Register.WriteBlock(rd, resultBuffer);
                     }
 
+                    break;
+
+                // Shift Left Immediate
+                case slli:
+                    var leftShiftAmount = immediate & 0x1F; // the last 5 bytes are the shift increment;
+                    resultUnsigned = rs1ValueUnsigned << leftShiftAmount;
+                    Register.WriteUnsignedLong(rd, resultUnsigned);
+                    break;
+
+                case srli_and_srai:
+
+                    // https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators
+
+                    var rightShiftAmount = immediate & 0x1F;
+                    var rightShiftMode = (immediate & 0x0400);
+                    if (rightShiftMode == 0x400)
+                    {
+                        resultSigned = rs1ValueSigned >> rightShiftAmount;
+                        Register.WriteSignedLong(rd, resultSigned);
+                    }
+                    else
+                    {
+                        resultUnsigned = rs1ValueUnsigned >> rightShiftAmount;
+                        Register.WriteUnsignedLong(rd, resultUnsigned);
+                    }
                     break;
 
                 default:

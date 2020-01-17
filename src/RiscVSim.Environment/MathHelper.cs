@@ -134,22 +134,35 @@ namespace RiscVSim.Environment
             BitwiseInversion
         }
 
-        internal static IEnumerable<byte> ExecuteLogicalOp(LogicalOp op, IEnumerable<byte> rs1, int immediate)
+        internal static IEnumerable<byte> ExecuteLogicalOp(LogicalOp op, IEnumerable<byte> rs1, int immediate, Architecture architecture)
         {
-            var buffer = new byte[4];
-            var i = BitConverter.GetBytes(immediate);
-            for (int index = 0; index < 4; index++)
+            byte[] buffer;
+            if (architecture == Architecture.Rv32I)
+            {
+                buffer = new byte[4];
+            }
+            else
+            {
+                buffer = new byte[8];
+            }
+
+            var immediateBytes = BitConverter.GetBytes(immediate);
+            var immediateBuffer = new byte[buffer.Length];
+            Array.Copy(immediateBytes, 0, immediateBuffer, 0, immediateBytes.Length);
+            //for (int )
+
+            for (int index = 0; index < buffer.Length; index++)
             {
                 switch (op)
                 {
                     case LogicalOp.Add:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) & i.ElementAt(index));
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) & immediateBuffer.ElementAt(index));
                         break;
                     case LogicalOp.Or:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) | i.ElementAt(index));
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) | immediateBuffer.ElementAt(index));
                         break;
                     case LogicalOp.Xor:
-                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) ^ i.ElementAt(index));
+                        buffer[index] = Convert.ToByte(rs1.ElementAt(index) ^ immediateBuffer.ElementAt(index));
                         break;
                     case LogicalOp.BitwiseInversion:
                         var value = rs1.ElementAt(index);

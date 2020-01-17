@@ -259,108 +259,112 @@ namespace RiscVSim.Environment.Test.Rv64i
             Assert.AreEqual(x2Block, new byte[] { 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
         }
 
-        //[Test]
-        //public void SlliTest1()
-        //{
-        //    var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01);
-        //    var instSlli1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x01);  // Left Shift of x1 with 1
-        //    var instSlli2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
+        [Test]
+        public void SlliTest1()
+        {
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01);
+            var instSlli1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x01);  // Left Shift of x1 with 1
+            var instSlli2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
 
-        //    var program = new List<byte>();
-        //    program.AddRange(instAddi);
-        //    program.AddRange(instSlli1);
-        //    program.AddRange(instSlli2);
+            var program = new List<byte>();
+            program.AddRange(instAddi);
+            program.AddRange(instSlli1);
+            program.AddRange(instSlli2);
 
-        //    core.Run(program);
+            core.Run(program);
 
-        //    var register = core.Register;
-        //    var x1Block = register.ReadBlock(1);
-        //    var x2Block = register.ReadBlock(2);
-        //    var x3Block = register.ReadBlock(3);
+            var register = core.Register;
+            var x1Block = register.ReadBlock(1);
+            var x2Block = register.ReadBlock(2);
+            var x3Block = register.ReadBlock(3);
 
-        //    Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00 }); 
-        //    Assert.AreEqual(x2Block, new byte[] { 0x02, 0x00, 0x00, 0x00 }); // Just a simple left shift
-        //    Assert.AreEqual(x3Block, new byte[] { 0x00, 0x00, 0x00, 0x80 }); // Last bit of the register must have 1!
-        //}
+            Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2Block, new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); // Just a simple left shift
+            Assert.AreEqual(x3Block, new byte[] { 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00 }); // Last bit of the register must have 1!
+        }
 
-        //[Test]
-        //public void SrliTest1()
-        //{
-        //    var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01);
-        //    var instSll1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
-        //    var instSrl1 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMsrlisrai, 2, 0x1F);  // And the same back to 01...
+        [Test]
+        public void SrliTest1()
+        {
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01);
+            var instSll1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
+            var instSrl1 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMsrlisrai, 2, 0x1F);  // And the same back to 01...
 
-        //    var program = new List<byte>();
-        //    program.AddRange(instAddi);
-        //    program.AddRange(instSll1);
-        //    program.AddRange(instSrl1);
+            var program = new List<byte>();
+            program.AddRange(instAddi);
+            program.AddRange(instSll1);
+            program.AddRange(instSrl1);
 
-        //    core.Run(program);
+            core.Run(program);
 
-        //    var register = core.Register;
-        //    var x1Block = register.ReadBlock(1);
-        //    var x2Block = register.ReadBlock(2);
-        //    var x3Block = register.ReadBlock(3);
+            var register = core.Register;
+            var x1Block = register.ReadBlock(1);
+            var x2Block = register.ReadBlock(2);
+            var x3Block = register.ReadBlock(3);
 
-        //    Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00 });
-        //    Assert.AreEqual(x2Block, new byte[] { 0x00, 0x00, 0x00, 0x80 }); // Shift the byte to the highest bit...
-        //    Assert.AreEqual(x3Block, new byte[] { 0x01, 0x00, 0x00, 0x00 }); // ...and shift it back!
-        //}
+            Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2Block, new byte[] { 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00 }); // Shift the byte to the highest bit...
+            Assert.AreEqual(x3Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); // ...and shift it back!
+        }
 
-        //[Test]
-        //public void SraiTest1()
-        //{
-        //    var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x02);
-        //    var instSrai = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMsrlisrai, 1, 0x401);
+        [Test]
+        public void SraiTest1()
+        {
+            var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x02);
+            var instSrai = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMsrlisrai, 1, 0x401);
 
-        //    var program = new List<byte>();
-        //    program.AddRange(instAddi);
-        //    program.AddRange(instSrai);
+            var program = new List<byte>();
+            program.AddRange(instAddi);
+            program.AddRange(instSrai);
 
-        //    core.Run(program);
+            core.Run(program);
 
-        //    var register = core.Register;
-        //    var x1Block = register.ReadBlock(1);
-        //    var x2Block = register.ReadBlock(2);
+            var register = core.Register;
+            var x1Block = register.ReadBlock(1);
+            var x2Block = register.ReadBlock(2);
 
-        //    Assert.AreEqual(x1Block, new byte[] { 0x02, 0x00, 0x00, 0x00 });
-        //    Assert.AreEqual(x2Block, new byte[] { 0x01, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x1Block, new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
 
-        //}
+        }
 
-        //[Test]
-        //public void SraiTest2()
-        //{
-        //    var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
-        //    var instSll1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F);  //x2 = x1 << 32;
-        //    var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
-        //    // OK..  We have a 1 at the MSB and 1 at LSB.  Run the two shift commands now.
-        //    var instSrai1 = InstructionTypeFactory.CreateIType(C.OPIMM, 4, C.opOPIMMsrlisrai, 3, 0x01);  // slri (logical mode)
-        //    var instSrai2 = InstructionTypeFactory.CreateIType(C.OPIMM, 5, C.opOPIMMsrlisrai, 3, 0x401); // srai (arithmetic mode)
+        [Test]
+        public void SraiTest2()
+        {
+            var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
+            var instSll11 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F); 
+            var instSll12 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 2, 0x1F);  
+            var instSlli3 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 2, 0x01);  
+            var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
+            // OK..  We have a 1 at the MSB and 1 at LSB.  Run the two shift commands now.
+            var instSrai1 = InstructionTypeFactory.CreateIType(C.OPIMM, 4, C.opOPIMMsrlisrai, 3, 0x01);  // slri (logical mode)
+            var instSrai2 = InstructionTypeFactory.CreateIType(C.OPIMM, 5, C.opOPIMMsrlisrai, 3, 0x401); // srai (arithmetic mode)
 
-        //    var program = new List<byte>();
-        //    program.AddRange(instAddi1);
-        //    program.AddRange(instSll1);
-        //    program.AddRange(instAddi2);
-        //    program.AddRange(instSrai1);
-        //    program.AddRange(instSrai2);
+            var program = new List<byte>();
+            program.AddRange(instAddi1);
+            program.AddRange(instSll11);
+            program.AddRange(instSll12);
+            program.AddRange(instSlli3);
+            program.AddRange(instAddi2);
+            program.AddRange(instSrai1);
+            program.AddRange(instSrai2);
 
-        //    core.Run(program);
+            core.Run(program);
 
-        //    var register = core.Register;
-        //    var x1Block = register.ReadBlock(1);
-        //    var x2Block = register.ReadBlock(2);
-        //    var x3Block = register.ReadBlock(3);
-        //    var x4Block = register.ReadBlock(4);
-        //    var x5Block = register.ReadBlock(5);
+            var register = core.Register;
+            var x1Block = register.ReadBlock(1);
+            var x2Block = register.ReadBlock(2);
+            var x3Block = register.ReadBlock(3);
+            var x4Block = register.ReadBlock(4);
+            var x5Block = register.ReadBlock(5);
 
-        //    Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00 });
-        //    Assert.AreEqual(x2Block, new byte[] { 0x00, 0x00, 0x00, 0x80 });
-        //    Assert.AreEqual(x3Block, new byte[] { 0x01, 0x00, 0x00, 0x80 }); // MSB = 1, LSB = 1  
-        //    Assert.AreEqual(x4Block, new byte[] { 0x00, 0x00, 0x00, 0x40 }); // Right Shift byte 1 as logical mode
-        //    Assert.AreEqual(x5Block, new byte[] { 0x00, 0x00, 0x00, 0xC0 }); // Right Shift byte 1 as arithmetic mode
+            Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2Block, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 });
+            Assert.AreEqual(x3Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80 }); // MSB = 1, LSB = 1  
+            Assert.AreEqual(x4Block, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40 }); // Right Shift byte 1 as logical mode
+            Assert.AreEqual(x5Block, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0 }); // Right Shift byte 1 as arithmetic mode
 
 
-        //}
+        }
     }
 }
