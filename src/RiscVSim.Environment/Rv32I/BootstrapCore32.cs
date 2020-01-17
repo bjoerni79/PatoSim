@@ -58,7 +58,7 @@ namespace RiscVSim.Environment.Rv32I
             var typeDecoder = new TypeDecoder();
 
             // Create a simple bootstrap CPU
-            var cpu = new BootstrapCpu();
+            var cpu = new Cpu32();
             cpu.AssignMemory(Memory);
             cpu.AssignRegister(Register);
             cpu.AssignHint(Hint);

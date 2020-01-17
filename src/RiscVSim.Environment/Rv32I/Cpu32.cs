@@ -7,7 +7,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    internal class BootstrapCpu : ICpu
+    internal class Cpu32 : ICpu
     {
         private IMemory memory;
         private IRegister register;
@@ -15,7 +15,7 @@ namespace RiscVSim.Environment.Rv32I
         private Hint hint;
         private Stack<uint> rasStack;
 
-        public BootstrapCpu()
+        public Cpu32()
         {
             opCodeRegistry = new OpCodeRegistry();
         }
