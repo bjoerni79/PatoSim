@@ -1,5 +1,4 @@
 ﻿using RiscVSim.Environment.Decoder;
-using RiscVSim.Environment.Opcode;
 using System;
 using System.Collections.Generic;
 using System.Linq;

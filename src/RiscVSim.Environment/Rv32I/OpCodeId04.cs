@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Opcode
+namespace RiscVSim.Environment.Rv32I
 {
     public sealed class OpCodeId04 : OpCodeCommand32
     {

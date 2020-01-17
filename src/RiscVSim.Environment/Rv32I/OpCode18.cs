@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Opcode
+namespace RiscVSim.Environment.Rv32I
 {
     /// <summary>
     /// Implements the RV32I conditional branches BNE...

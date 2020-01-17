@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Opcode
+namespace RiscVSim.Environment.Rv32I
 {
     /// <summary>
     /// Implements the OpCode 1B, which implements the RV32i JAL (Jump and Link) instruction
