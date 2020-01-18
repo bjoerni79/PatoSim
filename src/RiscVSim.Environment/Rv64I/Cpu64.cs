@@ -79,9 +79,9 @@ namespace RiscVSim.Environment.Rv64I
             //// Jump Opcodes:
             ////
             //// opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
-            //opCodeRegistry.Add(0x1B, new OpCode1B(memory, register, rasStack));
-            //opCodeRegistry.Add(0x19, new OpCode19(memory, register, rasStack));
-            //opCodeRegistry.Add(0x18, new OpCode18(memory, register, rasStack));
+            opCodeRegistry.Add(0x1B, new OpCode64Id1B(memory, register, rasStack));
+            opCodeRegistry.Add(0x19, new OpCode64Id19(memory, register, rasStack));
+            opCodeRegistry.Add(0x18, new OpCode64Id18(memory, register, rasStack));
 
             ////
             //// Load and Store

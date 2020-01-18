@@ -22,7 +22,22 @@ namespace RiscVSim.Environment
             }
 
             return result;
-            return 0;
+        }
+
+        internal static ulong Add(ulong baseAddress, int offset)
+        {
+            ulong result;
+            if (offset > 0)
+            {
+                result = baseAddress + Convert.ToUInt32(offset);
+            }
+            else
+            {
+                int positiveOffset = offset * -1;
+                result = baseAddress - Convert.ToUInt32(positiveOffset);
+            }
+
+            return result;
         }
 
         /// <summary>
