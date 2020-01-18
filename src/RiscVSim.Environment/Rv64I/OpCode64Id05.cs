@@ -24,12 +24,20 @@ namespace RiscVSim.Environment.Rv64I
             var unsingedImmedaite = payload.UnsignedImmediate;
             var address = Register.ReadUnsignedInt(Register.ProgramCounter);
 
+            // Shift the value to left
             workingBuffer = unsingedImmedaite;
             workingBuffer <<= 12;
 
+            // Add the current address to the working buffer
             workingBuffer += address;
 
-            Register.WriteUnsignedInt(rd, workingBuffer);
+            // Write the value to target register
+            // Register.WriteUnsignedInt(rd, workingBuffer);
+
+            var bytes = MathHelper.SignExtensionToLong(workingBuffer);
+            Register.WriteBlock(rd, bytes);
+
+            return true;
 
             // RV64I
             // AUIPC (add upper immediate to pc) uses the same opcode as RV32I. AUIPC is used to build pcrelative
@@ -39,7 +47,6 @@ namespace RiscVSim.Environment.Rv64I
 
             // https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/sign-extension
 
-            return true;
         }
     }
 }

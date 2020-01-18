@@ -26,11 +26,14 @@ namespace RiscVSim.Environment.Rv32I
             var unsingedImmedaite = payload.UnsignedImmediate;
             var address = Register.ReadUnsignedInt(Register.ProgramCounter);
 
+            // Shift the value to left
             workingBuffer = unsingedImmedaite;
             workingBuffer <<= 12;
 
+            // Add the current address to the working buffer
             workingBuffer += address;
 
+            // Write the value to target register
             Register.WriteUnsignedInt(rd, workingBuffer);
 
             return true;
