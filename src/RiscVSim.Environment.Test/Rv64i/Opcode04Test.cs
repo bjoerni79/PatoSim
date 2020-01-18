@@ -265,11 +265,13 @@ namespace RiscVSim.Environment.Test.Rv64i
             var instAddi = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01);
             var instSlli1 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x01);  // Left Shift of x1 with 1
             var instSlli2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMslli, 1, 0x1F);  // Left shift of x1 with 0x1F = 31
+            var instSlli3 = InstructionTypeFactory.CreateIType(C.OPIMM, 4, C.opOPIMMslli, 1, 0x20);  // Left shift of x1 with 0x20 = 32
 
             var program = new List<byte>();
             program.AddRange(instAddi);
             program.AddRange(instSlli1);
             program.AddRange(instSlli2);
+            program.AddRange(instSlli3);
 
             core.Run(program);
 
@@ -277,10 +279,12 @@ namespace RiscVSim.Environment.Test.Rv64i
             var x1Block = register.ReadBlock(1);
             var x2Block = register.ReadBlock(2);
             var x3Block = register.ReadBlock(3);
+            var x4Block = register.ReadBlock(4);
 
             Assert.AreEqual(x1Block, new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
             Assert.AreEqual(x2Block, new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }); // Just a simple left shift
             Assert.AreEqual(x3Block, new byte[] { 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00 }); // Last bit of the register must have 1!
+            Assert.AreEqual(x4Block, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }); // Last bit of the register must have 1!
         }
 
         [Test]
@@ -332,9 +336,8 @@ namespace RiscVSim.Environment.Test.Rv64i
         public void SraiTest2()
         {
             var instAddi1 = InstructionTypeFactory.CreateIType(C.OPIMM, 1, C.opOPIMMaddi, 0, 0x01); // x1 = 0 + 1;
-            var instSll11 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x1F); 
-            var instSll12 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 2, 0x1F);  
-            var instSlli3 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 2, 0x01);  
+            var instSll11 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 1, 0x20); // Left shift 32
+            var instSll12 = InstructionTypeFactory.CreateIType(C.OPIMM, 2, C.opOPIMMslli, 2, 0x1F); // Left Shift 31
             var instAddi2 = InstructionTypeFactory.CreateIType(C.OPIMM, 3, C.opOPIMMaddi, 2, 0x01); // x1 = 0 + 1;
             // OK..  We have a 1 at the MSB and 1 at LSB.  Run the two shift commands now.
             var instSrai1 = InstructionTypeFactory.CreateIType(C.OPIMM, 4, C.opOPIMMsrlisrai, 3, 0x01);  // slri (logical mode)
@@ -344,7 +347,6 @@ namespace RiscVSim.Environment.Test.Rv64i
             program.AddRange(instAddi1);
             program.AddRange(instSll11);
             program.AddRange(instSll12);
-            program.AddRange(instSlli3);
             program.AddRange(instAddi2);
             program.AddRange(instSrai1);
             program.AddRange(instSrai2);

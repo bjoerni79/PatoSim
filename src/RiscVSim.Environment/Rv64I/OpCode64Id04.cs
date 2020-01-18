@@ -141,7 +141,7 @@ namespace RiscVSim.Environment.Rv64I
 
                 // Shift Left Immediate
                 case slli:
-                    var leftShiftAmount = immediate & 0x1F; // the last 5 bytes are the shift increment;
+                    var leftShiftAmount = immediate & 0x3F; // the last 6 bytes are the shift increment;
                     resultUnsigned = rs1ValueUnsigned << leftShiftAmount;
                     Register.WriteUnsignedLong(rd, resultUnsigned);
                     break;
@@ -150,7 +150,7 @@ namespace RiscVSim.Environment.Rv64I
 
                     // https://docs.microsoft.com/de-de/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators
 
-                    var rightShiftAmount = immediate & 0x1F;
+                    var rightShiftAmount = immediate & 0x3F;  // Get the last 6 Bit  (RV64I difference compared toRV32)
                     var rightShiftMode = (immediate & 0x0400);
                     if (rightShiftMode == 0x400)
                     {
