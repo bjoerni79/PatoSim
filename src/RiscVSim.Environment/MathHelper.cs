@@ -89,7 +89,7 @@ namespace RiscVSim.Environment
             return length;
         }
 
-        internal static byte[] Prepare(byte[] buffer, int bytesRequired, bool isSigned)
+        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired, bool isSigned)
         {
             var bufferLength = buffer.Length;
             // Take care of the signed bit. Save the information and remove it
@@ -122,6 +122,42 @@ namespace RiscVSim.Environment
             }
 
             return preparedBuffer.ToArray();
+        }
+
+        internal static byte[] SignExtensionToLong(uint value)
+        {
+            // https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/sign-extension
+
+            bool signedBitDetected = false;
+
+            // Step one : Detect the signed bit and remove it
+            uint signedBitFilter = 0x80000000;
+            if ((value & signedBitFilter) == signedBitFilter)
+            {
+                // Signed bit detected
+                signedBitDetected = true;
+            }
+
+
+            var result = new byte[8];
+            var valueBytes = BitConverter.GetBytes(value);
+
+            // If signed bit is detected, set all content to FF first.
+            if (signedBitDetected)
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = 0xFF;
+                }
+            }
+
+            for (int i=0; i<valueBytes.Length; i++)
+            {
+                result[i] = valueBytes[i];
+            }
+
+
+            return result;
         }
 
         // ---

@@ -57,23 +57,23 @@ namespace RiscVSim.Environment.Rv32I
                 case lh:
                     // LH loads a 16-bit value from memory, then sign-extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.Prepare(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
                     break;
 
                 case lhu:
                     // LHU loads a 16-bit value from memory but then zero extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.Prepare(buffer.ToArray(),4, false);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, false);
                     break;
 
                 case lb:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.Prepare(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
                     break;
 
                 case lbu:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.Prepare(buffer.ToArray(),4, false);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, false);
                     break;
 
                 case lw:

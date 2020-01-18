@@ -1,20 +1,20 @@
 ﻿using NUnit.Framework;
-using RiscVSim.Environment.Rv32I;
+using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Test.Rv32i
+namespace RiscVSim.Environment.Test.Rv64i
 {
-    public class Opcode0DTest
+    public class OpCode0DTest
     {
-        private BootstrapCore32 core;
+        private BootstrapCore64 core;
 
         [SetUp]
         public void Setup()
         {
-            core = new BootstrapCore32();
+            core = new BootstrapCore64();
         }
 
         [Test]
@@ -31,9 +31,9 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x1 = register.ReadBlock(1);
             var x2 = register.ReadBlock(2);
 
-            Assert.AreEqual(x1, new byte[] { 0x00, 0x10, 0x00, 0x00 });
-            Assert.AreEqual(x2, new byte[] { 0x00, 0x00, 0x10, 0x00 });
-            
+            Assert.AreEqual(x1, new byte[] { 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x2, new byte[] { 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00 });
+
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             var register = core.Register;
             var x1 = register.ReadBlock(1);
-            Assert.AreEqual(x1, new byte[] {0x00, 0xF0, 0xFF, 0x00 });
+            Assert.AreEqual(x1, new byte[] { 0x00, 0xF0, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 });
 
         }
 
@@ -60,7 +60,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             var register = core.Register;
             var x1 = register.ReadBlock(1);
-            Assert.AreEqual(x1, new byte[] { 0x00, 0xF0, 0xFF, 0xFF });
+            Assert.AreEqual(x1, new byte[] { 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
     }
 }
