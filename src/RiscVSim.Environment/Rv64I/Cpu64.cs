@@ -86,18 +86,18 @@ namespace RiscVSim.Environment.Rv64I
             ////
             //// Load and Store
             ////
-            //opCodeRegistry.Add(0x00, new OpCode00(memory, register));
-            //opCodeRegistry.Add(0x08, new OpCode08(memory, register));
+            opCodeRegistry.Add(0x00, new OpCode64Id00(memory, register));
+            opCodeRegistry.Add(0x08, new OpCode64Id08(memory, register));
 
             ////
             //// FENCE
             ////
-            //opCodeRegistry.Add(0x03, new OpCode03(memory, register));
+            opCodeRegistry.Add(0x03, new OpCode64Id03(memory, register));
 
             ////
             //// System
             ////
-            //opCodeRegistry.Add(0x1C, new OpCode1C(memory, register));
+            opCodeRegistry.Add(0x1C, new OpCode64Id1C(memory, register));
         }
     }
 }

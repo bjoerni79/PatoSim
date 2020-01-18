@@ -2,18 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.Environment.Rv64I
 {
-    /// <summary>
-    /// Implements the Load Opcode 00
-    /// </summary>
-    public class OpCode32Id00 : OpCodeCommand
+    public class OpCode64Id00 : OpCodeCommand
     {
-        public OpCode32Id00(IMemory memory, IRegister register) : base(memory,register)
-        {
-            // base...
-        }
 
         /*
          *  lb      rd rs1       imm12 14..12=0 6..2=0x00 1..0=3
@@ -35,6 +29,10 @@ namespace RiscVSim.Environment.Rv32I
         private const int lhu = 5;
         private const int lwu = 6;
 
+        public OpCode64Id00 (IMemory memory, IRegister register) : base(memory, register)
+        {
+
+        }
 
         public override int Opcode => 0x00;
 
@@ -54,33 +52,37 @@ namespace RiscVSim.Environment.Rv32I
                 case lh:
                     // LH loads a 16-bit value from memory, then sign-extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4,true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, true);
                     break;
 
                 case lhu:
                     // LHU loads a 16-bit value from memory but then zero extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, true);
                     break;
 
                 case lb:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, true);
                     break;
 
                 case lbu:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, true);
                     break;
 
                 case lw:
                     buffer = Memory.GetWord(memoryAddress);
-                    result = buffer.ToArray();
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, true);
                     break;
 
                 case lwu:
                     buffer = Memory.GetWord(memoryAddress);
-                    result = buffer.ToArray();
+                    result = MathHelper.PrepareLoad(buffer.ToArray(), 8, false);
+                    break;
+
+                case ld:
+                    result = Memory.GetDoubleWord(memoryAddress).ToArray();
                     break;
 
                 default:
@@ -91,7 +93,5 @@ namespace RiscVSim.Environment.Rv32I
 
             return true;
         }
-
-
     }
 }

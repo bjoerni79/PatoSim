@@ -69,12 +69,14 @@ namespace RiscVSim.Environment.Test
         public const int OPLOADlb = 0;
         public const int OPLOADlbu = 4;
         public const int OPLOADlwu = 6;
+        public const int OPLOADld = 3;
 
         // Store, Opcode 08
         public const int OPSTORE = 0x08;
         public const int OPSTOREsb = 0;
         public const int OPSTOREsh = 1;
         public const int OPSTOREsw = 2;
+        public const int OPSTOREsd = 3;
 
         // OP-IMM32, OpCode 06 (64 Bit)
         public const int OPIMM32 = 0x06;

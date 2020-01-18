@@ -46,6 +46,12 @@ namespace RiscVSim.Environment
             return word;
         }
 
+        public IEnumerable<byte> GetDoubleWord(uint address)
+        {
+            var doubleWord = ReadBlock(address, 8);
+            return doubleWord;
+        }
+
         public IEnumerable<byte> Read(uint baseAddress, int count)
         {
             var buffer = ReadBlock(baseAddress, count);
@@ -110,10 +116,6 @@ namespace RiscVSim.Environment
 
             return memoryDict[address];
         }
-
-
-
-
 
 
 

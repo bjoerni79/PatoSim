@@ -60,5 +60,10 @@ namespace RiscVSim.Environment
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<byte> GetDoubleWord(uint address)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

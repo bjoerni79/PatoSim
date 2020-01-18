@@ -104,7 +104,7 @@ namespace RiscVSim.Environment
             return length;
         }
 
-        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired)
+        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired, bool useSignExtension)
         {
             //TODO:  PrepareLoad and SignExtension are very similar.  Consider a refactoring and use only one method.
 
@@ -118,7 +118,7 @@ namespace RiscVSim.Environment
 
             // Create a new buffer and set the default value to 0xFF
             var newBuffer = new byte[bytesRequired];
-            if (signBitDetected)
+            if (useSignExtension && signBitDetected)
             {
                 for (int i=0; i<bytesRequired;i++)
                 {

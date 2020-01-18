@@ -24,10 +24,11 @@ namespace RiscVSim.Environment
 
         IEnumerable<byte> GetByte(uint address);
 
+        IEnumerable<byte> GetDoubleWord(uint address);
+
         void Write(uint baseAddress, IEnumerable<byte> content);
 
         IEnumerable<byte> Read(uint baseAddress, int count);
-
 
     }
 }
