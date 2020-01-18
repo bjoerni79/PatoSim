@@ -48,32 +48,29 @@ namespace RiscVSim.Environment.Rv32I
             IEnumerable<byte> buffer;
             byte[] result;
 
-            //var memoryAddress = Convert.ToUInt32(rs1Value + signedImmediate);
             var memoryAddress = MathHelper.Add(rs1Value, signedImmediate);
-
-
             switch (payload.Funct3)
             {
                 case lh:
                     // LH loads a 16-bit value from memory, then sign-extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4);
                     break;
 
                 case lhu:
                     // LHU loads a 16-bit value from memory but then zero extends to 32 - bits before storing in rd.
                     buffer = Memory.GetHalfWord(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, false);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4);
                     break;
 
                 case lb:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, true);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4);
                     break;
 
                 case lbu:
                     buffer = Memory.GetByte(memoryAddress);
-                    result = MathHelper.PrepareLoad(buffer.ToArray(),4, false);
+                    result = MathHelper.PrepareLoad(buffer.ToArray(),4);
                     break;
 
                 case lw:

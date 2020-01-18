@@ -41,7 +41,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             Assert.AreEqual(x10, new byte[] { 0xC8, 0x00, 0x00, 0x00 });
             Assert.AreEqual(x11, new byte[] { 0xAB, 0x00, 0x00, 0x00 });
-            Assert.AreEqual(x12, new byte[] { 0xAB, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0xAB, 0xFF, 0xFF, 0xFF });
         }
 
         [Test]

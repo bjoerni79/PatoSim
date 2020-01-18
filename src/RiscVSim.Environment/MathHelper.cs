@@ -89,39 +89,34 @@ namespace RiscVSim.Environment
             return length;
         }
 
-        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired, bool isSigned)
+        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired)
         {
-            var bufferLength = buffer.Length;
-            // Take care of the signed bit. Save the information and remove it
+            //TODO:  PrepareLoad and SignExtension are very similar.  Consider a refactoring and use only one method.
+
             bool signBitDetected = false;
-            if (isSigned)
+            var last = buffer.Last();
+
+            if ((last & 0x80) == 0x80)
             {
-                var last = buffer.Last();
-                if ((last & 0x80) == 0x80)
+                signBitDetected = true;
+            }
+
+            // Create a new buffer and set the default value to 0xFF
+            var newBuffer = new byte[bytesRequired];
+            if (signBitDetected)
+            {
+                for (int i=0; i<bytesRequired;i++)
                 {
-                    // Save this info and remove the signed bit.
-                    buffer[buffer.Length - 1] &= 0x7F;
-                    signBitDetected = true;
+                    newBuffer[i] = 0xFF;
                 }
             }
 
-            // Fill up to 4 bytes
-            var diff = bytesRequired - bufferLength;
-            List<byte> preparedBuffer = new List<byte>();
-            preparedBuffer.AddRange(buffer);
-
-            for (int zeroIndex = 0; zeroIndex < diff; zeroIndex++)
+            for (int i=0; i< buffer.Length; i++)
             {
-                preparedBuffer.Add(0x00);
+                newBuffer[i] = buffer[i];
             }
 
-            // Add the signed bit at the last position
-            if (isSigned && signBitDetected)
-            {
-                preparedBuffer[3] |= 0x80;
-            }
-
-            return preparedBuffer.ToArray();
+            return newBuffer;
         }
 
         internal static byte[] SignExtensionToLong(uint value)
@@ -137,7 +132,6 @@ namespace RiscVSim.Environment
                 // Signed bit detected
                 signedBitDetected = true;
             }
-
 
             var result = new byte[8];
             var valueBytes = BitConverter.GetBytes(value);

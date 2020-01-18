@@ -35,7 +35,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x11 = register.ReadBlock(11);
 
             Assert.AreEqual(x10, new byte[] { 0x01, 0x02, 0x00, 0x00 });
-            Assert.AreEqual(x11, new byte[] { 0x03, 0x04, 0x00, 0x80 });
+            Assert.AreEqual(x11, new byte[] { 0x03, 0x84, 0xFF, 0xFF });
 
         }
 
@@ -57,7 +57,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x11 = register.ReadBlock(11);
 
             Assert.AreEqual(x10, new byte[] { 0x01, 0x02, 0x00, 0x00 });
-            Assert.AreEqual(x11, new byte[] { 0x03, 0x04, 0x00, 0x80 });
+            Assert.AreEqual(x11, new byte[] { 0x03, 0x84, 0xFF, 0xFF });
 
         }
 
@@ -79,7 +79,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x11 = register.ReadBlock(11);
 
             Assert.AreEqual(x10, new byte[] { 0x01, 0x02, 0x00, 0x00 });
-            Assert.AreEqual(x11, new byte[] { 0x03, 0x84, 0x00, 0x00 });
+            Assert.AreEqual(x11, new byte[] { 0x03, 0x84, 0xFF, 0xFF });
 
         }
 
@@ -101,7 +101,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x11 = register.ReadBlock(11);
 
             Assert.AreEqual(x10, new byte[] { 0x01, 0x00, 0x00, 0x00 });
-            Assert.AreEqual(x11, new byte[] { 0x03, 0x00, 0x00, 0x80 });
+            Assert.AreEqual(x11, new byte[] { 0x83, 0xFF, 0xFF, 0xFF });
 
         }
 
