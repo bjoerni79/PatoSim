@@ -80,7 +80,7 @@ namespace RiscVSim.Input.LowLevel
         private void AddDataToBlock(Program program, string line)
         {
             var data = line.Remove(0, 1);
-            Console.WriteLine("Processing ..." + data);
+            //Console.WriteLine("Processing ..." + data);
 
             // Value is XY where X and Y as between 0 and F ..
             var hexString = Cleanup(data);
@@ -99,7 +99,7 @@ namespace RiscVSim.Input.LowLevel
         private void StartNewBlock(Program program, string line)
         {
             var data = line.Remove(0, 1);
-            Console.WriteLine("Processing ..." + data);
+            //Console.WriteLine("Processing ..." + data);
 
             var hexString = Cleanup(data);
             if (hexString.Length % 2 == 1)
@@ -125,7 +125,7 @@ namespace RiscVSim.Input.LowLevel
         private void ApplyPc(Program program, string line)
         {
             var data = line.Remove(0, 1);
-            Console.WriteLine("Processing ..." + data);
+            //Console.WriteLine("Processing ..." + data);
 
             var hexString = Cleanup(data);
             if (hexString.Length % 2 == 1)

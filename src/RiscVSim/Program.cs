@@ -28,6 +28,7 @@ namespace RiscVSim
 
                     try
                     {
+                        //TODO: This could be done via a isolated task ! For now this is fine, though.
                         Run(config);
                     }
                     catch (RiscVSimException rvEx)
@@ -49,10 +50,10 @@ namespace RiscVSim
         {
             // Let#s go!"
             Console.WriteLine("## Configuration");
-            Console.WriteLine("#Start : {0}", DateTime.Now.ToLongDateString());
-            Console.WriteLine("#CPU : {0}", config.Architecture);
-            Console.WriteLine("#Memory : {0}", config.Memory);
-            Console.WriteLine("#Debug : {0}", config.Debug);
+            Console.WriteLine("# Start : {0}", DateTime.Now.ToLongDateString());
+            Console.WriteLine("# CPU : {0}", config.Architecture);
+            Console.WriteLine("# Memory : {0}", config.Memory);
+            Console.WriteLine("# Debug : {0}", config.Debug);
 
             bool fileExists = File.Exists(config.Source);
             if (fileExists)
@@ -64,10 +65,41 @@ namespace RiscVSim
                 Console.WriteLine("## STOP : File does not exists");
             }
 
-
+            //
+            // Read the low level file
+            //
+            // TODO: For now it is only this stupid little low level format (..but hey,..it works and could be useful for debugging). In future GCC-ELF for RISC-V is the target!
             var lowLwevelParser = new Parser();
-            var p = lowLwevelParser.Parse(config.Source);
-            Console.WriteLine(p.GetHumanReadableContent());
+            var myProgram = lowLwevelParser.Parse(config.Source);
+            Console.WriteLine("\n## Program details:\n");
+            Console.WriteLine(myProgram.GetHumanReadableContent());
+
+            //
+            // Init the RISC V hart and start the simulation
+            //
+            var hart = HartFactory.CreateHart(config);
+            hart.Init(myProgram.InitialProgramCounter);
+
+            // Load each modules to the memory
+            foreach (var subRoutineMarker in myProgram.GetSubRoutineMarker())
+            {
+                var data = myProgram.GetSubRoutine(subRoutineMarker);
+                hart.Load(subRoutineMarker, data);
+            }
+
+            //
+            //  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
+            //
+            hart.Start();
+
+            //
+            // Show the states of the register and memory (?)
+            //
+            var registerState = hart.GetRegisterStates();
+            Console.WriteLine(registerState);
+
+            var memoryState = hart.GetMemoryState();
+            Console.WriteLine(memoryState);
         }
 
         private static HartConfiguration ReadArgs(string[] args)

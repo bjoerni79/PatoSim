@@ -8,8 +8,14 @@ namespace RiscVSim.Environment.Hart
     {
         void Configure(HartConfiguration configuration);
 
-        void Init();
+        void Init(ulong programCounter);
 
         void Start();
+
+        void Load(ulong address, IEnumerable<byte> data);
+
+        string GetRegisterStates();
+
+        string GetMemoryState();
     }
 }

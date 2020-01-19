@@ -7,21 +7,21 @@ namespace RiscVSim.Input.LowLevel
 {
     public class Program
     {
-        private Dictionary<uint,IEnumerable<byte>> addressBlockDict;
+        private Dictionary<ulong,IEnumerable<byte>> addressBlockDict;
 
-        private uint currendAddressBlock;
+        private ulong currendAddressBlock;
 
         public Program()
         {
-            addressBlockDict = new Dictionary<uint, IEnumerable<byte>>();
+            addressBlockDict = new Dictionary<ulong, IEnumerable<byte>>();
         }
 
-        public uint InitialProgramCounter { get; private set; }
+        public ulong InitialProgramCounter { get; private set; }
 
        
         public void AddData (IEnumerable<byte> content)
         {
-            Console.WriteLine("Added data to Address " + currendAddressBlock);
+            //Console.WriteLine("Added data to Address " + currendAddressBlock);
             if (addressBlockDict.ContainsKey(currendAddressBlock))
             {
                 var value = addressBlockDict[currendAddressBlock];
@@ -33,26 +33,36 @@ namespace RiscVSim.Input.LowLevel
             }
         }
 
-        public void AddNewAddressMarker(uint address)
+        public void AddNewAddressMarker(ulong address)
         {
-            Console.WriteLine("Address " + address + " block detected");
+            //Console.WriteLine("Address " + address + " block detected");
             currendAddressBlock = address;
         }
 
-        public void AddStartAddress (uint address)
+        public void AddStartAddress (ulong address)
         {
-            Console.WriteLine("Start " + address + "  detected");
+            //Console.WriteLine("Start " + address + "  detected");
             InitialProgramCounter = address;
+        }
+
+        public IEnumerable<ulong> GetSubRoutineMarker()
+        {
+            return addressBlockDict.Keys;
+        }
+
+        public IEnumerable<byte> GetSubRoutine(ulong marker)
+        {
+            return addressBlockDict[marker];
         }
 
         public string GetHumanReadableContent()
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("Initial Program Counter = {0:X}", InitialProgramCounter);
+            sb.AppendFormat("# Initial Program Counter = {0:X}", InitialProgramCounter);
             sb.AppendLine();
             foreach (var address in addressBlockDict.Keys)
             {
-                sb.AppendFormat("Address {0:X}\n", address);
+                sb.AppendFormat("# Address {0:X}\n", address);
                 sb.AppendLine();
                 foreach (var curByte in addressBlockDict[address])
                 {
