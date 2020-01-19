@@ -50,7 +50,7 @@ namespace RiscVSim
         {
             // Let#s go!"
             Console.WriteLine("## Configuration");
-            Console.WriteLine("# Start : {0}", DateTime.Now.ToLongDateString());
+            Console.WriteLine("# Start : {0}", DateTime.Now.ToUniversalTime());
             Console.WriteLine("# CPU : {0}", config.Architecture);
             Console.WriteLine("# Memory : {0}", config.Memory);
             Console.WriteLine("# Debug : {0}", config.Debug);
@@ -92,14 +92,16 @@ namespace RiscVSim
             //
             hart.Start();
 
+            Console.WriteLine("# Stop : {0}", DateTime.Now.ToUniversalTime());
+
             //
             // Show the states of the register and memory (?)
             //
             var registerState = hart.GetRegisterStates();
             Console.WriteLine(registerState);
 
-            var memoryState = hart.GetMemoryState();
-            Console.WriteLine(memoryState);
+            //var memoryState = hart.GetMemoryState();
+            //Console.WriteLine(memoryState);
         }
 
         private static HartConfiguration ReadArgs(string[] args)
@@ -135,6 +137,23 @@ namespace RiscVSim
                 {
                     file = arg;
                 }
+            }
+
+            // Set some defaults
+
+            if (cpu == null)
+            {
+                cpu = "RV64I";
+            }
+
+            if (memory == null)
+            {
+                memory = "Dynamic";
+            }
+
+            if (debug == null)
+            {
+                debug = "Off";
             }
 
             bool allSet = (cpu != null) && (memory != null) && (debug != null) && (file != null);

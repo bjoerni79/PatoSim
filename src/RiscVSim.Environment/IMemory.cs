@@ -13,22 +13,22 @@ namespace RiscVSim.Environment
         /// </summary>
         /// <param name="address">the address</param>
         /// <returns>An IEnumerable with the bytes</returns>
-        IEnumerable<byte> GetHalfWord(uint address);
+        IEnumerable<byte> GetHalfWord(ulong address);
 
         /// <summary>
         /// Gets a word (= 32 Bit, 4 Byte = Instruction) from memory
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        IEnumerable<byte> GetWord(uint address);
+        IEnumerable<byte> GetWord(ulong address);
 
-        IEnumerable<byte> GetByte(uint address);
+        IEnumerable<byte> GetByte(ulong address);
 
-        IEnumerable<byte> GetDoubleWord(uint address);
+        IEnumerable<byte> GetDoubleWord(ulong address);
 
-        void Write(uint baseAddress, IEnumerable<byte> content);
+        void Write(ulong baseAddress, IEnumerable<byte> content);
 
-        IEnumerable<byte> Read(uint baseAddress, int count);
+        IEnumerable<byte> Read(ulong baseAddress, int count);
 
     }
 }

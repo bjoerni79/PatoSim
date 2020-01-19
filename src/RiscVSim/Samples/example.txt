@@ -1,0 +1,29 @@
+/ Sample File
+/ ------------
+/ 
+/ - The program set x10, x11 to FF and adds them with the result to x12
+/ - Then jumps (JALR jump with x1) to the relative offset to the PC (here 30C) and sets x14 = 2 in the subroutine.
+/ - The subroutine restores the PC from the stack and returns to the main code
+/ - Last action is the set of x15 to 1
+/
+/ ! = Start Program Counter 
+/ # = Program Counter Space for content (data and instruction)
+! 100
+# 100
+/ ADDI x10 = x0 + FF
+	13 05 F0 0F
+/ ADDI x11 = x0 + FF
+	93 05 F0 0F
+/ ADD x12 = x10 + x11
+	33 06 B5 00
+/ Jump to 200
+	EF 00 00 20
+/ Addi x15 = 0 + 1
+	93 07 10 00
+
+
+# 30C
+/ ADDI x14 = x0 + 1
+	13 07 23 00
+/ JALR rd=0, rs1 = 1 => POP
+	67 80 00 00
