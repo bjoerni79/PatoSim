@@ -66,12 +66,12 @@ namespace RiscVSim.Environment.Hart
 
                 if (value == 0)
                 {
-                    sb.AppendFormat("X{0:D2} = {1:X}, ", index, value);
+                    sb.AppendFormat(" X{0:D2} = {1:X8}\t", index, value);
                 }
                 else
                 {
                     //TODO: Highlight this somehow...
-                    sb.AppendFormat("X{0:D2} = {1:X}, ", index, value);
+                    sb.AppendFormat("!X{0:D2} = {1:X8}\t", index, value);
                 }
                 
 

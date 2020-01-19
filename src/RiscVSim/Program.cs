@@ -58,7 +58,7 @@ namespace RiscVSim
             bool fileExists = File.Exists(config.Source);
             if (fileExists)
             {
-                Console.WriteLine("#File : {0}", config.Source);
+                Console.WriteLine("# File : {0}", config.Source);
             }
             else
             {

@@ -87,16 +87,16 @@ namespace RiscVSim.Environment.Rv64I
             if (doJump)
             {
                 var pcIndex = Register.ProgramCounter;
-                var pc = Register.ReadUnsignedInt(pcIndex);
+                var pc = Register.ReadUnsignedLong(pcIndex);
 
                 var newPc = MathHelper.Add(pc, payload.SignedImmediate);
                 var rasPc = pc + 4;
 
                 // Write it to X1 and the RAS
-                Register.WriteUnsignedInt(1, rasPc);
+                Register.WriteUnsignedLong(1, rasPc);
                 ras.Push(rasPc);
 
-                Register.WriteUnsignedInt(pcIndex, newPc);
+                Register.WriteUnsignedLong(pcIndex, newPc);
             }
 
             return !doJump;
