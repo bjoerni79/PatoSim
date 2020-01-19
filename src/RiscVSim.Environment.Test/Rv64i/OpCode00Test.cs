@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using RiscVSim.Environment.Bootstrap;
 using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;

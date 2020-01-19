@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RiscVSim": {
+      "commandName": "Project",
+      "commandLineArgs": "/CPU:RV64 /Memory:Dynamic /Debug:off D:\\temp\\example.txt"
+    }
+  }
+}

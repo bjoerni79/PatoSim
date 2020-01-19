@@ -1,10 +1,11 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv64I
+namespace RiscVSim.Environment.Bootstrap
 {
     public class BootstrapCore64
     {

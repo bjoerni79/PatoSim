@@ -1,5 +1,6 @@
 ﻿using RiscVSim.Environment;
 using RiscVSim.Environment.Hart;
+using RiscVSim.Input.LowLevel;
 using System;
 using System.IO;
 using System.Text;
@@ -62,6 +63,11 @@ namespace RiscVSim
             {
                 Console.WriteLine("## STOP : File does not exists");
             }
+
+
+            var lowLwevelParser = new Parser();
+            var p = lowLwevelParser.Parse(config.Source);
+            Console.WriteLine(p.GetHumanReadableContent());
         }
 
         private static HartConfiguration ReadArgs(string[] args)

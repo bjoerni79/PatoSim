@@ -1,10 +1,11 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.Environment.Bootstrap
 {
     /// <summary>
     /// A simple core for testing all components
