@@ -16,7 +16,7 @@ lala
 
 | Feature | Status | Comment |
 | ------- | ------ | ------- |
-| RV32I | In Progress | Version 2.1 |
+| RV32I | Complete | Version 2.1 |
+| RV64I | Complete | Version 2.1 |
 | CSR | Planned | |
-| M | Planned | |
-| A | Plammed | |
+| GCC Toolchain Support | Planned ||
