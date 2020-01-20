@@ -2,7 +2,7 @@
   "profiles": {
     "RiscVSim": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\temp\\RiscVSim\\source\\add_and_jump1.txt"
+      "commandLineArgs": "/CPU:RV32I D:\\temp\\RiscVSim\\source\\add_and_jump1.txt"
     }
   }
 }

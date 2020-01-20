@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace RiscVSim.Input.LowLevel
+namespace RiscVSim.Input.OpCode
 {
     public class Parser
     {
@@ -65,6 +65,11 @@ namespace RiscVSim.Input.LowLevel
                             // Read Data..
                             AddDataToBlock(program, line);
                         }
+
+                        if (line.Equals("nop"))
+                        {
+                            AddNop(program);
+                        }
                     }
 
                 }
@@ -75,6 +80,11 @@ namespace RiscVSim.Input.LowLevel
             }
 
             return program;
+        }
+
+        private void AddNop (Program program)
+        {
+            program.AddData(new byte[] { 0x13, 0x00, 0x00, 0x00 });
         }
 
         private void AddDataToBlock(Program program, string line)

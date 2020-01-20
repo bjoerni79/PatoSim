@@ -1,9 +1,10 @@
 ﻿using RiscVSim.Environment;
 using RiscVSim.Environment.Hart;
-using RiscVSim.Input.LowLevel;
+using RiscVSim.Input.OpCode;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RiscVSim
 {
@@ -28,8 +29,8 @@ namespace RiscVSim
 
                     try
                     {
-                        //TODO: This could be done via a isolated task ! For now this is fine, though.
-                        Run(config);
+                        var host = new Host();
+                        host.Run(config);
                     }
                     catch (RiscVSimException rvEx)
                     {
@@ -44,64 +45,6 @@ namespace RiscVSim
                 }
             }
 
-        }
-
-        private static void Run (HartConfiguration config)
-        {
-            // Let#s go!"
-            Console.WriteLine("## Configuration");
-            Console.WriteLine("# Start : {0}", DateTime.Now.ToUniversalTime());
-            Console.WriteLine("# CPU : {0}", config.Architecture);
-            Console.WriteLine("# Memory : {0}", config.Memory);
-            Console.WriteLine("# Debug : {0}", config.Debug);
-
-            bool fileExists = File.Exists(config.Source);
-            if (fileExists)
-            {
-                Console.WriteLine("# File : {0}", config.Source);
-            }
-            else
-            {
-                Console.WriteLine("## STOP : File does not exists");
-            }
-
-            //
-            // Read the low level file
-            //
-            // TODO: For now it is only this stupid little low level format (..but hey,..it works and could be useful for debugging). In future GCC-ELF for RISC-V is the target!
-            var lowLwevelParser = new Parser();
-            var myProgram = lowLwevelParser.Parse(config.Source);
-            Console.WriteLine("\n## Program details:\n");
-            Console.WriteLine(myProgram.GetHumanReadableContent());
-
-            //
-            // Init the RISC V hart and start the simulation
-            //
-            var hart = HartFactory.CreateHart(config);
-            hart.Init(myProgram.InitialProgramCounter);
-
-            // Load each modules to the memory
-            foreach (var subRoutineMarker in myProgram.GetSubRoutineMarker())
-            {
-                var data = myProgram.GetSubRoutine(subRoutineMarker);
-                hart.Load(subRoutineMarker, data);
-            }
-
-            //
-            //  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
-            //
-            hart.Start();
-
-            Console.WriteLine("# Stop : {0}", DateTime.Now.ToUniversalTime());
-
-            //
-            // Show the states of the register and memory (?)
-            //
-            var registerState = hart.GetRegisterStates();
-            Console.WriteLine(registerState);
-
-            //var memoryState = hart.GetMemoryState();
-            //Console.WriteLine(memoryState);
         }
 
         private static HartConfiguration ReadArgs(string[] args)
@@ -143,36 +86,74 @@ namespace RiscVSim
 
             if (cpu == null)
             {
-                cpu = "RV64I";
+                cpu = "/CPU:RV64I";
             }
 
             if (memory == null)
             {
-                memory = "Dynamic";
+                memory = "/Memory:Dynamic";
             }
 
             if (debug == null)
             {
-                debug = "Off";
+                debug = "/Debug:Off";
             }
 
-            bool allSet = (cpu != null) && (memory != null) && (debug != null) && (file != null);
-            if (allSet)
+            //
+            // Build the configuraton now
+            //
+            var config = new HartConfiguration();
+
+            var cpuMode = cpu.Split(new char[] { ':' });
+            var memoryMode = memory.Split(new char[] { ':' });
+            var debugMode = debug.Split(new char[] { ':' });
+
+            ApplyCpu(config, cpuMode[1]);
+            ApplyMemory(config, memoryMode[1]);
+            ApplyDebug(config, debugMode[1]);
+
+            config.Source = file;
+            return config;
+        }
+
+        private static void ApplyCpu(HartConfiguration config, string mode)
+        {
+            var toUpper = mode.ToUpper();
+            Architecture architecture = Architecture.Unknown;
+
+            if (mode == "RV32I")
             {
-                var config = new HartConfiguration();
-
-                var cpuMode = cpu.Split(new char[] { ':' });
-                var memoryMode = memory.Split(new char[] { ':' });
-                var debugMode = debug.Split(new char[] { ':' });
-
-                //TODO....
-
-                config.Source = file;
-                return config;
-                
+                architecture = Architecture.Rv32I;
             }
 
-            return null;
+            if (mode == "RV32E")
+            {
+                architecture = Architecture.Rv32E;
+            }
+
+            if (mode == "RV64I")
+            {
+                architecture = Architecture.Rv64I;
+            }
+
+            config.Architecture = architecture;
+        }
+
+        private static void ApplyMemory(HartConfiguration config, string mode)
+        {
+            var toUpper = mode.ToUpper();
+
+            // keep the default.  others are in the queue...
+        }
+
+        private static void ApplyDebug (HartConfiguration config, string mode)
+        {
+            var toUpper = mode.ToUpper();
+
+            if (mode == "ON")
+            {
+                config.Debug = DebugMode.Enabled;
+            }
         }
 
         private static void ShowHelp()
@@ -184,14 +165,19 @@ namespace RiscVSim
             sb.AppendLine("RiscVSim [Option] [File]");
             sb.AppendLine("");
             sb.AppendLine("Option:\n");
-            sb.AppendLine(" CPU: RV32,RV64");
-            sb.AppendLine(" /Memory : Dynamic,Fixed");
+            sb.AppendLine(" CPU: RV32I,RV32E,RV64I,");
+            sb.AppendLine(" /Memory : Dynamic");
             sb.AppendLine(" /Debug: On,Off");
             sb.AppendLine("");
+            sb.AppendLine("Default Values are");
+            sb.AppendLine(" CPU = RV64I, Memory = Dynamic, Debug= Off");
             sb.AppendLine("");
             sb.AppendLine("Examples:\n");
-            sb.AppendLine(" RiscVSim /CPU:RV64 /Memory:Dynamic /Debug:On myFile.S");
+            sb.AppendLine(" RiscVSim /CPU:RV64 /Memory:Dynamic /Debug:On myFile");
             sb.AppendLine(" Starts RV64I RISC-V hart with dynamic memory and debugging enabled");
+            sb.AppendLine("");
+            sb.AppendLine(" RiscVSim myfile");
+            sb.AppendLine(" Start the simulator with the defaults");
             sb.AppendLine("");
             Console.WriteLine(sb.ToString());
         }

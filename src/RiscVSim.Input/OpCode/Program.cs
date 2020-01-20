@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Input.LowLevel
+namespace RiscVSim.Input.OpCode
 {
     public class Program
     {

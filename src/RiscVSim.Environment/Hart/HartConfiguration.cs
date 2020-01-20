@@ -14,11 +14,11 @@ namespace RiscVSim.Environment.Hart
             Source = String.Empty;
         }
 
-        public DebugMode Debug { get; private set; }
+        public DebugMode Debug { get;  set; }
 
-        public MemoryConfiguration Memory { get; private set; }
+        public MemoryConfiguration Memory { get;  set; }
 
-        public Architecture Architecture { get; private set; }
+        public Architecture Architecture { get;  set; }
 
         public string Source { get; set; }
     }
