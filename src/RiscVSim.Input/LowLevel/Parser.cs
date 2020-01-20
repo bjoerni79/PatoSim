@@ -60,7 +60,7 @@ namespace RiscVSim.Input.LowLevel
                             StartNewBlock(program, line);
                         }
 
-                        if (line.StartsWith("\t"))
+                        if (line.StartsWith(";"))
                         {
                             // Read Data..
                             AddDataToBlock(program, line);
