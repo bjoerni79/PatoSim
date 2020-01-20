@@ -20,9 +20,9 @@ namespace RiscVSim.Environment
             return memory;
         }
 
-        public static IRegister CreateRegisterRv32()
+        public static IRegister CreateRegisterRv32(Architecture architecture)
         {
-            return new Rv32I.Register32();
+            return new Rv32I.Register32(architecture);
         }
 
         public static IRegister CreateRegisterRv64()

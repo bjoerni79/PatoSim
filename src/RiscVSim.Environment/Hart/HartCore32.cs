@@ -39,7 +39,7 @@ namespace RiscVSim.Environment.Hart
             int registerLength = GetRegisterCount();
             for (int index = 0; index <= registerLength; index++)
             {
-                var value = register.ReadUnsignedLong(index);
+                var value = register.ReadUnsignedInt(index);
 
                 if (value == 0)
                 {
@@ -93,7 +93,7 @@ namespace RiscVSim.Environment.Hart
             //
             //  Set the program counter
             //
-            register.WriteUnsignedLong(register.ProgramCounter, initialPc);
+            register.WriteUnsignedInt(register.ProgramCounter, initialPc);
         }
 
         protected override void ExecuteOpcode(Instruction instruction, InstructionPayload payload)
@@ -110,7 +110,7 @@ namespace RiscVSim.Environment.Hart
 
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu32();
-            register = Factory.CreateRegisterRv64();
+            register = Factory.CreateRegisterRv32(architecture);
             memory = Factory.CreateDynamicMemory(architecture);
             ras = new Stack<uint>();
             hint = new Hint();

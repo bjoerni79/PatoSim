@@ -34,14 +34,22 @@ namespace RiscVSim.Environment.Rv32I
 
 
 
-        internal Register32()
+        internal Register32(Architecture architecture)
         {
             register = new RegisterEntry[33];  // Register 0,1,2...32
-            pcRegister = 32;
+
+            if (architecture == Architecture.Rv32I)
+            {
+                pcRegister = 32;
+            }
+            else
+            {
+                pcRegister = 16;
+            }
 
             for (int index=0; index <= 32; index++)
             {
-                register[index] = new RegisterEntry(Architecture.Rv32I);
+                register[index] = new RegisterEntry(architecture);
             }
         }
 
