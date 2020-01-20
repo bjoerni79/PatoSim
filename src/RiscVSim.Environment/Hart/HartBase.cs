@@ -1,5 +1,4 @@
 ﻿using RiscVSim.Environment.Decoder;
-using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,38 +6,28 @@ using System.Text;
 
 namespace RiscVSim.Environment.Hart
 {
-    internal class HartVersion1 : IHart
+    public abstract class HartBase : IHart
     {
-        private HartConfiguration configuration;
-        private bool isInitialized;
-        private int registerLength = 32;
+        protected HartConfiguration configuration;
+        protected bool isInitialized;
+        protected Architecture architecture;
 
-        #region RISC V hart components
-        //
-        //  Components for the hart
-        //
-        // the initial PC 
-        private ulong initialPc;
-        // the CPU with the Opcode
-        private ICpu64 cpu;
-        // the memory 
-        private IMemory memory;
-        // The register set
-        private IRegister register;
-        // the "Return Address Stack" for the jumps
-        private Stack<ulong> ras;
         // the Hint
-        private Hint hint;
+        protected Hint hint;
+
+        // the memory 
+        protected IMemory memory;
+        // The register set
+        protected IRegister register;
 
         // the decoder
-        private InstructionDecoder instructionDecoder;
+        protected InstructionDecoder instructionDecoder;
         // the type decoder
-        private TypeDecoder typeDecoder;
+        protected TypeDecoder typeDecoder;
 
-        #endregion
-
-        internal HartVersion1()
+        public HartBase(Architecture architecture)
         {
+            this.architecture = architecture;
             isInitialized = false;
         }
 
@@ -47,78 +36,26 @@ namespace RiscVSim.Environment.Hart
             this.configuration = configuration;
         }
 
-        public string GetMemoryState()
-        {
+        public abstract string GetMemoryState();
 
+        public abstract string GetRegisterStates();
 
-            return "TODO";
-        }
+        public abstract void Load(ulong address, IEnumerable<byte> data);
 
-        public string GetRegisterStates()
-        {
-            var sb = new StringBuilder();
+        protected abstract void BootCpu();
 
-            sb.AppendLine("# Register States");
-            int blockCount = 0;
-            for (int index = 0; index <= registerLength; index++)
-            {
-                var value = register.ReadUnsignedLong(index);
+        protected abstract void ExecuteOpcode(Instruction instruction, InstructionPayload payload);
 
-                if (value == 0)
-                {
-                    sb.AppendFormat(" X{0:D2} = {1:X8}\t", index, value);
-                }
-                else
-                {
-                    //TODO: Highlight this somehow...
-                    sb.AppendFormat("!X{0:D2} = {1:X8}\t", index, value);
-                }
-                
-
-                // Write 4 registers in a row.
-                if (blockCount == 3)
-                {
-                    sb.AppendLine();
-                    blockCount = 0;
-                }
-                else
-                {
-                    blockCount++;
-                }
-            }
-
-            sb.AppendLine();
-            return sb.ToString();
-        }
+        protected abstract void InitDetails(ulong programCounter);
 
         public void Init(ulong programCounter)
         {
-            // Set the initial program counter
-            initialPc = programCounter;
-
-            // Set the CPU, register, memory and Return Address Stack (ras) and hint
-            cpu = new Cpu64();
-            register = Factory.CreateRegisterRv64();
-            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
-            ras = new Stack<ulong>();
-            hint = new Hint();
-
             // Set the instruction decoder and type decoder
             instructionDecoder = new InstructionDecoder(EndianType.Little);
             typeDecoder = new TypeDecoder();
 
             isInitialized = true;
-        }
-
-        public void Load(ulong address, IEnumerable<byte> data)
-        {
-            if (!isInitialized)
-            {
-                throw new RiscVSimException("Please initialize the RISC-V hart first!");
-            }
-
-            // Store the data in the address
-            memory.Write(address, data);
+            InitDetails(programCounter);
         }
 
         public void Start()
@@ -128,21 +65,20 @@ namespace RiscVSim.Environment.Hart
                 throw new RiscVSimException("Please initialize the RISC-V hart first!");
             }
 
-            // OK. Boot up the CPU first.
-            cpu.AssignMemory(memory);
-            cpu.AssignRegister(register);
-            cpu.AssignHint(hint);
-            cpu.AssignRasStack(ras);
-            cpu.Init();
+            BootCpu();
 
-            //
-            //  Set the program counter
-            //
-            register.WriteUnsignedLong(register.ProgramCounter, initialPc);
+            // All set up and start the loop
+            Fetch();
+        }
 
+
+        /// <summary>
+        /// The generic fetch method for all hart implementations
+        /// </summary>
+        private void Fetch()
+        {
             // Done! 
             // Fetch the first instruction and run the loop. Get the first 2 Bytes from the Base Address aka PC
-
             var pc = register.ReadUnsignedInt(register.ProgramCounter);
             var instructionCoding = memory.GetHalfWord(pc);
 
@@ -178,13 +114,33 @@ namespace RiscVSim.Environment.Hart
 
 
                     // Execute the command
-                    cpu.Execute(instruction, payload);
+                    ExecuteOpcode(instruction, payload);
                 }
 
                 // Done. Next run.
                 pc = register.ReadUnsignedInt(register.ProgramCounter);
                 instructionCoding = memory.GetHalfWord(pc);
             }
+        }
+
+        protected int GetRegisterCount()
+        {
+            if (architecture == Architecture.Rv32E)
+            {
+                return 16;
+            }
+
+            return 32;
+        }
+
+        protected int GetRegisterLength()
+        {
+            if (architecture == Architecture.Rv64I)
+            {
+                return 8;
+            }
+
+            return 4;
         }
 
         /// <summary>
@@ -197,5 +153,6 @@ namespace RiscVSim.Environment.Hart
             var isEmpty = instruction.All(b => b == 00);
             return !isEmpty;
         }
+
     }
 }

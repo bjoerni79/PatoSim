@@ -19,7 +19,15 @@ namespace RiscVSim.Environment
             }
 
             this.architecture = architecture;
-            registerSize = (int)architecture;
+            
+            if (architecture == Architecture.Rv64I)
+            {
+                registerSize = 8;
+            }
+            else
+            {
+                registerSize = 4;
+            }
 
             Clear();
         }

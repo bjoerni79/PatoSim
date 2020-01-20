@@ -1,0 +1,115 @@
+﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Rv64I;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace RiscVSim.Environment.Hart
+{
+    internal class HartCore64 : HartBase
+    {
+        // the initial PC 
+        private ulong initialPc;
+        // the CPU with the Opcode
+        private ICpu64 cpu;
+        // the "Return Address Stack" for the jumps
+        private Stack<ulong> ras;
+
+        internal HartCore64() : base(Architecture.Rv64I)
+        {
+
+        }
+
+
+        public override string GetMemoryState()
+        {
+
+
+            return "TODO";
+        }
+
+        public override string GetRegisterStates()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("# Register States");
+            int blockCount = 0;
+            int registerLength = GetRegisterCount();
+            for (int index = 0; index <= registerLength; index++)
+            {
+                var value = register.ReadUnsignedLong(index);
+
+                if (value == 0)
+                {
+                    sb.AppendFormat(" X{0:D2} = {1:X8}\t", index, value);
+                }
+                else
+                {
+                    //TODO: Highlight this somehow...
+                    sb.AppendFormat("!X{0:D2} = {1:X8}\t", index, value);
+                }
+                
+
+                // Write 4 registers in a row.
+                if (blockCount == 3)
+                {
+                    sb.AppendLine();
+                    blockCount = 0;
+                }
+                else
+                {
+                    blockCount++;
+                }
+            }
+
+            sb.AppendLine();
+            return sb.ToString();
+        }
+
+        protected override void InitDetails(ulong programCounter)
+        {
+            // Set the initial program counter
+            initialPc = programCounter;
+
+            // Set the CPU, register, memory and Return Address Stack (ras) and hint
+            cpu = new Cpu64();
+            register = Factory.CreateRegisterRv64();
+            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
+            ras = new Stack<ulong>();
+            hint = new Hint();
+        }
+
+        public override void Load(ulong address, IEnumerable<byte> data)
+        {
+            if (!isInitialized)
+            {
+                throw new RiscVSimException("Please initialize the RISC-V hart first!");
+            }
+
+            // Store the data in the address
+            memory.Write(address, data);
+        }
+
+        protected override void BootCpu()
+        {
+            // OK. Boot up the CPU first.
+            cpu.AssignMemory(memory);
+            cpu.AssignRegister(register);
+            cpu.AssignHint(hint);
+            cpu.AssignRasStack(ras);
+            cpu.Init();
+
+            //
+            //  Set the program counter
+            //
+            register.WriteUnsignedLong(register.ProgramCounter, initialPc);
+        }
+
+        protected override void ExecuteOpcode(Instruction instruction, InstructionPayload payload)
+        {
+            cpu.Execute(instruction, payload);
+        }
+
+    }
+}

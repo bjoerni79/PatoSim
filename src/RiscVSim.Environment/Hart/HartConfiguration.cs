@@ -10,7 +10,7 @@ namespace RiscVSim.Environment.Hart
         {
             Debug = DebugMode.Disabled;
             Memory = MemoryConfiguration.Dynamic;
-            Architecture = Architecture.Rv64I;
+            Architecture = Architecture.Rv32I;
             Source = String.Empty;
         }
 
