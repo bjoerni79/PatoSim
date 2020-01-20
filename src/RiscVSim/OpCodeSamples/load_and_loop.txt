@@ -1,0 +1,25 @@
+/ Sample File
+/ ------------
+/ 
+/ TODO
+/
+/
+/ ! = Start Program Counter 
+/ # = Program Counter Space for content (data and instruction)
+! 100
+# 100
+/ Load the value from 400 to X10 = MAX
+;03 35 00 40
+/ ADDI X11 = X0 + 1 = MIN
+;93 05 10 00
+/ ADDI X15 = X11 + 0
+;93 87 05 00
+/
+/ While Start!
+/
+/  	
+
+
+#400
+// Hex 10 in Little Endian Coding at address 400
+;0A 00 00 00 00 00 00 00

@@ -1,0 +1,36 @@
+/ Sample File
+/ ------------
+/ 
+/ 1. Set X10 = 01;
+/ 2. Set X11 = 10;
+/ 3. Jump to Address 200 (just for have a start for brance computation)
+/ 4. If (X11 > X10) then x15 = 1			
+/ 5. x19 = 1
+/
+/
+/ Last: X19 = 1 and the program is over
+/
+/ ! = Start Program Counter 
+/ # = Program Counter Space for content (data and instruction)
+! 100
+# 100
+/ ADDI x10 = x0 + 01
+;13 05 10 00
+/ ADDI x11 = x0 + 10
+;93 05 00 01
+/ Jump to 200 using JALR direct jump
+;E7 00 00 20 
+/ ADDI x19 = x0 + 01
+;93 09 10 00
+
+# 200
+/ BGE X11, X10 ( 10 > 01)
+;63 D0 A5 10
+/ JALR rd=0, rs1 = 1 => POP
+;67 80 00 00
+	
+#300
+/ ADDI x15 = x0 + 01
+;93 07 10 00
+/ JALR rd=0, rs1 = 1 => POP
+;67 80 00 00

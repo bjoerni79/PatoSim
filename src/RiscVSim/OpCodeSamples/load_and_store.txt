@@ -1,0 +1,32 @@
+/ Sample File
+/ ------------
+/ 
+/ Adds to values from the memory and writes the result back
+/
+/ X10 = value from address 400
+/ X11 = value from address 408
+/ X12 = X10 + X11
+/ ...write the result to 410
+/ X13 = value from 410
+/
+/ ! = Start Program Counter 
+/ # = Program Counter Space for content (data and instruction)
+! 100
+# 100
+/ Load the value from 400 to X10
+;03 35 00 40
+/ Load the value from 408 to X11
+;83 35 80 40
+/ Add x12 = x10 + X11
+;33 06 B5 00
+/ Store x12 to address 412
+;23 38 C0 40
+// Load the value from 410 to X13
+;83 36 00 41
+
+
+# 400
+// Hex 10 in Little Endian Coding at address 400
+;0A 00 00 00 00 00 00 00
+/ 408
+;0A 10 00 00 00 00 00 00
