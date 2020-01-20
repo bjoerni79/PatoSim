@@ -9,7 +9,7 @@ namespace RiscVSim.Environment
     {
         public static IHart CreateHart(HartConfiguration configuration)
         {
-            IHart hart = null;
+            IHart hart;
 
             switch (configuration.Architecture)
             {
