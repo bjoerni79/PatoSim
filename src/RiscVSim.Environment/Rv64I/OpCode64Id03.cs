@@ -16,6 +16,8 @@ namespace RiscVSim.Environment.Rv64I
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
+            Logger.Info("Opcode03");
+
             return true;
         }
     }

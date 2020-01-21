@@ -36,6 +36,7 @@ namespace RiscVSim.Environment.Rv64I
             uint unsignedIntResult;
             IEnumerable<byte> result;
 
+            Logger.Info("Opcode 06 : rd = {rd}, rs1 = {rs1}, immediate = {imm}, funct3 = {funct3}", rd, rs1, immediate, f3);
 
             switch (f3)
             {

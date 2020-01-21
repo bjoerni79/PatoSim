@@ -41,6 +41,7 @@ namespace RiscVSim.Environment.Rv32I
 
             var list = new List<byte>();
 
+            Logger.Info("Opcode 08 : rs1 = {rs1}, rs2 = {rs2}, immediate = {imm}", rs1, rs2, payload.SignedImmediate);
 
             switch (payload.Funct3)
             {

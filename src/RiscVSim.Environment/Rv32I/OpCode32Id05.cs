@@ -26,6 +26,8 @@ namespace RiscVSim.Environment.Rv32I
             var unsingedImmedaite = payload.UnsignedImmediate;
             var address = Register.ReadUnsignedInt(Register.ProgramCounter);
 
+            Logger.Info("Opcode 05 : rd = {rd}, unsigned immediate = {imm:X} hex, address = {address:X} hex", rd,unsingedImmedaite, address);
+
             // Shift the value to left
             workingBuffer = unsingedImmedaite;
             workingBuffer <<= 12;

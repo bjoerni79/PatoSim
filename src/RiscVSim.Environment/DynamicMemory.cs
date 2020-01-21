@@ -7,6 +7,7 @@ namespace RiscVSim.Environment
 {
     internal class DynamicMemory : IMemory
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private Architecture architecture;
 
         private Dictionary<ulong, byte> memoryDict;

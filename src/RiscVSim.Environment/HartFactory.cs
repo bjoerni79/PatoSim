@@ -7,6 +7,8 @@ namespace RiscVSim.Environment
 {
     public static class HartFactory
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public static IHart CreateHart(HartConfiguration configuration)
         {
             IHart hart;
@@ -26,6 +28,7 @@ namespace RiscVSim.Environment
                     break;
 
                 default:
+                    Logger.Error("Unsupported architecture detected!  {arch}", configuration.Architecture);
                     throw new RiscVSimException("Unsupported architecture detected : " + configuration.Architecture);
 
 

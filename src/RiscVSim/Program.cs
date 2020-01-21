@@ -10,8 +10,12 @@ namespace RiscVSim
 {
     class Program
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         static void Main(string[] args)
         {
+            Logger.Info("Simulator started");
+
             if (args.Length == 0 || args[0].Equals("/?"))
             {
                 ShowHelp();
@@ -34,17 +38,20 @@ namespace RiscVSim
                     }
                     catch (RiscVSimException rvEx)
                     {
+                        Logger.Error(rvEx);
                         Console.WriteLine("Risc V Simulation error thrown!\n");
                         Console.Error.WriteLine(rvEx.ToString());
                     }
                     catch (Exception ex)
                     {
+                        Logger.Error(ex);
                         Console.Error.WriteLine("Unknown error thrown\n");
                         Console.Error.WriteLine(ex.ToString());
                     }
                 }
             }
 
+            Logger.Info("Simulator stopped");
         }
 
         private static HartConfiguration ReadArgs(string[] args)

@@ -34,6 +34,7 @@ namespace RiscVSim.Environment.Rv64I
                 var isNop = (payload.Rs1 == 0) && (payload.SignedImmediate == 0) && (payload.Funct3 == 0);
                 if (isNop && hint != null)
                 {
+                    Logger.Info("Opcode04 : NOP operation detected");
                     hint.IncreaseNopCounter();
                 }
             }
@@ -63,6 +64,7 @@ namespace RiscVSim.Environment.Rv64I
 
 
             var funct3 = payload.Funct3;
+            Logger.Info("Opcode 04: rd={rd}, rs1={rs1}, funct3={funct3}", rd, rs1, funct3);
             switch (funct3)
             {
                 // Addi

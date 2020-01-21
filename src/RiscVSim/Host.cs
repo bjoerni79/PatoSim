@@ -11,12 +11,13 @@ namespace RiscVSim
 {
     public class Host
     {
-
-
-
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         public void Run(HartConfiguration config)
         {
+            Logger.Info("CPU = {cpu}", config.Architecture);
+            Logger.Info("Memory = {memory}", config.Memory);
+
             // Let#s go!"
             Console.WriteLine("## Configuration");
             Console.WriteLine("# Start : {0}", DateTime.Now.ToUniversalTime());
@@ -65,7 +66,7 @@ namespace RiscVSim
 
             // Wait for the end of the task or any debug stop
 
-            Console.WriteLine("# Stop : {0}", DateTime.Now.ToUniversalTime());
+            Console.WriteLine("## Simulation stopped : {0}", DateTime.Now.ToUniversalTime());
 
             //
             // Show the states of the register and memory (?)

@@ -8,6 +8,8 @@ namespace RiscVSim.Environment.Hart
 {
     public abstract class HartBase : IHart
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         protected HartConfiguration configuration;
         protected bool isInitialized;
         protected Architecture architecture;
@@ -62,13 +64,24 @@ namespace RiscVSim.Environment.Hart
         {
             if (!isInitialized)
             {
+                Logger.Error("Hart is not initialized");
                 throw new RiscVSimException("Please initialize the RISC-V hart first!");
             }
 
-            BootCpu();
+            try
+            {
+                BootCpu();
 
-            // All set up and start the loop
-            Fetch();
+                // All set up and start the loop
+                Fetch();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                throw;
+            }
+
+
         }
 
 
@@ -82,10 +95,13 @@ namespace RiscVSim.Environment.Hart
             var pc = register.ReadUnsignedInt(register.ProgramCounter);
             var instructionCoding = memory.GetHalfWord(pc);
 
+            Logger.Info("Instruction {ins:X} fetched", BitConverter.ToString(instructionCoding.ToArray()));
+
             while (ContinueIfValid(instructionCoding))
             {
                 // Loop for the commands
                 var instruction = instructionDecoder.Decode(instructionCoding);
+                Logger.Info("Instruction Detected with Opcode {opcode:X2} and Type {type}", instruction.OpCode, instruction.Type);
 
                 // If the decoder cannot decode the parameter pattern, throw an exception
                 if (instruction.Type == InstructionType.Unknown)
@@ -106,9 +122,11 @@ namespace RiscVSim.Environment.Hart
 
                     var inst32Coding = memory.GetWord(pc);
                     var payload = typeDecoder.DecodeType(instruction, inst32Coding);
+                    Logger.Info("Instruction to excecute = {ins32}", BitConverter.ToString(inst32Coding.ToArray()));
 
                     if (payload == null)
                     {
+                        Logger.Error("No Payload available");
                         throw new RiscVSimException("No Payload available!");
                     }
 
@@ -120,6 +138,7 @@ namespace RiscVSim.Environment.Hart
                 // Done. Next run.
                 pc = register.ReadUnsignedInt(register.ProgramCounter);
                 instructionCoding = memory.GetHalfWord(pc);
+                Logger.Info("Instruction {ins:X} fetched", BitConverter.ToString(instructionCoding.ToArray()));
             }
         }
 

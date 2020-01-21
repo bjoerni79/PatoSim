@@ -69,6 +69,7 @@ namespace RiscVSim.Environment.Hart
 
         protected override void InitDetails(ulong programCounter)
         {
+            Logger.Info("Init hart");
             // Set the initial program counter
             initialPc = programCounter;
 
@@ -84,8 +85,11 @@ namespace RiscVSim.Environment.Hart
         {
             if (!isInitialized)
             {
+                Logger.Error("Please initialize the RISC-V hart first!");
                 throw new RiscVSimException("Please initialize the RISC-V hart first!");
             }
+
+            Logger.Info("Load data to memory. Address = {address:X} hex, Data = {data}", address, BitConverter.ToString(data.ToArray()));
 
             // Store the data in the address
             memory.Write(address, data);
@@ -93,6 +97,7 @@ namespace RiscVSim.Environment.Hart
 
         protected override void BootCpu()
         {
+            Logger.Info("Boot CPU");
             // OK. Boot up the CPU first.
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
@@ -103,6 +108,7 @@ namespace RiscVSim.Environment.Hart
             //
             //  Set the program counter
             //
+            Logger.Info("Set program counter to {pc:X}", initialPc);
             register.WriteUnsignedLong(register.ProgramCounter, initialPc);
         }
 

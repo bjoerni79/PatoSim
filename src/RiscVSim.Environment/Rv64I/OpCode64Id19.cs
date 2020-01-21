@@ -25,6 +25,8 @@ namespace RiscVSim.Environment.Rv64I
             var rdLink = (rd == 1) || (rd == 5);
             var rs1Link = (rs1 == 1) || (rs1 == 5);
 
+            Logger.Info("Opcode 19 : rd = {rd}, rs1 = {rs1}, Immediate = {imm}", rd, rs1, payload.SignedImmediate);
+
             // A simple jump
             if (!rdLink && !rs1Link)
             {

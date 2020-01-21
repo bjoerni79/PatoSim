@@ -45,6 +45,7 @@ namespace RiscVSim.Environment.Rv32I
             int rs2SignedValue = Register.ReadSignedInt(rs2);
             uint rs2UnsignedValue = Register.ReadUnsignedInt(rs2);
 
+            Logger.Info("Opcode 0C : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, funct7 = {f7}", rd, rs1, rs2, payload.Funct3, payload.Funct7);
 
             RunOp(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
             return true;
@@ -74,6 +75,7 @@ namespace RiscVSim.Environment.Rv32I
                     }
                     else
                     {
+                        Logger.Error("Funct7 value is not as expected. Funct7 = {f7}", funct7);
                         throw new RiscVSimException("Funct7 code is not as expected. ");
                     }
 

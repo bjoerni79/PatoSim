@@ -10,6 +10,8 @@ namespace RiscVSim.Environment.Rv32I
     /// </summary>
     public sealed class Register32 : IRegister
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private RegisterEntry[] register;
         private int pcRegister;
 
@@ -62,6 +64,7 @@ namespace RiscVSim.Environment.Rv32I
         {
             if (index == 0)
             {
+                Logger.Error("X0 is readonly!");
                 throw new RiscVSimException("Register x0 is read only!");
             }
 
@@ -98,6 +101,7 @@ namespace RiscVSim.Environment.Rv32I
         {
             if (index == 0)
             {
+                Logger.Error("X0 is readonly!");
                 throw new RiscVSimException("Register x0 is read only!");
             }
 

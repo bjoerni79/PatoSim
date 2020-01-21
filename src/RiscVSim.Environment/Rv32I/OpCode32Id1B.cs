@@ -25,12 +25,15 @@ namespace RiscVSim.Environment.Rv32I
             // JAL
             int rd = payload.Rd;
 
+            Logger.Info("Opcode 1B : rd = {rd} , immediate = {imm}", rd, payload.SignedImmediate);
+
             //
             // First filter for x0,x1 or x5. All other registers are not mentioned in the spec!
             //
             var isValidRd = (rd == 0) || (rd == 1) || (rd == 5);
             if (!isValidRd)
             {
+                Logger.Error("JAL uses an rd, which is not 0,1 or 5");
                 new RiscVSimException("JAL uses an rd, which is not 0,1 or 5");
             }
 

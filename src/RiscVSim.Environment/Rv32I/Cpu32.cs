@@ -9,6 +9,8 @@ namespace RiscVSim.Environment.Rv32I
 {
     internal class Cpu32 : ICpu32
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private IMemory memory;
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
@@ -44,6 +46,7 @@ namespace RiscVSim.Environment.Rv32I
         {
             if (!opCodeRegistry.IsInitialized)
             {
+                Logger.Error("CPU is not initialized");
                 new RiscVSimException("CPU is not initialized: Please call init() first!");
             }
 
@@ -55,6 +58,7 @@ namespace RiscVSim.Environment.Rv32I
             if (opCodeCommand == null)
             {
                 string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
+                Logger.Error(opCodeNotSupportedErrorMessage);
                 throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
             }
 

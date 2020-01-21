@@ -31,6 +31,8 @@ namespace RiscVSim.Environment.Rv64I
             long signedResult;
             ulong unsignedResult;
 
+            Logger.Info("Opcode 0C : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, funct7 = {f7}", rd, rs1, rs2, payload.Funct3, payload.Funct7);
+
             switch (funct3)
             {
                 // Add and Sub
@@ -50,6 +52,7 @@ namespace RiscVSim.Environment.Rv64I
                     }
                     else
                     {
+                        Logger.Error("Funct7 is not as expected. F7 = {f7}", funct7);
                         throw new RiscVSimException("Funct7 code is not as expected. ");
                     }
 

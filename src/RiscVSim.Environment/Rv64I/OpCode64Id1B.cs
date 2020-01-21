@@ -21,6 +21,8 @@ namespace RiscVSim.Environment.Rv64I
             // JAL
             int rd = payload.Rd;
 
+            Logger.Info("Opcode 1B : rd = {rd} , immediate = {imm}", rd, payload.SignedImmediate);
+
             //
             // First filter for x0,x1 or x5. All other registers are not mentioned in the spec!
             //

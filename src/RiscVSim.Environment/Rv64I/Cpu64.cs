@@ -7,6 +7,8 @@ namespace RiscVSim.Environment.Rv64I
 {
     internal class Cpu64 : ICpu64
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private IMemory memory;
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
@@ -42,7 +44,8 @@ namespace RiscVSim.Environment.Rv64I
         {
             if (!opCodeRegistry.IsInitialized)
             {
-                new RiscVSimException("CPU is not initialized: Please call init() first!");
+                Logger.Error("CPU is not initialized");
+                throw new RiscVSimException("CPU is not initialized: Please call init() first!");
             }
 
             var curOpCode = instruction.OpCode;
@@ -53,6 +56,7 @@ namespace RiscVSim.Environment.Rv64I
             if (opCodeCommand == null)
             {
                 string opCodeNotSupportedErrorMessage = String.Format("Implementation for OpCode {0} cannot be found", curOpCode);
+                Logger.Error(opCodeNotSupportedErrorMessage);
                 throw new OpCodeNotSupportedException(opCodeNotSupportedErrorMessage);
             }
 

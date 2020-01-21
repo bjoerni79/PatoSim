@@ -24,6 +24,8 @@ namespace RiscVSim.Environment.Rv32I
             int rd = payload.Rd;
             var unsingedImmedaite = payload.UnsignedImmediate;
 
+            Logger.Info("Opcode 0D : rd = {rd}, immediate = {imm}", rd, unsingedImmedaite);
+
             workingBuffer = unsingedImmedaite;
             workingBuffer <<= 12;
 

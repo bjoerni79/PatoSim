@@ -43,6 +43,8 @@ namespace RiscVSim.Environment.Rv64I
             var signedImmediate = payload.SignedImmediate;
             var rs1Value = Register.ReadUnsignedInt(rs1);
 
+            Logger.Info("Opcode00 : rd = {rd}, rs1 = {rs1}", rd, rs1);
+
             IEnumerable<byte> buffer;
             byte[] result;
 

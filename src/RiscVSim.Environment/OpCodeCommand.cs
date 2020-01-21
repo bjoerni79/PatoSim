@@ -12,6 +12,8 @@ namespace RiscVSim.Environment
     /// </summary>
     public abstract class OpCodeCommand
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private readonly IMemory memory;
         private readonly IRegister register;
 

@@ -6,6 +6,8 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class Register64 : IRegister
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private RegisterEntry[] register;
         private int pcRegister;
 
@@ -129,6 +131,7 @@ namespace RiscVSim.Environment.Rv64I
         {
             if (index==0)
             {
+                Logger.Error("X0 is readonly!");
                 throw new RiscVSimException("Register X0 is only readable!");
             }
         }

@@ -2,6 +2,7 @@
 using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RiscVSim.Environment.Hart
@@ -20,7 +21,8 @@ namespace RiscVSim.Environment.Hart
             var is32 = (architecture == Architecture.Rv32I) || (architecture == Architecture.Rv32E);
             if (!is32)
             {
-                throw new RiscVSimException("A hart core implementation only support RV32I and RV32E");
+                Logger.Error("this hart core implementation only support RV32I and RV32E");
+                throw new RiscVSimException("this hart core implementation only support RV32I and RV32E");
             }
         }
 
@@ -77,6 +79,8 @@ namespace RiscVSim.Environment.Hart
 
             uint address32 = Convert.ToUInt32(address);
 
+            Logger.Info("Address = {address:X} hex, Data = {data}", address32, BitConverter.ToString(data.ToArray()));
+
             // Store the data in the address
             memory.Write(address32, data);
         }
@@ -93,6 +97,7 @@ namespace RiscVSim.Environment.Hart
             //
             //  Set the program counter
             //
+            Logger.Info("Set program counter to {pc:X}", initialPc);
             register.WriteUnsignedInt(register.ProgramCounter, initialPc);
         }
 

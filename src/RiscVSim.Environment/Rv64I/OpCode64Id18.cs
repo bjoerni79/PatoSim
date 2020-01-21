@@ -29,6 +29,8 @@ namespace RiscVSim.Environment.Rv64I
 
             bool doJump = false;
 
+            Logger.Info("Opcode 18 : rs1 = {rs1}, rs2 = {rs2} funct3 = {f3}", rs1, rs2, f3);
+
             switch (f3)
             {
                 // beq

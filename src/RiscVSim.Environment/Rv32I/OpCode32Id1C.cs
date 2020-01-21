@@ -16,6 +16,8 @@ namespace RiscVSim.Environment.Rv32I
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
+            Logger.Info("Opcode 1C : ");
+
             return true;
         }
     }
