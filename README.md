@@ -14,7 +14,7 @@ Simply build it via the DotNet tool or installing the Visual Studio Community Ed
 | RV64I | Complete | Version 2.1 |
 | RV32I | Complete | Version 2.1 |
 | RV32E | Under Test | Version 1.9 |
-| CSR | Planned | |
+| CSR | In Progress | |
 | GCC Toolchain Support | Planned ||
 
 The simulator supports all opcodes as specified for RV32I and RV64I. It also supports the reduced RV32E mode, but it is stil under test. All OpCode are tested via Unit tests and there are currently 160+ Tests. Nevertheless, there are still bugs in it and I would not recommend using it for your daily work. All my tests were done with my Windows 10 + Intel I5 CPU machine with Little Endian coding. Big Endian coding is on the list (basically just a reverse on the byte order, but still needs testing efforts) and will come later.
