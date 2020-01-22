@@ -394,6 +394,7 @@ namespace RiscVSim.Environment.Decoder
             payload.Rs1 = rs1;
             payload.SignedImmediate = immediate;
             payload.UnsignedImmediate = workingBuffer;
+            payload.SignedImmediateComplete = Convert.ToInt32(workingBuffer);
             return payload;
         }
 

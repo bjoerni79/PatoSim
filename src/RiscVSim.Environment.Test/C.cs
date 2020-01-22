@@ -84,6 +84,6 @@ namespace RiscVSim.Environment.Test
         public const int OPIMM32_slliw = 1;
         public const int OPIMM32_srliw_sraiw = 5;
 
-
+        public const int OPSYSTEM = 0x1C;
     }
 }

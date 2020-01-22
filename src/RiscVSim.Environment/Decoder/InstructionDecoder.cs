@@ -47,6 +47,7 @@ namespace RiscVSim.Environment.Decoder
             opCodeDict.Add(0x19, InstructionType.I_Type);  // JALR
             opCodeDict.Add(0x00, InstructionType.I_Type);
             opCodeDict.Add(0x03, InstructionType.I_Type);
+            opCodeDict.Add(0x1C, InstructionType.I_Type); // System
 
             //
             // I-Type 64Bit

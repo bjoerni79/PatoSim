@@ -74,27 +74,31 @@ namespace RiscVSim.Environment.Rv32I
         {
             Logger.Info("CSR Call detected.");
 
-            var csrIndex = payload.UnsignedImmediate;
+            var csrIndex = payload.SignedImmediateComplete;
             var rs1 = payload.Rs1;
             var rd = payload.Rd;
 
             var rs1Value = Register.ReadSignedInt(rs1);
-            
+            var csrValue = ReadAndExtendCsr(csrIndex);
 
             // CSR Value is 5 Bit and gets zero extended to the register length
-            
-
-
 
             switch (payload.Funct3)
             {
                 //
-                // Atomic Swap of CSR register content and integer register
+                // Atomic Read Write CSR : An atomic Swap of CSR register content and integer register
                 //
                 case csrrw:
-
+                    WriteToCsr(csrIndex, rs1Value);
+                    if (rd != 0)
+                    {
+                        WriteToRegister(rd, csrValue);
+                    }
                     break;
 
+                //
+                //  
+                //
                 case csrrs:
                     //break;
 
@@ -115,6 +119,30 @@ namespace RiscVSim.Environment.Rv32I
             }
         }
 
+        private int ReadAndExtendCsr(int csrIndex)
+        {
+            int buffer = 0;
+            var value = csrRegister.Read(csrIndex);
+
+            buffer |= value;
+            return buffer;
+        }
+
+        private void WriteToCsr(int csrIndex, int value)
+        {
+            var buffer = value & 0x1F; // Get the last 5 bits
+            byte csrValue = Convert.ToByte(buffer);
+
+            csrRegister.Write(csrIndex, csrValue);
+        }
+
+        private void WriteToRegister(int registerIndex, int value)
+        {
+            int buffer = value;
+            buffer &= 0x1F; // Only the last 5 Bits
+
+            Register.WriteSignedInt(registerIndex, buffer);
+        }
 
     }
 }

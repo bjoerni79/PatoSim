@@ -43,5 +43,10 @@ namespace RiscVSim.Environment.Decoder
         public int SignedImmediate { get; internal set; }
 
         public uint UnsignedImmediate { get; internal set; }
+
+        /// <summary>
+        /// All bits are treated as values bits 
+        /// </summary>
+        public int SignedImmediateComplete { get; internal set; }
     }
 }
