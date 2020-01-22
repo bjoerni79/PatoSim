@@ -36,6 +36,10 @@ namespace RiscVSim.Environment
         /// <summary>
         /// Initializes the CPU 
         /// </summary>
+
+        void AssignCrs(ICsrRegister csrRegister);
+
+
         void Init();
     }
 }

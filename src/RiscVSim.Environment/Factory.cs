@@ -30,9 +30,10 @@ namespace RiscVSim.Environment
             return new Rv64I.Register64();
         }
 
-        public static Rv32I.Core CreateRv32ICore()
+        public static ICsrRegister CreateCsrRegister()
         {
-            return new Rv32I.Core();
+            return new CsrRegister();
         }
+
     }
 }

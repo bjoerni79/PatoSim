@@ -393,6 +393,7 @@ namespace RiscVSim.Environment.Decoder
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.SignedImmediate = immediate;
+            payload.UnsignedImmediate = workingBuffer;
             return payload;
         }
 

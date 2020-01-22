@@ -15,6 +15,8 @@ namespace RiscVSim.Environment.Rv32I
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
         private Hint hint;
+        private ICsrRegister csrRegister;
+
         private Stack<uint> rasStack;
 
         public Cpu32()
@@ -102,7 +104,12 @@ namespace RiscVSim.Environment.Rv32I
             //
             // System
             //
-            opCodeRegistry.Add(0x1C, new OpCode32Id1C(memory, register));
+            opCodeRegistry.Add(0x1C, new OpCode32Id1C(memory, register,csrRegister));
+        }
+
+        public void AssignCrs(ICsrRegister csrRegister)
+        {
+            this.csrRegister = csrRegister;
         }
     }
 }

@@ -16,6 +16,8 @@ namespace RiscVSim.Environment.Bootstrap
 
         public IRegister Register { get; set; }
 
+        public ICsrRegister CsrRegister { get; set; }
+
         public Hint Hint { get; set; }
 
         public uint BaseAddres { get; set; }
@@ -32,6 +34,8 @@ namespace RiscVSim.Environment.Bootstrap
         {
             Memory = Factory.CreateDynamicMemory(architecture);
             Register = Factory.CreateRegisterRv32(architecture);
+            CsrRegister = Factory.CreateCsrRegister();
+            
             RasStack = new Stack<uint>();
             Hint = new Hint();
             BaseAddres = 0x100;
@@ -64,6 +68,7 @@ namespace RiscVSim.Environment.Bootstrap
             cpu.AssignRegister(Register);
             cpu.AssignHint(Hint);
             cpu.AssignRasStack(RasStack);
+            cpu.AssignCrs(CsrRegister);
             cpu.Init();
 
             // Fetch the first instruction and run the loop

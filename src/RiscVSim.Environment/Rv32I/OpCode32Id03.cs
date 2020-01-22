@@ -21,7 +21,7 @@ namespace RiscVSim.Environment.Rv32I
             var f3 = payload.Funct3;
  
 
-            Logger.Info("Opcode 03: rd={rd}, rs1={rs1}, funct3={funct3}", rd, rs1, f3);
+            Logger.Info("Opcode 03: rd={rd}, rs1={rs1}, funct3={funct3}, Unsigned Imm = {uimm:X}", rd, rs1, f3, payload.UnsignedImmediate);
 
 
 

@@ -22,6 +22,8 @@ namespace RiscVSim.Environment.Hart
         // The register set
         protected IRegister register;
 
+        protected ICsrRegister csrRegister;
+
         // the decoder
         protected InstructionDecoder instructionDecoder;
         // the type decoder

@@ -12,12 +12,18 @@ namespace RiscVSim.Environment.Rv64I
         private IMemory memory;
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
+        private ICsrRegister csrRegister;
         private Hint hint;
         private Stack<ulong> rasStack;
 
         internal Cpu64()
         {
             opCodeRegistry = new OpCodeRegistry();
+        }
+
+        public void AssignCrs(ICsrRegister csrRegister)
+        {
+            this.csrRegister = csrRegister;
         }
 
         public void AssignHint(Hint hint)

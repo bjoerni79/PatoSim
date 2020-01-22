@@ -7,18 +7,114 @@ namespace RiscVSim.Environment.Rv32I
 {
     public class OpCode32Id1C : OpCodeCommand
     {
-        public OpCode32Id1C(IMemory memory, IRegister register) : base(memory,register)
-        {
+        private ICsrRegister csrRegister;
 
+        public OpCode32Id1C(IMemory memory, IRegister register, ICsrRegister csrRegister) : base(memory,register)
+        {
+            this.csrRegister = csrRegister;
         }
+
+        /*
+         *  # SYSTEM
+            ecall     11..7=0 19..15=0 31..20=0x000 14..12=0 6..2=0x1C 1..0=3
+            ebreak    11..7=0 19..15=0 31..20=0x001 14..12=0 6..2=0x1C 1..0=3
+            uret      11..7=0 19..15=0 31..20=0x002 14..12=0 6..2=0x1C 1..0=3
+            sret      11..7=0 19..15=0 31..20=0x102 14..12=0 6..2=0x1C 1..0=3
+            mret      11..7=0 19..15=0 31..20=0x302 14..12=0 6..2=0x1C 1..0=3
+            dret      11..7=0 19..15=0 31..20=0x7b2 14..12=0 6..2=0x1C 1..0=3
+            sfence.vma 11..7=0 rs1 rs2 31..25=0x09  14..12=0 6..2=0x1C 1..0=3
+            wfi       11..7=0 19..15=0 31..20=0x105 14..12=0 6..2=0x1C 1..0=3
+            csrrw     rd      rs1      imm12        14..12=1 6..2=0x1C 1..0=3
+            csrrs     rd      rs1      imm12        14..12=2 6..2=0x1C 1..0=3
+            csrrc     rd      rs1      imm12        14..12=3 6..2=0x1C 1..0=3
+            csrrwi    rd      rs1      imm12        14..12=5 6..2=0x1C 1..0=3
+            csrrsi    rd      rs1      imm12        14..12=6 6..2=0x1C 1..0=3
+            csrrci    rd      rs1      imm12        14..12=7 6..2=0x1C 1..0=3
+         * 
+         */
+
+        private const int csrrw = 1;
+        private const int csrrs = 2;
+        private const int csrrc = 3;
+        private const int csrrwi = 5;
+        private const int csrrsi = 6;
+        private const int csrrci = 7;
 
         public override int Opcode => 0x1C;
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
-            Logger.Info("Opcode 1C : ");
+            var rd = payload.Rd;
+            var rs1 = payload.Rs1;
+            var f3 = payload.Funct3;
+            var f12 = payload.UnsignedImmediate;
+
+            Logger.Info("Opcode 1C : rd = {rd}, rs1 = {rs1}, f3 = 0x{f3:X}, f12 = 0x{f12:x}",rd,rs1,f3,f12);
+
+            if (f3 == 0)
+            {
+                HandleSystemCall(payload);
+            }
+            else
+            {
+                HandleCsr(payload);
+            }
 
             return true;
         }
+
+        private void HandleSystemCall(InstructionPayload payload)
+        {
+            Logger.Info("System Call detected");
+
+
+        }
+
+        private void HandleCsr(InstructionPayload payload)
+        {
+            Logger.Info("CSR Call detected.");
+
+            var csrIndex = payload.UnsignedImmediate;
+            var rs1 = payload.Rs1;
+            var rd = payload.Rd;
+
+            var rs1Value = Register.ReadSignedInt(rs1);
+            
+
+            // CSR Value is 5 Bit and gets zero extended to the register length
+            
+
+
+
+            switch (payload.Funct3)
+            {
+                //
+                // Atomic Swap of CSR register content and integer register
+                //
+                case csrrw:
+
+                    break;
+
+                case csrrs:
+                    //break;
+
+                case csrrc:
+                    //break;
+
+                case csrrwi:
+                    //break;
+
+                case csrrsi:
+                    //break;
+
+                case csrrci:
+                    //break;
+
+                default:
+                    throw new RiscVSimException("Unknown CSR instruction detected!");
+            }
+        }
+
+
     }
 }

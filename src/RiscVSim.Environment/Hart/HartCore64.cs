@@ -78,6 +78,7 @@ namespace RiscVSim.Environment.Hart
             register = Factory.CreateRegisterRv64();
             memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
             ras = new Stack<ulong>();
+            csrRegister = Factory.CreateCsrRegister();
             hint = new Hint();
         }
 
@@ -103,6 +104,7 @@ namespace RiscVSim.Environment.Hart
             cpu.AssignRegister(register);
             cpu.AssignHint(hint);
             cpu.AssignRasStack(ras);
+            cpu.AssignCrs(csrRegister);
             cpu.Init();
 
             //

@@ -92,6 +92,7 @@ namespace RiscVSim.Environment.Hart
             cpu.AssignRegister(register);
             cpu.AssignHint(hint);
             cpu.AssignRasStack(ras);
+            cpu.AssignCrs(csrRegister);
             cpu.Init();
 
             //
@@ -117,6 +118,7 @@ namespace RiscVSim.Environment.Hart
             cpu = new Cpu32();
             register = Factory.CreateRegisterRv32(architecture);
             memory = Factory.CreateDynamicMemory(architecture);
+            csrRegister = Factory.CreateCsrRegister();
             ras = new Stack<uint>();
             hint = new Hint();
         }
