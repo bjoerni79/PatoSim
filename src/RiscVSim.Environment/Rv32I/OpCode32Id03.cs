@@ -16,7 +16,14 @@ namespace RiscVSim.Environment.Rv32I
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
-            Logger.Info("Opcode03");
+            var rs1 = payload.Rs1;
+            var rd = payload.Rd;
+            var f3 = payload.Funct3;
+ 
+
+            Logger.Info("Opcode 03: rd={rd}, rs1={rs1}, funct3={funct3}", rd, rs1, f3);
+
+
 
             /*
              *   Bit 31 .. 28 | 27 26 25 24 23 22 21 20
@@ -37,6 +44,9 @@ namespace RiscVSim.Environment.Rv32I
              */
 
             // No idea what to do right now..
+
+
+
             return true;
         }
     }

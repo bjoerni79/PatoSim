@@ -16,7 +16,12 @@ namespace RiscVSim.Environment.Rv64I
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
-            Logger.Info("Opcode03");
+            var rs1 = payload.Rs1;
+            var rd = payload.Rd;
+            var f3 = payload.Funct3;
+
+
+            Logger.Info("Opcode 03: rd={rd}, rs1={rs1}, funct3={funct3}", rd, rs1, f3);
 
             return true;
         }
