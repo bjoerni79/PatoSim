@@ -82,6 +82,7 @@ namespace RiscVSim.Environment.Rv32I
             var csrValue = ReadAndExtendCsr(csrIndex);
 
             // CSR Value is 5 Bit and gets zero extended to the register length
+            int buffer;
 
             switch (payload.Funct3)
             {
@@ -89,33 +90,80 @@ namespace RiscVSim.Environment.Rv32I
                 // Atomic Read Write CSR : An atomic Swap of CSR register content and integer register
                 //
                 case csrrw:
-                    WriteToCsr(csrIndex, rs1Value);
-                    if (rd != 0)
-                    {
-                        WriteToRegister(rd, csrValue);
-                    }
+                    DoCsrrw(rd, csrIndex, csrValue, rs1Value);
                     break;
 
                 //
-                //  
+                //  Atomic Read and Set Bits in CSR
                 //
                 case csrrs:
-                    //break;
+                    DoCsrrs(rd, rs1, csrIndex, csrValue, rs1Value);
+                    break;
 
+                //
+                //  Atomic Read and Clear Bits in CSR
+                //
                 case csrrc:
-                    //break;
+                    DoCsrrc(rd, rs1, csrIndex, csrValue, rs1Value);
+                    break;
 
                 case csrrwi:
+                    //DoCsrrw(rd, rs1, csrIndex, rs1);
                     //break;
 
                 case csrrsi:
+                    //DoCsrrs(rd, rs1, csrIndex, csrValue, rs2);
                     //break;
 
                 case csrrci:
+                    //DoCsrrc(rd, rs1, csrIndex, csrValue, rs2S);
                     //break;
 
                 default:
                     throw new RiscVSimException("Unknown CSR instruction detected!");
+            }
+        }
+
+        private void DoCsrrw(int rd, int csrIndex, int csrValue, int value)
+        {
+            WriteToCsr(csrIndex, value);
+            if (rd != 0)
+            {
+                WriteToRegister(rd, csrValue);
+            }
+        }
+
+        private void DoCsrrs(int rd, int rs1,int csrIndex, int csrValue, int value)
+        {
+            int buffer = csrValue;
+            // Logical OR with the content of rs1
+            buffer &= value;
+
+            if (rs1 != 0)
+            {
+                WriteToCsr(csrIndex, buffer);
+            }
+
+            if (rd != 0)
+            {
+                WriteToRegister(rd, csrValue);
+            }
+        }
+
+        private void DoCsrrc(int rd, int rs1,int csrIndex, int csrValue, int value)
+        {
+            int buffer = csrValue;
+            // Logical OR with the inverse content of rs1
+            buffer &= (~value);
+
+            if (rs1 != 0)
+            {
+                WriteToCsr(csrIndex, buffer);
+            }
+
+            if (rd != 0)
+            {
+                WriteToRegister(rd, csrValue);
             }
         }
 
