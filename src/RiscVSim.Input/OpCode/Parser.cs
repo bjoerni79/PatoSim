@@ -8,6 +8,8 @@ namespace RiscVSim.Input.OpCode
 {
     public class Parser
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private bool debugEnabled;
 
         public Parser() : this(false)
@@ -22,8 +24,8 @@ namespace RiscVSim.Input.OpCode
 
         public Program Parse (string source)
         {
+            Logger.Info("Parse file {file}", source);
             var program = new Program();
-
 
             try
             {

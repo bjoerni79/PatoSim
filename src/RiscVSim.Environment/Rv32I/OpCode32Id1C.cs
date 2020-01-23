@@ -82,7 +82,6 @@ namespace RiscVSim.Environment.Rv32I
             var csrValue = ReadAndExtendCsr(csrIndex);
 
             // CSR Value is 5 Bit and gets zero extended to the register length
-            int buffer;
 
             switch (payload.Funct3)
             {
@@ -108,16 +107,16 @@ namespace RiscVSim.Environment.Rv32I
                     break;
 
                 case csrrwi:
-                    //DoCsrrw(rd, rs1, csrIndex, rs1);
-                    //break;
+                    DoCsrrw(rd, csrIndex, csrValue, rs1);
+                    break;
 
                 case csrrsi:
-                    //DoCsrrs(rd, rs1, csrIndex, csrValue, rs2);
-                    //break;
+                    DoCsrrs(rd, rs1, csrIndex, csrValue, rs1);
+                    break;
 
                 case csrrci:
-                    //DoCsrrc(rd, rs1, csrIndex, csrValue, rs2S);
-                    //break;
+                    DoCsrrc(rd, rs1, csrIndex, csrValue, rs1);
+                    break;
 
                 default:
                     throw new RiscVSimException("Unknown CSR instruction detected!");

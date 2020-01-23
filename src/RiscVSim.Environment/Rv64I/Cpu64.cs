@@ -107,7 +107,7 @@ namespace RiscVSim.Environment.Rv64I
             ////
             //// System
             ////
-            opCodeRegistry.Add(0x1C, new OpCode64Id1C(memory, register));
+            opCodeRegistry.Add(0x1C, new OpCode64Id1C(memory, register,csrRegister));
         }
     }
 }
