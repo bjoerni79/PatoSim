@@ -18,7 +18,7 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | A | In progress | |
 | M | In progress | |
 | Compressed Instruction | Next milestone | |
-| Debugging | Futrue milestone | According to RISC-V debug spec |
+| Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
 | GCC Toolchain Support | Future milestone  ||
 
