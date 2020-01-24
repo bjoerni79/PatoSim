@@ -27,7 +27,7 @@ The simulator supports all opcodes as specified for RV32I and RV64I. It also sup
 All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet core using little endian coding.
 
 ## How to Run
-The simulator is a console base programm and only supports Opode at the moment. Starting the console app without additional parameters shows the syntax of the arguments. Please find the OpCodeSamples in the RiscVSim project for sample files. Please see the Wiki for additional infos.
+The simulator is a console base programm and only supports Opode at the moment. Starting the console app without additional parameters shows the syntax of the arguments. Please find the OpCodeSamples in the RiscVSim project for sample files. Please find the Wiki for additional infos.
 
 ## What's next?
 The milestone 3 is in progress and the goal is to reach the next milestone. 
