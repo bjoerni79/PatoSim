@@ -2,7 +2,8 @@
 The goal of this project is simulating a RISC-V hart based on .NET Core 3.1.
 
 ## Architecture
-The project uses .NET Core 3.1 and runs as a console application. Every operating system provided by .NET Core should be able running it.  However, the code is written and tested on Windows 10 with an Intel i5 CPU. Loging is supported by NLog and the ecosystem of the this logging tool like numeros viewers etc. can be used. Each hart runs in his own thread and, in future, complex scenarios could be set up like two harts exchanging content over memory etc. I am new to the RISC-V world and any input of useful scenarios is appreciated.
+The project uses .NET Core 3.1 and runs as a console application. Every operating system provided by .NET Core should be able running it.  However, the code is written and tested on Windows 10 with an Intel i5 CPU. Loging is supported by NLog and the ecosystem of the this logging tool like numeros viewers etc. can be used. Each hart runs in his own thread and, in future, complex scenarios could be set up like two harts exchanging content over memory etc.
+I am new to the RISC-V world and any input of useful scenarios is appreciated.
 The entire simulator is built with unit testing from the beginning (run dotnet test on src folder..) and the goal is to reach a stable OpCode implementation in a short time.
 
 ### How To Build
