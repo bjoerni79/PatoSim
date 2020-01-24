@@ -23,7 +23,7 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | GCC Toolchain Support | Future milestone  ||
 
 The simulator supports all opcodes as specified for RV32I and RV64I. It also supports the reduced RV32E mode as a subset of RV32I.
-All opcodes are tested via Unit Tests on my (Little Endian) Core I5 using Windows 10. 
+All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet core using little endian coding.
 
 ## How to Run
 The simulator is a console base programm and only supports Opode at the moment. Starting the console app without additional parameters shows the syntax of the arguments. Please find the OpCodeSamples in the RiscVSim project for sample files. Please see the Wiki for additional infos.
