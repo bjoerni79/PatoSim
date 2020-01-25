@@ -2,7 +2,7 @@
   "profiles": {
     "RiscVSim": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\temp\\rv\\r0201.hex"
+      "commandLineArgs": "D:\\temp\\rv\\r0201.bin"
     }
   }
 }

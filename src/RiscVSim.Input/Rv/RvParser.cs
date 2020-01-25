@@ -100,18 +100,8 @@ namespace RiscVSim.Input.Rv
                 00000003  # data (3)
              */
 
-            var data = source.Split(new char[] { '#' });
-
-            var code = data[0];
-            var comment = String.Empty;
-
-            if (code.Length > 1)
-            {
-                comment = data[1];
-            }
-
-            code = code.Trim();
-            comment = comment.Trim();
+            string code, comment;
+            Filter(source, out code, out comment);
 
             // Write Code to the program
             //Console.WriteLine("Code = {0}, Comment = {1}", code, comment);
@@ -128,6 +118,21 @@ namespace RiscVSim.Input.Rv
             program.AddOpcode(bytesInLittleEndian);
         }
 
+        private void Filter(string source, out string code, out string comment)
+        {
+            var data = source.Split(new char[] { '#' });
+
+            code = data[0];
+            comment = String.Empty;
+            if (code.Length > 1)
+            {
+                comment = data[1];
+            }
+
+            code = code.Trim();
+            comment = comment.Trim();
+        }
+
         private void ParseBin(string source, RvProgram program)
         {
             Logger.Info("Bin file coding detected");
@@ -142,8 +147,47 @@ namespace RiscVSim.Input.Rv
                 00000000000000000000000000000010       # data (2)
                 00000000000000000000000000000011       # data (3)
 
+
+                0000 0001 0100 0001 1010 0010 1000 0011   # lw    
+                0000 0001 1000 0001 1010 0011 0000 0011   # lw
+                00000000011000101000001010110011  # add
+                00000100000000101000000000000000  # dout
+                00000000000000000000000000000000  # halt
+                00000000000000000000000000000010       # data (2)
+                00000000000000000000000000000011       # data (3)
              */
 
+            string code, comment;
+            Filter(source, out code, out comment);
+
+            program.AddOpCodeLine(code, comment);
+
+            // Construct the coding now. 
+            uint inst32Coding = 0;
+
+            // We start with the LSB ...
+            var reverseBits = code.Reverse();
+            int power = 0;
+            foreach (var bit in reverseBits)
+            {
+                // Ignore the spaces..
+                if (bit != ' ')
+                {
+                    if (bit=='1')
+                    {
+                        inst32Coding += (uint)(Math.Pow(2, power));
+                    }
+
+                    // next position
+                    power++;
+                }
+
+            }
+
+            // Write the opcode
+
+            var inst32Bytes = BitConverter.GetBytes(inst32Coding);
+            program.AddOpcode(inst32Bytes);
         }
     }
 }
