@@ -114,6 +114,7 @@ namespace RiscVSim.Environment.Hart
 
             initialPc = programCounter32;
 
+
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu32();
             register = Factory.CreateRegisterRv32(architecture);
@@ -121,6 +122,8 @@ namespace RiscVSim.Environment.Hart
             csrRegister = Factory.CreateCsrRegister();
             ras = new Stack<uint>();
             hint = new Hint();
+
+            register.WriteUnsignedInt(3, programCounter32);
         }
     }
 }

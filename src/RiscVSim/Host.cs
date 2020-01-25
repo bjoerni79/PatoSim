@@ -80,11 +80,12 @@ namespace RiscVSim
             Console.WriteLine("\n## Program details:\n");
 
             // The program counter starts at 0
-            hart.Init(0);
+            ulong programCounter = 0;
+            hart.Init(programCounter);
 
             var opcodes = program.GetOpcodes();
             Console.WriteLine(program.GetOpcodeLines());
-            hart.Load(0, opcodes);
+            hart.Load(programCounter, opcodes);
         }
 
         private void ReadOpcode(HartConfiguration config, IHart hart)

@@ -80,6 +80,8 @@ namespace RiscVSim.Environment.Hart
             ras = new Stack<ulong>();
             csrRegister = Factory.CreateCsrRegister();
             hint = new Hint();
+
+            register.WriteUnsignedLong(3, programCounter);
         }
 
         public override void Load(ulong address, IEnumerable<byte> data)
