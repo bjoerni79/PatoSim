@@ -78,7 +78,6 @@ namespace RiscVSim
             var program = rvParser.Parse(config.Source);
 
             Console.WriteLine("\n## Program details:\n");
-            Console.WriteLine("TODO");
 
             // The program counter starts at 0
             hart.Init(0);
