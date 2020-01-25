@@ -60,6 +60,7 @@ namespace RiscVSim
             string memory = null;
             string debug = null;
             string file = null;
+            string rvMode = null;
 
             foreach (var arg in args)
             {
@@ -81,6 +82,11 @@ namespace RiscVSim
                 if (toUpper.StartsWith("/DEBUG:"))
                 {
                     debug = arg;
+                }
+
+                if (toUpper.StartsWith("/RVMODE:"))
+                {
+                    rvMode = arg;
                 }
 
                 if (!arg.StartsWith("/"))
@@ -106,6 +112,11 @@ namespace RiscVSim
                 debug = "/Debug:Off";
             }
 
+            if (rvMode == null)
+            {
+                rvMode = "/RvMode: Off";
+            }
+
             //
             // Build the configuraton now
             //
@@ -121,6 +132,15 @@ namespace RiscVSim
 
             config.Source = file;
             return config;
+        }
+
+        private static void ApplyRvMode(HartConfiguration config, string mode)
+        {
+            var toUpper = mode.ToUpper();
+            if (toUpper.Equals("On"))
+            {
+                config.RvMode = true;
+            }
         }
 
         private static void ApplyCpu(HartConfiguration config, string mode)
@@ -175,9 +195,13 @@ namespace RiscVSim
             sb.AppendLine(" CPU: RV32I,RV32E,RV64I,");
             sb.AppendLine(" /Memory : Dynamic");
             sb.AppendLine(" /Debug: On,Off");
+            sb.AppendLine(" /RvMode: On,Off");
             sb.AppendLine("");
+            sb.AppendLine("");
+            sb.AppendLine("RvMode enables support for the assembler extensions and input formats as specified in the book RISC-V Assembly Langugage by Anthony J. Dos Reis");
+            sb.AppendLine();
             sb.AppendLine("Default Values are");
-            sb.AppendLine(" CPU = RV64I, Memory = Dynamic, Debug= Off");
+            sb.AppendLine(" CPU = RV64I, Memory = Dynamic, Debug= Off, RvMode=Off");
             sb.AppendLine("");
             sb.AppendLine("Examples:\n");
             sb.AppendLine(" RiscVSim /CPU:RV64 /Memory:Dynamic /Debug:On myFile");

@@ -78,6 +78,7 @@ namespace RiscVSim.Input.OpCode
             }
             catch (Exception ex)
             {
+                Logger.Error(ex, "Exception detected!");
                 throw new ParserException("Could not parse file", ex);
             }
 
@@ -95,16 +96,16 @@ namespace RiscVSim.Input.OpCode
             //Console.WriteLine("Processing ..." + data);
 
             // Value is XY where X and Y as between 0 and F ..
-            var hexString = Cleanup(data);
+            var hexString = FormatHelper.Cleanup(data);
             foreach (var curChar in hexString)
             {
-                if (!isHex(curChar))
+                if (!FormatHelper.isHex(curChar))
                 {
                     throw new ParserException("Invalid content detected. Please only provide hex values");
                 }
             }
 
-            var bytes = ConvertHexStringToByteArray(hexString);
+            var bytes = FormatHelper.ConvertHexStringToByteArray(hexString);
             program.AddData(bytes);
         }
 
@@ -113,7 +114,7 @@ namespace RiscVSim.Input.OpCode
             var data = line.Remove(0, 1);
             //Console.WriteLine("Processing ..." + data);
 
-            var hexString = Cleanup(data);
+            var hexString = FormatHelper.Cleanup(data);
             if (hexString.Length % 2 == 1)
             {
                 hexString = "0" + hexString;
@@ -121,14 +122,14 @@ namespace RiscVSim.Input.OpCode
 
             foreach (var curChar in hexString)
             {
-                if (!isHex(curChar))
+                if (!FormatHelper.isHex(curChar))
                 {
                     throw new ParserException("Invalid content detected. Please only provide hex values");
                 }
             }
 
-            var bytes = ConvertHexStringToByteArray(hexString);
-            var address = ConvertToAddress(bytes);
+            var bytes = FormatHelper.ConvertHexStringToByteArray(hexString);
+            var address = FormatHelper.ConvertToAddress(bytes);
             program.AddNewAddressMarker(address);
         }
 
@@ -139,7 +140,7 @@ namespace RiscVSim.Input.OpCode
             var data = line.Remove(0, 1);
             //Console.WriteLine("Processing ..." + data);
 
-            var hexString = Cleanup(data);
+            var hexString = FormatHelper.Cleanup(data);
             if (hexString.Length % 2 == 1)
             {
                 hexString = "0" + hexString;
@@ -147,68 +148,18 @@ namespace RiscVSim.Input.OpCode
 
             foreach (var curChar in hexString)
             {
-                if (!isHex(curChar))
+                if (!FormatHelper.isHex(curChar))
                 {
                     throw new ParserException("Invalid content detected. Please only provide hex values");
                 }
             }
 
-            var bytes = ConvertHexStringToByteArray(hexString);
-            var address = ConvertToAddress(bytes);
+            var bytes = FormatHelper.ConvertHexStringToByteArray(hexString);
+            var address = FormatHelper.ConvertToAddress(bytes);
             program.AddStartAddress(address);
         }
 
 
-        private bool isHex(char c)
-        {
-            return Char.IsDigit(c) || c == 'A' || c == 'B' || c == 'C' || c == 'D' || c == 'E' || c == 'F';
-        }
-
-        private string Cleanup(string data)
-        {
-            var sb = new StringBuilder();
-            foreach (var curChar in data.ToUpper())
-            {
-                if (curChar != ' ')
-                {
-                    sb.Append(curChar);
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        private byte[] ConvertHexStringToByteArray(string hexString)
-        {
-            // https://stackoverflow.com/questions/321370/how-can-i-convert-a-hex-string-to-a-byte-array
-
-            if (hexString.Length % 2 != 0)
-            {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "The binary key cannot have an odd number of digits: {0}", hexString));
-            }
-
-            byte[] data = new byte[hexString.Length / 2];
-            for (int index = 0; index < data.Length; index++)
-            {
-                string byteValue = hexString.Substring(index * 2, 2);
-                data[index] = byte.Parse(byteValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-            }
-
-            return data;
-        }
-
-        private uint ConvertToAddress(IEnumerable<byte> bytes)
-        {
-            uint address = 0;
-            foreach (var curByte in bytes)
-            {
-                address |= curByte;
-                address <<= 8;
-            }
-
-            address >>= 8;
-            return address;
-        }
 
     }
 }

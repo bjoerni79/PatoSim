@@ -1,6 +1,7 @@
 ﻿using RiscVSim.Environment;
 using RiscVSim.Environment.Hart;
 using RiscVSim.Input.OpCode;
+using RiscVSim.Input.Rv;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,7 @@ namespace RiscVSim
             Console.WriteLine("# CPU : {0}", config.Architecture);
             Console.WriteLine("# Memory : {0}", config.Memory);
             Console.WriteLine("# Debug : {0}", config.Debug);
+            Console.WriteLine("# RvMode = {0}", config.RvMode);
 
             bool fileExists = File.Exists(config.Source);
             if (fileExists)
@@ -35,26 +37,16 @@ namespace RiscVSim
                 Console.WriteLine("## STOP : File does not exists");
             }
 
-            //
-            // Read the low level file
-            //
-            // TODO: For now it is only this stupid little low level format (..but hey,..it works and could be useful for debugging). In future GCC-ELF for RISC-V is the target!
-            var lowLwevelParser = new Parser();
-            var myProgram = lowLwevelParser.Parse(config.Source);
-            Console.WriteLine("\n## Program details:\n");
-            Console.WriteLine(myProgram.GetHumanReadableContent());
-
-            //
-            // Init the RISC V hart and start the simulation
-            //
             var hart = HartFactory.CreateHart(config);
-            hart.Init(myProgram.InitialProgramCounter);
-
-            // Load each modules to the memory
-            foreach (var subRoutineMarker in myProgram.GetSubRoutineMarker())
+            if (config.RvMode)
             {
-                var data = myProgram.GetSubRoutine(subRoutineMarker);
-                hart.Load(subRoutineMarker, data);
+                // Read the RV files
+                ReadRv(config, hart);
+            }
+            else
+            {
+                // If the input format is not the "rv format" use the default opcode one
+                ReadOpcode(config, hart);
             }
 
             //
@@ -77,5 +69,44 @@ namespace RiscVSim
             //var memoryState = hart.GetMemoryState();
             //Console.WriteLine(memoryState);
         }
+
+        private void ReadRv(HartConfiguration config, IHart hart)
+        {
+            var rvParser = new RvParser();
+            var program = rvParser.Parse(config.Source);
+
+            Console.WriteLine("\n## Program details:\n");
+            Console.WriteLine("TODO");
+
+            // The program counter starts at 0
+            hart.Init(0);
+
+            var opcodes = program.GetOpcodes();
+            Console.WriteLine(program.GetOpcodeLines());
+            hart.Load(0, opcodes);
+        }
+
+        private void ReadOpcode(HartConfiguration config, IHart hart)
+        {
+            var lowLwevelParser = new Parser();
+            var myProgram = lowLwevelParser.Parse(config.Source);
+            Console.WriteLine("\n## Program details:\n");
+            Console.WriteLine(myProgram.GetHumanReadableContent());
+
+            //
+            // Init the RISC V hart and start the simulation
+            //
+
+            hart.Init(myProgram.InitialProgramCounter);
+
+            // Load each modules to the memory
+            foreach (var subRoutineMarker in myProgram.GetSubRoutineMarker())
+            {
+                var data = myProgram.GetSubRoutine(subRoutineMarker);
+                hart.Load(subRoutineMarker, data);
+            }
+
+        }
+
     }
 }
