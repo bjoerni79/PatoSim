@@ -244,6 +244,7 @@ namespace RiscVSim.Environment.Hart
                 if (!isValid)
                 {
                     Logger.Error("Invalid instruction byte detected : {ins:X2}", insByte);
+                    throw new RiscVSimException("Invalid instruction coding detected. Please enable RV support if you want to use the custom extensions");
                 }
             }
 

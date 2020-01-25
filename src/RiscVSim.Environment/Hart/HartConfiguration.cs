@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Hart
             Memory = MemoryConfiguration.Dynamic;
             Architecture = Architecture.Rv64I;
             Source = String.Empty;
-            RvMode = true;
+            RvMode = false;
         }
 
         public DebugMode Debug { get;  set; }

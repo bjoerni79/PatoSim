@@ -60,7 +60,7 @@ namespace RiscVSim
             string memory = null;
             string debug = null;
             string file = null;
-            string rvMode = null;
+            string rv = null;
 
             foreach (var arg in args)
             {
@@ -86,7 +86,7 @@ namespace RiscVSim
 
                 if (toUpper.StartsWith("/RVMODE:"))
                 {
-                    rvMode = arg;
+                    rv = arg;
                 }
 
                 if (!arg.StartsWith("/"))
@@ -112,9 +112,9 @@ namespace RiscVSim
                 debug = "/Debug:Off";
             }
 
-            if (rvMode == null)
+            if (rv == null)
             {
-                rvMode = "/RvMode: Off";
+                rv= "/RvMode: Off";
             }
 
             //
@@ -125,10 +125,12 @@ namespace RiscVSim
             var cpuMode = cpu.Split(new char[] { ':' });
             var memoryMode = memory.Split(new char[] { ':' });
             var debugMode = debug.Split(new char[] { ':' });
+            var rvMode = rv.Split(new char[] { ':' });
 
             ApplyCpu(config, cpuMode[1]);
             ApplyMemory(config, memoryMode[1]);
             ApplyDebug(config, debugMode[1]);
+            ApplyRvMode(config, rvMode[1]);
 
             config.Source = file;
             return config;
@@ -137,7 +139,7 @@ namespace RiscVSim
         private static void ApplyRvMode(HartConfiguration config, string mode)
         {
             var toUpper = mode.ToUpper();
-            if (toUpper.Equals("On"))
+            if (toUpper.Equals("ON"))
             {
                 config.RvMode = true;
             }
