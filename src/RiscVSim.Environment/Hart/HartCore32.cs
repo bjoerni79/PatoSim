@@ -45,12 +45,12 @@ namespace RiscVSim.Environment.Hart
 
                 if (value == 0)
                 {
-                    sb.AppendFormat(" {0} = {1:X4}\t", registerNames32[index], value);
+                    sb.AppendFormat(" {0} = {1:X8}\t", registerNames32[index], value);
                 }
                 else
                 {
                     //TODO: Highlight this somehow...
-                    sb.AppendFormat("!{0} = {1:X4}\t", registerNames32[index], value);
+                    sb.AppendFormat("!{0} = {1:X8}\t", registerNames32[index], value);
                 }
 
 
@@ -122,6 +122,11 @@ namespace RiscVSim.Environment.Hart
             csrRegister = Factory.CreateCsrRegister();
             ras = new Stack<uint>();
             hint = new Hint();
+
+            if (configuration.RvMode)
+            {
+                register.WriteUnsignedInt(2, 0x10000);
+            }
 
             register.WriteUnsignedInt(3, programCounter32);
         }

@@ -27,9 +27,18 @@ namespace RiscVSim.Environment.Custom
 
             if (f7 == 0x02)
             {
+                // dout
                 var rs1Value = Register.ReadSignedInt(rs1);
 
                 Console.WriteLine(rs1Value);
+            }
+
+            if (f7 == 0x04)
+            {
+                // hout
+                var rs1Value = Register.ReadSignedInt(rs1);
+
+                Console.WriteLine("{0:X}", rs1Value);
             }
 
             return true;
