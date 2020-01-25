@@ -59,5 +59,7 @@ namespace RiscVSim.Environment.Decoder
                 return instLength;
             }
         }
+
+
     }
 }

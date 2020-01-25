@@ -12,6 +12,22 @@ namespace RiscVSim.Environment.Decoder
         {
         }
 
+        public InstructionPayload DecodeCustom (Instruction instruction, IEnumerable<byte> inst32Coding)
+        {
+            InstructionPayload payload;
+            var isRv = inst32Coding.First() == 0x00;
+            if (isRv)
+            {
+                payload = DecodeTypeR(instruction, inst32Coding);
+            }
+            else
+            {
+                throw new EncodingException("Unknown Type Encoding detected!");
+            }
+
+            return payload;
+        }
+
         public InstructionPayload DecodeType (Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             InstructionPayload payload;

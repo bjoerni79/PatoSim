@@ -9,6 +9,7 @@ namespace RiscVSim.Environment
         Unknown,
         Rv32I, // 4 Bytes = 32 Bit
         Rv32E,
-        Rv64I
+        Rv64I,
+        Custom
     };
 }

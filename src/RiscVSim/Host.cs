@@ -38,6 +38,8 @@ namespace RiscVSim
             }
 
             var hart = HartFactory.CreateHart(config);
+            hart.Configure(config);
+
             if (config.RvMode)
             {
                 // Read the RV files
