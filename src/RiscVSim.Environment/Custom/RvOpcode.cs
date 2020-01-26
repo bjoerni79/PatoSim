@@ -55,29 +55,92 @@ namespace RiscVSim.Environment.Custom
 
             if (f7 == 0x01)
             {
+                // nl          output newline to display 
                 Console.WriteLine();
             }
 
             if (f7 == 0x02)
             {
-                // dout
+                // dout  reg   output reg in decimal to display
                 Console.Write(rs1ValueSigned);
             }
 
             if (f7 == 0x03)
             {
-                // udout
+                // udout reg   output reg in unsigned decimal to display
                 Console.Write(rs1ValueUnsigned);
             }
 
             if (f7 == 0x04)
             {
-                // hout
-
+                // hout  reg   output reg in hex to display   
                 Console.WriteLine("{0:X}", rs1ValueUnsigned);
             }
 
+            if (f7 == 0x05)
+            {
+                // aout  reg   output ASCII character in reg to display
+            }
 
+            if (f7 == 0x06)
+            {
+                // sout reg   display string reg points to
+            }
+
+            if (f7 == 0x07)
+            {
+                // din   reg   input dec number from keyboard into reg 
+            }
+
+            if (f7 == 0x08)
+            {
+                // hin   reg   input hex number from keyboard into reg 
+            }
+
+            if (f7 == 0x09)
+            {
+                // ain   reg   input character from keyboard into reg
+            }
+
+            if (f7 == 0x0A)
+            {
+                // sin   reg   like sout but for input 
+            }
+
+            if (f7 == 0x0B)
+            {
+                // m           display memory       
+            }
+
+            if (f7 == 0x0C)
+            {
+                // x           display registers
+            }
+
+            if (f7 == 0x0D)
+            {
+                // s           display stack      
+            }
+
+            if (f7 == 0x0E)
+            {
+                // bp          software breakpoint
+            }
+
+            if (f7 == 0x0F)
+            {
+                // ddout reg   doubleword (i.e., 64 bits) decimal out 
+            }
+
+            if (f7 == 0x10)
+            {
+                // dudout reg  doubleword (i.e., 64 bits) unsigned dec out 
+            }
+
+            if (f7 == 0x11)
+            {
+                // dhout reg   doubleword (i.e., 64 bits) hex out     
+            }
 
             return true;
         }
