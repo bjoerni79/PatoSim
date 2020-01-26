@@ -27,6 +27,16 @@ namespace RiscVSim.Environment.Rv32I
             sra     rd rs1 rs2 31..25=32 14..12=5 6..2=0x0C 1..0=3
             or      rd rs1 rs2 31..25=0  14..12=6 6..2=0x0C 1..0=3
             and     rd rs1 rs2 31..25=0  14..12=7 6..2=0x0C 1..0=3
+
+            # RV32M
+            mul     rd rs1 rs2 31..25=1 14..12=0 6..2=0x0C 1..0=3
+            mulh    rd rs1 rs2 31..25=1 14..12=1 6..2=0x0C 1..0=3
+            mulhsu  rd rs1 rs2 31..25=1 14..12=2 6..2=0x0C 1..0=3
+            mulhu   rd rs1 rs2 31..25=1 14..12=3 6..2=0x0C 1..0=3
+            div     rd rs1 rs2 31..25=1 14..12=4 6..2=0x0C 1..0=3
+            divu    rd rs1 rs2 31..25=1 14..12=5 6..2=0x0C 1..0=3
+            rem     rd rs1 rs2 31..25=1 14..12=6 6..2=0x0C 1..0=3
+            remu    rd rs1 rs2 31..25=1 14..12=7 6..2=0x0C 1..0=3
          */
 
         public override int Opcode => 0x0C;
@@ -47,11 +57,56 @@ namespace RiscVSim.Environment.Rv32I
 
             Logger.Info("Opcode 0C : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, funct7 = {f7}", rd, rs1, rs2, payload.Funct3, payload.Funct7);
 
-            RunOp(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+            if (funct7 == 0x01)
+            {
+                HandleRV32M(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+            }
+            else
+            {
+                HandleRV32I(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+            }
+
+            
             return true;
         }
 
-        private void RunOp(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
+        private void HandleRV32M(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
+        {
+            Logger.Info("Multiplier extension detected");
+
+            switch (funct3)
+            {
+                // mul
+                case 0:
+
+                // mulh
+                case 1:
+
+                // mulhsu
+                case 2:
+
+                // mulhu
+                case 3:
+
+                // div
+                case 4:
+
+                // divu
+                case 5:
+
+                // rem
+                case 6:
+
+                // remu
+                case 7:
+
+                // Error
+                default:
+                    throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", instruction.OpCode, funct3));
+            }
+        }
+
+        private void HandleRV32I(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
         {
             int signedResult;
             uint unsignedResult;
