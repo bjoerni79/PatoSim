@@ -68,8 +68,8 @@ namespace RiscVSim
             var registerState = hart.GetRegisterStates();
             Console.WriteLine(registerState);
 
-            //var memoryState = hart.GetMemoryState();
-            //Console.WriteLine(memoryState);
+            var memoryState = hart.GetMemoryState();
+            Console.WriteLine(memoryState);
         }
 
         private void ReadRv(HartConfiguration config, IHart hart)

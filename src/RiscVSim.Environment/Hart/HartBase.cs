@@ -53,9 +53,80 @@ namespace RiscVSim.Environment.Hart
             this.rvMode = configuration.RvMode;
         }
 
-        public abstract string GetMemoryState();
+        public  string GetMemoryState()
+        {
+            var sb = new StringBuilder();
+            uint offset = 127;
+            uint curIndex;
+
+            sb.AppendLine("Memory in Little Endian:");
+            int blockCount;
+            int blockIndex;
+
+            if (architecture == Architecture.Rv64I)
+            {
+                blockCount = 1;
+                blockIndex = 0;
+
+                var globalPointer64 = register.ReadUnsignedLong(3);
+                for (curIndex = 0; curIndex < offset; curIndex += 8)
+                {
+                    var pos = Convert.ToUInt64(globalPointer64 + curIndex);
+                    var data = memory.GetDoubleWord(globalPointer64 + curIndex);
+
+                    if (blockIndex == 0)
+                    {
+                        sb.AppendFormat("{0:X16} : ", pos);
+                    }
+
+                    sb.AppendFormat("{0}    ", BitConverter.ToString(data.ToArray(), 0));
+
+                    if (blockIndex < blockCount)
+                    {
+                        blockIndex++;
+                    }
+                    else
+                    {
+                        sb.AppendLine();
+                        blockIndex = 0;
+                    }
+                }
+            }
+            else
+            {
+                blockCount = 3;
+                blockIndex = 0;
+
+                var globalPointer32 = register.ReadUnsignedInt(3);
+                for (curIndex = 0; curIndex < offset; curIndex += 4)
+                {
+                    var pos = globalPointer32 + curIndex;
+                    var data = memory.GetWord(globalPointer32 + curIndex);
+
+                    if (blockIndex == 0)
+                    {
+                        sb.AppendFormat("{0:X8} : ", pos);
+                    }
+
+                    sb.AppendFormat("{0}    ", BitConverter.ToString(data.ToArray(), 0));
+
+                    if (blockIndex < blockCount)
+                    {
+                        blockIndex++;
+                    }
+                    else
+                    {
+                        sb.AppendLine();
+                        blockIndex = 0;
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
 
         public abstract string GetRegisterStates();
+
 
         public abstract void Load(ulong address, IEnumerable<byte> data);
 

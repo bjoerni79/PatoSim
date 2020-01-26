@@ -21,14 +21,6 @@ namespace RiscVSim.Environment.Hart
 
         }
 
-
-        public override string GetMemoryState()
-        {
-
-
-            return "TODO";
-        }
-
         public override string GetRegisterStates()
         {
             var sb = new StringBuilder();
