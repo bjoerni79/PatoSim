@@ -113,7 +113,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [Test]
         public void JumpAddressCheckBlock4Test()
         {
-            var jal = new byte[] { 0xEF, 0x00, 0x80, 0x80 };
+            var jal = new byte[] { 0xEF, 0xF0, 0x7F, 0xFF };
             uint pc_old = core.BaseAddres;
 
             var register = core.Register;
@@ -128,7 +128,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             Assert.AreEqual(x1, pc_old + 4); // Make sure, that the x1 (link) register is set!
             Assert.AreNotEqual(pc_old, pc_new);
-            Assert.AreEqual(pc_new, pc_old - 0x8);
+            Assert.AreEqual(pc_new, pc_old - 0xA);
         }
 
         [Test]

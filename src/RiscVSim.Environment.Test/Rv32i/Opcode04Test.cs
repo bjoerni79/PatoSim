@@ -86,10 +86,10 @@ namespace RiscVSim.Environment.Test.Rv32i
             var program = inst1.Concat(inst2);
             core.Run(program);
 
-            var x1Content = core.Register.ReadUnsignedInt(1);
-            var x3Content = core.Register.ReadUnsignedInt(3);
+            var x1Content = core.Register.ReadSignedInt(1);
+            var x3Content = core.Register.ReadSignedInt(3);
             Assert.AreEqual(x1Content, 0x7FF);
-            Assert.AreEqual(x3Content, 0);
+            Assert.AreEqual(x3Content, 0x7FE);
         }
 
         [Test]

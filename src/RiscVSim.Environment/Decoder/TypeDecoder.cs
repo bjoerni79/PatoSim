@@ -312,39 +312,40 @@ namespace RiscVSim.Environment.Decoder
             // compute the 12 bit signed integer
             uint immediate;
 
-            // buffer = b4
-            workingBuffer = b4;
 
-            var block4 = (workingBuffer & 0x80) >> 7; // Imm[12]
-            block4 <<= 11; // Shift it to the last byte
-
-            var block2 = (workingBuffer & 0x7E) >> 1; // Imm[10:5]
-
-            // buffer = b2b1
+            //
+            // Read Imm[4...1]
+            //
             workingBuffer = b2;
             workingBuffer <<= 8;
             workingBuffer |= b1;
+            workingBuffer >>= 8; // Right shift the opcode and imm[11]
+            immediate = workingBuffer & 0x0F;
 
-            // remove the op codes
-            workingBuffer >>= 7;
-            var block3 = workingBuffer & 0x01;
+            //
+            // Read Imm [10...5]
+            //
+            workingBuffer = b4;
             workingBuffer >>= 1;
-            var block1 = workingBuffer & 0x0F;
+            workingBuffer &= 0x7F;
+            workingBuffer <<= 4;
+            immediate |= workingBuffer;
 
-            immediate = block1;
+            //
+            // Read Imm [11]
+            //
+            workingBuffer = b1;
+            workingBuffer >>= 7;
+            workingBuffer <<= 10;
+            immediate |= workingBuffer;
 
-            // Add Block2
-            block2 <<= 4;
-            immediate |= block2;
-
-            // Add Block3
-            block3 <<= 10;
-            immediate |= block3;
-
-            // Add Block 4
-            immediate |= block4;
-
-
+            //
+            //  Read Imm[12]
+            //
+            workingBuffer = b4;
+            workingBuffer >>= 7;
+            workingBuffer <<= 11;
+            immediate |= workingBuffer;
 
             // Finally a left shift to the immediate for making sure it is based on a multiple of 2.
             // All in all a 12 Bit Signed Int

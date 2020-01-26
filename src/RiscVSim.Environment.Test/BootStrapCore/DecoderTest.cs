@@ -272,7 +272,7 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             Assert.AreEqual(ins1.Type, InstructionType.B_Type);
             Assert.AreEqual(ins1.Rs1, 1);
             Assert.AreEqual(ins1.Rs2, 2);
-            Assert.AreEqual(ins1.SignedImmediate, -0xFFE);
+            Assert.AreEqual(ins1.SignedImmediate, -2);
         }
 
 

@@ -51,25 +51,30 @@ namespace RiscVSim.Environment
             // We get a coding from an instruction and this one has a signed bit. 
             // 1.  Scan for it
             // 2. Remove it
-            // 3. Convert to Int32 and Multiply the value with -1 
-
-
+            // 3. Sign extend to FF and let the Bitconverter do the work
 
             uint scanBitMask = 1;
             int bitLength = GetBitLength(type);
             scanBitMask <<= bitLength;
 
-            uint filter = ~scanBitMask;
-
             int result;
             if ((coding & scanBitMask) == scanBitMask)
             {
-                // Signed bit detected!
-                uint preparedCoding = coding & filter;
-                result = Convert.ToInt32(preparedCoding);
+                // Create a new buffer and set the default value to 0xFF
+                var bytes = BitConverter.GetBytes(coding);
+                var newBuffer = new byte[4];
 
-                // Signed bit removed and now multiply it with -1
-                result *= -1;
+                for (int i = 0; i < 4; i++)
+                {
+                    newBuffer[i] = 0xFF;
+                }
+
+                var bitmask = GetBitMask(type);
+                var la = Convert.ToByte(bytes[1] | bitmask);
+                newBuffer[0] = bytes[0];
+                newBuffer[1] = la;
+
+                result = BitConverter.ToInt32(newBuffer, 0);
             }
             else
             {
@@ -77,6 +82,34 @@ namespace RiscVSim.Environment
             }
 
             return result;
+        }
+
+        private static byte GetBitMask(InstructionType type)
+        {
+            byte bitmask;
+            switch (type)
+            {
+                case InstructionType.J_Type:
+                    bitmask = 0xF0;
+                    break;
+
+                case InstructionType.I_Type:
+                    bitmask = 0xF0;
+                    break;
+
+                case InstructionType.B_Type:
+                    bitmask = 0xE0;
+                    break;
+
+                case InstructionType.S_Type:
+                    bitmask = 0xF0;
+                    break;
+
+                default:
+                    throw new RiscVSimException("Could not decode immediate! Bitmask unknown.");
+            }
+
+            return bitmask;
         }
 
         private static int GetBitLength(InstructionType type)
@@ -91,14 +124,13 @@ namespace RiscVSim.Environment
                     length = 11; // 1 Bit already set, so 12 - 1 = 11
                     break;
                 case InstructionType.B_Type:
-                    length = 12; //  +/- 4KByte plus Signed
+                    length = 12; //  +/- 4KByte plus Signed , 13 with zero 0 index = 12
                     break;
                 case InstructionType.S_Type:
                     length = 11; // Similar to I.  12 Bit Signed,  +/- 2KBytes
                     break;
                 default:
-                    length = 12;
-                    break;
+                    throw new RiscVSimException("Could not decode immediate!");
             }
 
             return length;

@@ -16,6 +16,7 @@ namespace RiscVSim.Environment.Test.Hart
         {
             var configuration = new HartConfiguration();
             configuration.Architecture = Architecture.Rv32E;
+            configuration.RvMode = true;
 
             hart = HartFactory.CreateHart(configuration);
             hart.Configure(configuration);

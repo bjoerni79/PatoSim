@@ -76,9 +76,7 @@ namespace RiscVSim.Environment.Test.Rv64i
         [Test]
         public void beqTest3()
         {
-            //var instBeq = InstructionTypeFactory.CreateBType(C.OPB, 15, 16, C.OPBbeq, 0xFFF);
-            //TODO:  Theres a bug in the B-Type Instruction Factory for FFF (biggest negative number = -4096)
-            var instBeq = new byte[] { 0xE3, 0x8F, 0x6A, 0xFF };
+            var instBeq = new byte[] { 0xE3, 0x8F, 0x6A, 0xC0 };
             var program = initBlock.Concat(instBeq);
 
             core.BaseAddres = 0x30000;
@@ -86,7 +84,7 @@ namespace RiscVSim.Environment.Test.Rv64i
             var register = core.Register;
 
             var pc = register.ReadUnsignedInt(register.ProgramCounter);
-            Assert.AreEqual(pc, 0x2f012);
+            Assert.AreEqual(pc, 0x2fc2e);
         }
 
         [Test]
