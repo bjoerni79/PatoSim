@@ -190,7 +190,7 @@ namespace RiscVSim.Environment.Hart
 
                 if (rvMode)
                 {
-                    var isCustom = instructionCoding.First() == 0x00;
+                    var isCustom = (instructionCoding.First() & 0x7F) == 0x00;
                     if (isCustom)
                     {
                         Logger.Info("Processing RV custom command.");
