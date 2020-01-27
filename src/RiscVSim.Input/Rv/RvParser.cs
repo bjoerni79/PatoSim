@@ -44,35 +44,17 @@ namespace RiscVSim.Input.Rv
                 var fi = new FileInfo(source);
                 var extension = fi.Extension;
 
-                if (extension.Equals(".hex"))
+                bool isText = extension.Equals(".hex") || extension.Equals(".bin");
+
+                if (isText)
                 {
-                    concreteParse = ParseHex;
+                    ParseText(source, program, extension);
+                }
+                else
+                {
+                    ParseBinary(source, program, extension);
                 }
 
-                if (extension.Equals(".bin"))
-                {
-                    concreteParse = ParseBin;
-                }
-
-                // Something is not as expected.
-                if (concreteParse == null)
-                {
-                    throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,...");
-                }
-
-                // Parse it now..
-                using (var textStream = File.OpenText(source))
-                {
-                    // Read each line and convert it to Opcodes
-                    while (!textStream.EndOfStream)
-                    {
-                        var line = textStream.ReadLine();
-                        Logger.Debug("Reading {line}", line);
-
-                        // Convert 
-                        concreteParse(line,program);
-                    }
-                }
             }
 
             catch (Exception ex)
@@ -82,6 +64,69 @@ namespace RiscVSim.Input.Rv
             }
 
             return program;
+        }
+
+        private void ParseBinary (string source, RvProgram program, string extension)
+        {
+            if (!extension.Equals(".e"))
+            {
+                throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,.e) ");
+            }
+
+
+            using (var binaryStream = File.OpenRead(source))
+            {
+                // Read Inst32 Byte blocks. Not that efficient, but good for debugging.
+                var buffer = new byte[4];
+                while (binaryStream.Read(buffer,0,buffer.Length) > 0)
+                {
+                    var codeLine = BitConverter.ToString(buffer, 0);
+                    program.AddOpCodeLine(codeLine, String.Empty);
+
+                    // Add the opcode
+                    program.AddOpcode(buffer);
+                }
+            }
+
+
+        }
+
+        private void ParseText(string source, RvProgram program, string extension)
+        {
+            ParseContent concreteParse = null;
+
+            if (extension.Equals(".hex"))
+            {
+                concreteParse = ParseHex;
+            }
+
+            if (extension.Equals(".bin"))
+            {
+                concreteParse = ParseBin;
+            }
+
+            // Something is not as expected.
+            if (concreteParse == null)
+            {
+                throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,.e) ");
+            }
+
+            // *.hex and *.bin are using the text format
+
+            // Parse it now..
+            using (var textStream = File.OpenText(source))
+            {
+                // Read each line and convert it to Opcodes
+                while (!textStream.EndOfStream)
+                {
+                    var line = textStream.ReadLine();
+                    Logger.Debug("Reading {line}", line);
+
+                    // Convert 
+                    concreteParse(line, program);
+                }
+            }
+
         }
 
         private void ParseHex(string source, RvProgram program)

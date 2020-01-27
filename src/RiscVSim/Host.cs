@@ -80,7 +80,7 @@ namespace RiscVSim
             Console.WriteLine("\n## Program details:\n");
 
             // The program counter starts at 0
-            ulong programCounter = 0;
+            ulong programCounter = Convert.ToUInt64(config.RvLoadOffset);
             hart.Init(programCounter);
 
             var opcodes = program.GetOpcodes();
