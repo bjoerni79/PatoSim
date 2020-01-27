@@ -233,8 +233,7 @@ namespace RiscVSim
             sb.AppendLine("RvMode enables support for the assembler extensions and input formats as specified in the book RISC-V Assembly Langugage by Anthony J. Dos Reis");
             sb.AppendLine("The RvModeL simulates the -L switch of the original simualtion");
             sb.AppendLine();
-            sb.AppendLine("Default Values are");
-            sb.AppendLine(" CPU = RV64I, Memory = Dynamic, Debug= Off, RvMode=Off");
+            sb.AppendLine("Default Values are stored in the file simulation.xml which will be created at startup if not available.");
             sb.AppendLine("");
             sb.AppendLine("Examples:\n");
             sb.AppendLine(" RiscVSim /CPU:RV64 /Memory:Dynamic /Debug:On myFile");

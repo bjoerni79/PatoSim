@@ -51,6 +51,8 @@ namespace RiscVSim.Environment.Custom
             var rs1ValueSigned = Register.ReadSignedInt(rs1);
             var rs1ValueUnsigned = Register.ReadSignedInt(rs1);
 
+            int result = 0;
+
             Logger.Info("Opcode RV : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, f3 = {f3}, f7 = {f7}", rd, rs1, rs2, f3, f7);
 
             if (f7 == 0x01)
@@ -90,11 +92,21 @@ namespace RiscVSim.Environment.Custom
             if (f7 == 0x07)
             {
                 // din   reg   input dec number from keyboard into reg 
+                Console.WriteLine("Enter dec number : ");
+                var decValue = Console.ReadLine();
+
+                result = Int32.Parse(decValue);
+                Register.WriteSignedInt(rd, result);
             }
 
             if (f7 == 0x08)
             {
                 // hin   reg   input hex number from keyboard into reg 
+                Console.WriteLine("Enter hex number : ");
+                var hexValue = Console.ReadLine();
+
+                result = Int32.Parse(hexValue, System.Globalization.NumberStyles.HexNumber);
+                Register.WriteSignedInt(rd, result);
             }
 
             if (f7 == 0x09)
