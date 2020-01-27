@@ -105,12 +105,14 @@ namespace RiscVSim.Input.Rv
 
                 var headerLine = BitConverter.ToString(headerBytes.ToArray(), 0);
                 program.AddHeader(headerLine);
+                Logger.Debug("Header : {header", headerLine);
 
                 // Read Inst32 Byte blocks. Not that efficient, but good for debugging.
                 var buffer = new byte[4];
                 while (binaryStream.Read(buffer,0,buffer.Length) > 0)
                 {
                     var codeLine = BitConverter.ToString(buffer, 0);
+                    Logger.Debug("Block {code} detected", codeLine);
                     program.AddOpCodeLine(codeLine, String.Empty);
 
                     // Add the opcode
