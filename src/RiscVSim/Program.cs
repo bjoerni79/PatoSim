@@ -12,6 +12,13 @@ namespace RiscVSim
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+        private static string cpu = null;
+        private static string memory = null;
+        private static string debug = null;
+        private static string file = null;
+        private static string rv = null;
+        private static string rvL = null;
+
         static void Main(string[] args)
         {
             Logger.Info("Simulator started");
@@ -56,13 +63,6 @@ namespace RiscVSim
 
         private static HartConfiguration ReadArgs(string[] args)
         {
-            string cpu = null;
-            string memory = null;
-            string debug = null;
-            string file = null;
-            string rv = null;
-            string rvL = null;
-
             foreach (var arg in args)
             {
                 var toUpper = arg.ToUpper();
@@ -102,31 +102,8 @@ namespace RiscVSim
             }
 
             // Set some defaults
+            LoadDefaults();
 
-            if (cpu == null)
-            {
-                cpu = "/CPU:RV64I";
-            }
-
-            if (memory == null)
-            {
-                memory = "/Memory:Dynamic";
-            }
-
-            if (debug == null)
-            {
-                debug = "/Debug:Off";
-            }
-
-            if (rv == null)
-            {
-                rv= "/RvMode: Off";
-            }
-
-            if (rvL == null)
-            {
-                rvL = "/RvModeL: 0";
-            }
 
             //
             // Build the configuraton now
@@ -147,6 +124,37 @@ namespace RiscVSim
 
             config.Source = file;
             return config;
+        }
+
+        private static void LoadDefaults()
+        {
+            var simConfig = new SimConfiguration();
+            simConfig.Init();
+
+            if (cpu == null)
+            {
+                cpu = "/CPU:" + simConfig.GetCpu();
+            }
+
+            if (memory == null)
+            {
+                memory = "/Memory:" + simConfig.GetMemory();
+            }
+
+            if (debug == null)
+            {
+                debug = "/Debug:" + simConfig.GetDebug();
+            }
+
+            if (rv == null)
+            {
+                rv = "/RvMode:" + simConfig.GetRvMode();
+            }
+
+            if (rvL == null)
+            {
+                rvL = "/RvModeL:" + simConfig.GetRvModeL();
+            }
         }
 
         private static void ApplyRvModeL(HartConfiguration config, string mode)
