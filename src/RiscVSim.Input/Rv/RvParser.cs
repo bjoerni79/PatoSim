@@ -73,9 +73,39 @@ namespace RiscVSim.Input.Rv
                 throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,.e) ");
             }
 
+            /*
+             *  R - Header Start ...
+             * ...
+             *  C - Header End...
+             * 
+             * block 1
+             * block 2
+             * ...
+             * block n
+             * 
+             * 
+             */
 
             using (var binaryStream = File.OpenRead(source))
             {
+                // Read the header first
+                byte curByte = Convert.ToByte(binaryStream.ReadByte());
+                var headerBytes = new List<byte>();
+                if (curByte != 'R')
+                {
+                    throw new ParserException("Header (R..C) expected!");
+                }
+
+                while (curByte != 'C') 
+                {
+                    headerBytes.Add(curByte);
+                    curByte = Convert.ToByte(binaryStream.ReadByte());
+                }
+                headerBytes.Add(curByte);
+
+                var headerLine = BitConverter.ToString(headerBytes.ToArray(), 0);
+                program.AddHeader(headerLine);
+
                 // Read Inst32 Byte blocks. Not that efficient, but good for debugging.
                 var buffer = new byte[4];
                 while (binaryStream.Read(buffer,0,buffer.Length) > 0)

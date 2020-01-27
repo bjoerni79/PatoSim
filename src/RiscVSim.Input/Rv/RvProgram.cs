@@ -16,6 +16,10 @@ namespace RiscVSim.Input.Rv
             code = new StringBuilder();
         }
 
+        public void AddHeader (string header)
+        {
+            code.AppendFormat("Header : {0}\n", header);
+        }
         public void AddOpcode(IEnumerable<byte> opCode)
         {
             opCodeList.AddRange(opCode);
