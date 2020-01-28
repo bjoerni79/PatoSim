@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Hart;
 using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace RiscVSim.Environment.Bootstrap
         public IRegister Register { get; set; }
 
         public ICsrRegister CsrRegister { get; set; }
-        public Hint Hint { get; set; }
+        public IHartEnvironment Environment { get; set; }
 
         public uint BaseAddres { get; set; }
 
@@ -32,7 +33,7 @@ namespace RiscVSim.Environment.Bootstrap
             Register = Factory.CreateRegisterRv64();
             CsrRegister = Factory.CreateCsrRegister();
             RasStack = new Stack<ulong>();
-            Hint = new Hint();
+            Environment = new HartEnvironment(architecture,Register,Memory,CsrRegister);
             BaseAddres = 0x100;
             EndianCoding = EndianType.Little;
 
@@ -61,7 +62,7 @@ namespace RiscVSim.Environment.Bootstrap
             var cpu = new Cpu64();
             cpu.AssignMemory(Memory);
             cpu.AssignRegister(Register);
-            cpu.AssignHint(Hint);
+            cpu.AssignEEI(Environment);
             cpu.AssignRasStack(RasStack);
             cpu.AssignCrs(CsrRegister);
             cpu.Init();

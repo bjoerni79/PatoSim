@@ -9,12 +9,12 @@ namespace RiscVSim.Environment.Rv32I
 {
     public sealed class OpCode32Id04 : OpCodeCommand
     {
-        private Hint hint;
+        private IHartEnvironment environment;
 
-        public OpCode32Id04(IMemory memory, IRegister register, Hint hint) : base(memory, register)
+        public OpCode32Id04(IMemory memory, IRegister register, IHartEnvironment environment) : base(memory, register)
         {
 
-            this.hint = hint;
+            this.environment = environment;
             // memry and register are stored in the base class
         }
 
@@ -51,10 +51,10 @@ namespace RiscVSim.Environment.Rv32I
             {
                 // Test for a NOP operation
                 var isNop = (payload.Rs1 == 0) && (payload.SignedImmediate ==0) && (payload.Funct3==0);
-                if (isNop && hint != null)
+                if (isNop && environment != null)
                 {
                     Logger.Info("Opcode04 : NOP operation detected");
-                    hint.IncreaseNopCounter();
+                    environment.IncreaseNopCounter();
                 }
             }
             else

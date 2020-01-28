@@ -7,7 +7,7 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class OpCode64Id04 : OpCodeCommand
     {
-        private Hint hint;
+        private IHartEnvironment environment;
 
         private const int addi = 0;
         private const int slli = 1; // Shift Logical left ..
@@ -18,9 +18,9 @@ namespace RiscVSim.Environment.Rv64I
         private const int ori = 6;
         private const int andi = 7;
 
-        public OpCode64Id04(IMemory memory, IRegister register, Hint hint) : base(memory, register)
+        public OpCode64Id04(IMemory memory, IRegister register, IHartEnvironment environment) : base(memory, register)
         {
-            this.hint = hint;
+            this.environment = environment;
             // base()..
         }
 
@@ -32,10 +32,10 @@ namespace RiscVSim.Environment.Rv64I
             {
                 // Test for a NOP operation
                 var isNop = (payload.Rs1 == 0) && (payload.SignedImmediate == 0) && (payload.Funct3 == 0);
-                if (isNop && hint != null)
+                if (isNop && environment != null)
                 {
                     Logger.Info("Opcode04 : NOP operation detected");
-                    hint.IncreaseNopCounter();
+                    environment.IncreaseNopCounter();
                 }
             }
             else

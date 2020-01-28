@@ -13,7 +13,7 @@ namespace RiscVSim.Environment.Rv64I
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
         private ICsrRegister csrRegister;
-        private Hint hint;
+        private IHartEnvironment environment;
         private Stack<ulong> rasStack;
 
         internal Cpu64()
@@ -26,9 +26,9 @@ namespace RiscVSim.Environment.Rv64I
             this.csrRegister = csrRegister;
         }
 
-        public void AssignHint(Hint hint)
+        public void AssignEEI(IHartEnvironment environment)
         {
-            this.hint = hint;
+            this.environment = environment;
         }
 
         public void AssignMemory(IMemory memory)
@@ -78,7 +78,7 @@ namespace RiscVSim.Environment.Rv64I
             // Init the OpCodes here!
 
             // Add opcode=04
-            opCodeRegistry.Add(0x04, new OpCode64Id04(memory, register, hint));
+            opCodeRegistry.Add(0x04, new OpCode64Id04(memory, register, environment));
             opCodeRegistry.Add(0x06, new OpCode64Id06(memory, register));
 
             //// Add opcode=0C, 0D and 05

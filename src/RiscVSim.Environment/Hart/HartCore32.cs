@@ -26,45 +26,6 @@ namespace RiscVSim.Environment.Hart
             }
         }
 
-
-        public override string GetRegisterStates()
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("# Register States");
-            int blockCount = 0;
-            int registerLength = GetRegisterCount();
-            for (int index = 0; index <= registerLength; index++)
-            {
-                var value = register.ReadUnsignedInt(index);
-
-                if (value == 0)
-                {
-                    sb.AppendFormat(" {0} = {1:X8}\t", registerNames32[index], value);
-                }
-                else
-                {
-                    //TODO: Highlight this somehow...
-                    sb.AppendFormat("!{0} = {1:X8}\t", registerNames32[index], value);
-                }
-
-
-                // Write 4 registers in a row.
-                if (blockCount == 3)
-                {
-                    sb.AppendLine();
-                    blockCount = 0;
-                }
-                else
-                {
-                    blockCount++;
-                }
-            }
-
-            sb.AppendLine();
-            return sb.ToString();
-        }
-
         public override void Load(ulong address, IEnumerable<byte> data)
         {
             if (!isInitialized)
@@ -85,7 +46,7 @@ namespace RiscVSim.Environment.Hart
             // OK. Boot up the CPU first.
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
-            cpu.AssignHint(hint);
+            cpu.AssignEEI(environment);
             cpu.AssignRasStack(ras);
             cpu.AssignCrs(csrRegister);
             cpu.Init();
@@ -115,8 +76,9 @@ namespace RiscVSim.Environment.Hart
             register = Factory.CreateRegisterRv32(architecture);
             memory = Factory.CreateDynamicMemory(architecture);
             csrRegister = Factory.CreateCsrRegister();
+            environment = new HartEnvironment(architecture,register, memory,csrRegister);
+            
             ras = new Stack<uint>();
-            hint = new Hint();
 
             if (configuration.RvMode)
             {

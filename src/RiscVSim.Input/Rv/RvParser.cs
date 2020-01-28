@@ -44,35 +44,17 @@ namespace RiscVSim.Input.Rv
                 var fi = new FileInfo(source);
                 var extension = fi.Extension;
 
-                if (extension.Equals(".hex"))
+                bool isText = extension.Equals(".hex") || extension.Equals(".bin");
+
+                if (isText)
                 {
-                    concreteParse = ParseHex;
+                    ParseText(source, program, extension);
+                }
+                else
+                {
+                    ParseBinary(source, program, extension);
                 }
 
-                if (extension.Equals(".bin"))
-                {
-                    concreteParse = ParseBin;
-                }
-
-                // Something is not as expected.
-                if (concreteParse == null)
-                {
-                    throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,...");
-                }
-
-                // Parse it now..
-                using (var textStream = File.OpenText(source))
-                {
-                    // Read each line and convert it to Opcodes
-                    while (!textStream.EndOfStream)
-                    {
-                        var line = textStream.ReadLine();
-                        Logger.Debug("Reading {line}", line);
-
-                        // Convert 
-                        concreteParse(line,program);
-                    }
-                }
             }
 
             catch (Exception ex)
@@ -82,6 +64,106 @@ namespace RiscVSim.Input.Rv
             }
 
             return program;
+        }
+
+        private void ParseBinary (string source, RvProgram program, string extension)
+        {
+            if (!extension.Equals(".e"))
+            {
+                throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,.e) ");
+            }
+
+            /*
+             *  R - Header Start ...
+             *  A 41h .. xx xx xx xx
+             *  S 53h .. xx xx xx xx Starting point
+             *  C - Header End...
+             * 
+             * block 1
+             * block 2
+             * ...
+             * block n
+             * 
+             * 
+             */
+
+            using (var binaryStream = File.OpenRead(source))
+            {
+                // Read the header first
+                byte curByte = Convert.ToByte(binaryStream.ReadByte());
+                var headerBytes = new List<byte>();
+                if (curByte != 'R')
+                {
+                    throw new ParserException("Header (R..C) expected!");
+                }
+
+                while (curByte != 'C') 
+                {
+                    //TODO: Read A address (if written)
+
+                    //TODO: Read S address (if written)
+
+                    headerBytes.Add(curByte);
+                    curByte = Convert.ToByte(binaryStream.ReadByte());
+                }
+                headerBytes.Add(curByte);
+
+                var headerLine = BitConverter.ToString(headerBytes.ToArray(), 0);
+                program.AddHeader(headerLine);
+                Logger.Debug("Header : {header", headerLine);
+
+                // Read Inst32 Byte blocks. Not that efficient, but good for debugging.
+                var buffer = new byte[4];
+                while (binaryStream.Read(buffer,0,buffer.Length) > 0)
+                {
+                    var codeLine = BitConverter.ToString(buffer, 0);
+                    Logger.Debug("Block {code} detected", codeLine);
+                    program.AddOpCodeLine(codeLine, String.Empty);
+
+                    // Add the opcode
+                    program.AddOpcode(buffer);
+                }
+            }
+
+
+        }
+
+        private void ParseText(string source, RvProgram program, string extension)
+        {
+            ParseContent concreteParse = null;
+
+            if (extension.Equals(".hex"))
+            {
+                concreteParse = ParseHex;
+            }
+
+            if (extension.Equals(".bin"))
+            {
+                concreteParse = ParseBin;
+            }
+
+            // Something is not as expected.
+            if (concreteParse == null)
+            {
+                throw new ParserException("Could not read rv format. Please use a valid extension (.hex, .bin,.e) ");
+            }
+
+            // *.hex and *.bin are using the text format
+
+            // Parse it now..
+            using (var textStream = File.OpenText(source))
+            {
+                // Read each line and convert it to Opcodes
+                while (!textStream.EndOfStream)
+                {
+                    var line = textStream.ReadLine();
+                    Logger.Debug("Reading {line}", line);
+
+                    // Convert 
+                    concreteParse(line, program);
+                }
+            }
+
         }
 
         private void ParseHex(string source, RvProgram program)

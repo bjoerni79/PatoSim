@@ -14,7 +14,7 @@ namespace RiscVSim.Environment.Rv32I
         private IMemory memory;
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
-        private Hint hint;
+        private IHartEnvironment environment;
         private ICsrRegister csrRegister;
 
         private Stack<uint> rasStack;
@@ -24,9 +24,9 @@ namespace RiscVSim.Environment.Rv32I
             opCodeRegistry = new OpCodeRegistry();
         }
 
-        public void AssignHint(Hint hint)
+        public void AssignEEI(IHartEnvironment environment)
         {
-            this.hint = hint;
+            this.environment = environment;
         }
 
         public void AssignMemory(IMemory memory)
@@ -76,7 +76,7 @@ namespace RiscVSim.Environment.Rv32I
         public void Init()
         {
             // Add opcode=04
-            opCodeRegistry.Add(0x04, new OpCode32Id04(memory, register, hint));
+            opCodeRegistry.Add(0x04, new OpCode32Id04(memory, register, environment));
 
             // Add opcode=0C, 0D and 05
             opCodeRegistry.Add(0x0C, new OpCode32Id0C(memory, register));
