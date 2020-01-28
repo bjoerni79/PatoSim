@@ -22,7 +22,8 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | Compressed Instruction | Next milestone | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
-| GCC Toolchain Support | Future milestone  ||
+| GCC Toolchain Support (using ELF) | Future milestone  ||
+| LLVM Toolchain support (using ELF) | Future milestone ||
 
 The simulator supports all opcodes as specified for RV32I and RV64I. It also supports the reduced RV32E mode as a subset of RV32I.
 All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet core using little endian coding.
@@ -30,7 +31,8 @@ All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet 
 
 
 ## How to Run
-The simulator is a console base programm and only supports Opode at the moment. Starting the console app without additional parameters shows the syntax of the arguments. Please find the OpCodeSamples in the RiscVSim project for sample files.
+The simulator is a console base programm and supports the input forrmats of the book "RISC-V Assembly Language" and opcodes. Starting the console app without additional parameters shows the syntax of the arguments. Please find the OpCodeSamples in the RiscVSim project for sample files.
+The long term goal of the project is using the GCC / LLVM toolchain for coding and using this simulator for executing different harts in different environments.
 
 ## Documentaion
 Please find the documentation at the Wiki
