@@ -34,7 +34,6 @@ namespace RiscVSim.Environment.Hart
             memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
             ras = new Stack<ulong>();
             csrRegister = Factory.CreateCsrRegister();
-            hint = new Hint();
 
             if (configuration.RvMode)
             {
@@ -64,7 +63,7 @@ namespace RiscVSim.Environment.Hart
             // OK. Boot up the CPU first.
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
-            cpu.AssignHint(hint);
+            cpu.AssignEEI(environment);
             cpu.AssignRasStack(ras);
             cpu.AssignCrs(csrRegister);
             cpu.Init();

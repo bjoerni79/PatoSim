@@ -28,11 +28,9 @@ namespace RiscVSim.Environment
         /// </summary>
         /// <param name="register">the register instance</param>
         void AssignRegister(IRegister register);
-        /// <summary>
-        /// Assigns the hint container
-        /// </summary>
-        /// <param name="hint">the instance</param>
-        void AssignHint(Hint hint);
+
+        void AssignEEI(IHartEnvironment environment);
+
         /// <summary>
         /// Initializes the CPU 
         /// </summary>

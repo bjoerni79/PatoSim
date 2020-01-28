@@ -16,7 +16,7 @@ namespace RiscVSim.Environment.Hart
         protected Architecture architecture;
 
         // the Hint
-        protected Hint hint;
+        protected IHartEnvironment environment;
 
         // the memory 
         protected IMemory memory;
@@ -192,6 +192,7 @@ namespace RiscVSim.Environment.Hart
             // Set the instruction decoder and type decoder
             instructionDecoder = new InstructionDecoder(EndianType.Little);
             typeDecoder = new TypeDecoder();
+            environment = new HartEnvironment();
 
             isInitialized = true;
             InitDetails(programCounter);

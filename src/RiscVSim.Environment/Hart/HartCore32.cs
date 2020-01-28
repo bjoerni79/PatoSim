@@ -46,7 +46,7 @@ namespace RiscVSim.Environment.Hart
             // OK. Boot up the CPU first.
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
-            cpu.AssignHint(hint);
+            cpu.AssignEEI(environment);
             cpu.AssignRasStack(ras);
             cpu.AssignCrs(csrRegister);
             cpu.Init();
@@ -77,7 +77,6 @@ namespace RiscVSim.Environment.Hart
             memory = Factory.CreateDynamicMemory(architecture);
             csrRegister = Factory.CreateCsrRegister();
             ras = new Stack<uint>();
-            hint = new Hint();
 
             if (configuration.RvMode)
             {

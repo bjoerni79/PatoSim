@@ -39,7 +39,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x2 = register.ReadSignedInt(2);
             Assert.AreEqual(x2, 5);
 
-            var hint = core.Hint;
+            var hint = core.Environment;
             Assert.AreEqual(3, hint.NopCounter);
         }
     }
