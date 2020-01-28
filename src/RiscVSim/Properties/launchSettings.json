@@ -2,7 +2,7 @@
   "profiles": {
     "RiscVSim": {
       "commandName": "Project",
-      "commandLineArgs": "/RvMode:On /CPU:RV32I D:\\temp\\rv\\r0204.bin"
+      "commandLineArgs": "D:\\temp\\rv\\playground\\fib.e"
     }
   }
 }

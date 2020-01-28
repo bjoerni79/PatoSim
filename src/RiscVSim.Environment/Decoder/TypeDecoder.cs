@@ -15,7 +15,7 @@ namespace RiscVSim.Environment.Decoder
         public InstructionPayload DecodeCustom (Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             InstructionPayload payload;
-            var isRv = inst32Coding.First() == 0x00;
+            var isRv = (inst32Coding.First() & 0x7F) == 0x00;
             if (isRv)
             {
                 payload = DecodeTypeR(instruction, inst32Coding);

@@ -21,43 +21,6 @@ namespace RiscVSim.Environment.Hart
 
         }
 
-        public override string GetRegisterStates()
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("# Register States");
-            int blockCount = 0;
-            int registerLength = GetRegisterCount();
-            for (int index = 0; index <= registerLength; index++)
-            {
-                var value = register.ReadUnsignedLong(index);
-
-                if (value == 0)
-                {
-                    sb.AppendFormat(" {0:S5} = {1:X16}\t", registerNames32[index], value);
-                }
-                else
-                {
-                    //TODO: Highlight this somehow...
-                    sb.AppendFormat("!{0:S5} = {1:X16}\t", registerNames32[index], value);
-                }
-                
-
-                // Write 4 registers in a row.
-                if (blockCount == 3)
-                {
-                    sb.AppendLine();
-                    blockCount = 0;
-                }
-                else
-                {
-                    blockCount++;
-                }
-            }
-
-            sb.AppendLine();
-            return sb.ToString();
-        }
 
         protected override void InitDetails(ulong programCounter)
         {
@@ -68,10 +31,11 @@ namespace RiscVSim.Environment.Hart
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu64();
             register = Factory.CreateRegisterRv64();
-            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
-            ras = new Stack<ulong>();
             csrRegister = Factory.CreateCsrRegister();
-            hint = new Hint();
+            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
+            environment = new HartEnvironment(Architecture.Rv64I,register, memory,csrRegister);
+            ras = new Stack<ulong>();
+            
 
             if (configuration.RvMode)
             {
@@ -101,7 +65,7 @@ namespace RiscVSim.Environment.Hart
             // OK. Boot up the CPU first.
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
-            cpu.AssignHint(hint);
+            cpu.AssignEEI(environment);
             cpu.AssignRasStack(ras);
             cpu.AssignCrs(csrRegister);
             cpu.Init();
