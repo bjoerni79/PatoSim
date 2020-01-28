@@ -75,7 +75,8 @@ namespace RiscVSim.Input.Rv
 
             /*
              *  R - Header Start ...
-             * ...
+             *  A 41h .. xx xx xx xx
+             *  S 53h .. xx xx xx xx Starting point
              *  C - Header End...
              * 
              * block 1
@@ -98,6 +99,10 @@ namespace RiscVSim.Input.Rv
 
                 while (curByte != 'C') 
                 {
+                    //TODO: Read A address (if written)
+
+                    //TODO: Read S address (if written)
+
                     headerBytes.Add(curByte);
                     curByte = Convert.ToByte(binaryStream.ReadByte());
                 }
