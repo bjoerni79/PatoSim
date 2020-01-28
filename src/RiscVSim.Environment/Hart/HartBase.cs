@@ -125,7 +125,58 @@ namespace RiscVSim.Environment.Hart
             return sb.ToString();
         }
 
-        public abstract string GetRegisterStates();
+        public string GetRegisterStates()
+        { 
+            var sb = new StringBuilder();
+
+            string formatString;
+            string formatString_Changed;
+            if (architecture == Architecture.Rv64I)
+            {
+                // Show the register with 4 Byte lengths
+                formatString = " {0} = {1:X16}\t";
+                formatString_Changed = "!{0} = {1:X16}\t";
+            }
+            else
+            {
+                // Show the register with 8 Byte lengths
+                formatString = " {0} = {1:X8}\t";
+                formatString_Changed = "!{0} = {1:X8}\t";
+            }
+
+            sb.AppendLine("# Register States");
+            int blockCount = 0;
+            int registerLength = GetRegisterCount();
+            for (int index = 0; index <= registerLength; index++)
+            {
+                var value = register.ReadUnsignedInt(index);
+
+                if (value == 0)
+                {
+                    sb.AppendFormat(formatString, registerNames32[index], value);
+                }
+                else
+                {
+                    //TODO: Highlight this somehow...
+                    sb.AppendFormat(formatString_Changed, registerNames32[index], value);
+                }
+
+
+                // Write 4 registers in a row.
+                if (blockCount == 3)
+                {
+                    sb.AppendLine();
+                    blockCount = 0;
+                }
+                else
+                {
+                    blockCount++;
+                }
+            }
+
+            sb.AppendLine();
+            return sb.ToString();
+        }
 
 
         public abstract void Load(ulong address, IEnumerable<byte> data);

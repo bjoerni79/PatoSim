@@ -21,43 +21,6 @@ namespace RiscVSim.Environment.Hart
 
         }
 
-        public override string GetRegisterStates()
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("# Register States");
-            int blockCount = 0;
-            int registerLength = GetRegisterCount();
-            for (int index = 0; index <= registerLength; index++)
-            {
-                var value = register.ReadUnsignedLong(index);
-
-                if (value == 0)
-                {
-                    sb.AppendFormat(" {0:S5} = {1:X16}\t", registerNames32[index], value);
-                }
-                else
-                {
-                    //TODO: Highlight this somehow...
-                    sb.AppendFormat("!{0:S5} = {1:X16}\t", registerNames32[index], value);
-                }
-                
-
-                // Write 4 registers in a row.
-                if (blockCount == 3)
-                {
-                    sb.AppendLine();
-                    blockCount = 0;
-                }
-                else
-                {
-                    blockCount++;
-                }
-            }
-
-            sb.AppendLine();
-            return sb.ToString();
-        }
 
         protected override void InitDetails(ulong programCounter)
         {
