@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiscVSim.Environment.Decoder;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,8 @@ namespace RiscVSim.Environment
     /// </summary>
     public interface IHartEnvironment
     {
+        void RvConsoleAction(InstructionPayload payload);
+
         /// <summary>
         /// Increases the No-Op counter
         /// </summary>

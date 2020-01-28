@@ -192,7 +192,6 @@ namespace RiscVSim.Environment.Hart
             // Set the instruction decoder and type decoder
             instructionDecoder = new InstructionDecoder(EndianType.Little);
             typeDecoder = new TypeDecoder();
-            environment = new HartEnvironment();
 
             isInitialized = true;
             InitDetails(programCounter);
@@ -258,7 +257,7 @@ namespace RiscVSim.Environment.Hart
 
                         var payload = typeDecoder.DecodeCustom(instruction, customCoding);
 
-                        var rvOpcode = new RvOpcode(memory, register);
+                        var rvOpcode = new RvOpcode(memory, register, environment);
                         var inc = rvOpcode.Execute(instruction, payload);
 
                         if (inc)
