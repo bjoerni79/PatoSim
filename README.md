@@ -16,10 +16,10 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | RV32I | Complete | Version 2.1 |
 | RV32E | Complete | Version 1.9 |
 | CSR | Complete | Version 2.0 |
-| RISC-V Assembly Language book support | Under Test | Supports the Opcode from the book written by Anthony J. Dos Reis |
-| A | In progress | |
-| M | In progress | |
-| Compressed Instruction | Next milestone | |
+| RISC-V Assembly Language book support | *Under Test* | Supports the Opcode from the book written by Anthony J. Dos Reis |
+| A | *In progress* | |
+| M | *In progress* | |
+| Compressed Instruction | *Next milestone* | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
 | GCC Toolchain Support (using ELF) | Future milestone  ||
