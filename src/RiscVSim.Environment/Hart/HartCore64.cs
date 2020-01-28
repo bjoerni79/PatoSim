@@ -31,10 +31,11 @@ namespace RiscVSim.Environment.Hart
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu64();
             register = Factory.CreateRegisterRv64();
-            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
-            environment = new HartEnvironment(Architecture.Rv64I,register, memory);
-            ras = new Stack<ulong>();
             csrRegister = Factory.CreateCsrRegister();
+            memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
+            environment = new HartEnvironment(Architecture.Rv64I,register, memory,csrRegister);
+            ras = new Stack<ulong>();
+            
 
             if (configuration.RvMode)
             {

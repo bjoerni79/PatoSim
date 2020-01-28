@@ -75,8 +75,9 @@ namespace RiscVSim.Environment.Hart
             cpu = new Cpu32();
             register = Factory.CreateRegisterRv32(architecture);
             memory = Factory.CreateDynamicMemory(architecture);
-            environment = new HartEnvironment(architecture,register, memory);
             csrRegister = Factory.CreateCsrRegister();
+            environment = new HartEnvironment(architecture,register, memory,csrRegister);
+            
             ras = new Stack<uint>();
 
             if (configuration.RvMode)

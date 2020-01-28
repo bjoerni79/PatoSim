@@ -33,7 +33,7 @@ namespace RiscVSim.Environment.Bootstrap
             Register = Factory.CreateRegisterRv64();
             CsrRegister = Factory.CreateCsrRegister();
             RasStack = new Stack<ulong>();
-            Environment = new HartEnvironment(architecture,Register,Memory);
+            Environment = new HartEnvironment(architecture,Register,Memory,CsrRegister);
             BaseAddres = 0x100;
             EndianCoding = EndianType.Little;
 

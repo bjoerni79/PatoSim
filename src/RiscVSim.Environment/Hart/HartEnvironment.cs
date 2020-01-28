@@ -10,6 +10,7 @@ namespace RiscVSim.Environment.Hart
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private IRegister register;
+        private ICsrRegister csrRegister;
         private IMemory memory;
         private Architecture architecture;
 
@@ -22,10 +23,11 @@ namespace RiscVSim.Environment.Hart
             "pc"
 };
 
-        internal HartEnvironment(Architecture architecture, IRegister register, IMemory memory)
+        internal HartEnvironment(Architecture architecture, IRegister register, IMemory memory, ICsrRegister csrRegister)
         {
             this.architecture = architecture;
             this.register = register;
+            this.csrRegister = csrRegister;
             this.memory = memory;
         }
 
@@ -273,6 +275,8 @@ namespace RiscVSim.Environment.Hart
             if (f7 == 0x0C)
             {
                 // x           display registers
+                var register = GetRegisterStates();
+                Console.WriteLine(register);
             }
 
             if (f7 == 0x0D)
