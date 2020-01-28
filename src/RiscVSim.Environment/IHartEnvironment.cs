@@ -10,6 +10,10 @@ namespace RiscVSim.Environment
     /// </summary>
     public interface IHartEnvironment
     {
+        string GetRegisterStates();
+
+        string GetMemoryState();
+
         void RvConsoleAction(InstructionPayload payload);
 
         /// <summary>

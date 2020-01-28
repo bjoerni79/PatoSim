@@ -32,14 +32,6 @@ namespace RiscVSim.Environment.Hart
         // the type decoder
         protected TypeDecoder typeDecoder;
 
-        protected string[] registerNames32 = new string[]
-        {
-            "x0","ra","sp","gp","tp","t0","t1","t2",
-            "s0","s1", "a0","a1","a2","a3","a4","a5",
-            "a6","a7","s2","s3","s4","s5","s6","s7",
-            "s8","s9","s10","s11","t3","t4","t5","t6",
-            "pc"
-        };
 
         public HartBase(Architecture architecture)
         {
@@ -55,127 +47,12 @@ namespace RiscVSim.Environment.Hart
 
         public  string GetMemoryState()
         {
-            var sb = new StringBuilder();
-            uint offset = 127;
-            uint curIndex;
-
-            sb.AppendLine("Memory in Little Endian:");
-            int blockCount;
-            int blockIndex;
-
-            if (architecture == Architecture.Rv64I)
-            {
-                blockCount = 1;
-                blockIndex = 0;
-
-                var globalPointer64 = register.ReadUnsignedLong(3);
-                for (curIndex = 0; curIndex < offset; curIndex += 8)
-                {
-                    var pos = Convert.ToUInt64(globalPointer64 + curIndex);
-                    var data = memory.GetDoubleWord(globalPointer64 + curIndex);
-
-                    if (blockIndex == 0)
-                    {
-                        sb.AppendFormat("{0:X16} : ", pos);
-                    }
-
-                    sb.AppendFormat("{0}    ", BitConverter.ToString(data.ToArray(), 0));
-
-                    if (blockIndex < blockCount)
-                    {
-                        blockIndex++;
-                    }
-                    else
-                    {
-                        sb.AppendLine();
-                        blockIndex = 0;
-                    }
-                }
-            }
-            else
-            {
-                blockCount = 3;
-                blockIndex = 0;
-
-                var globalPointer32 = register.ReadUnsignedInt(3);
-                for (curIndex = 0; curIndex < offset; curIndex += 4)
-                {
-                    var pos = globalPointer32 + curIndex;
-                    var data = memory.GetWord(globalPointer32 + curIndex);
-
-                    if (blockIndex == 0)
-                    {
-                        sb.AppendFormat("{0:X8} : ", pos);
-                    }
-
-                    sb.AppendFormat("{0}    ", BitConverter.ToString(data.ToArray(), 0));
-
-                    if (blockIndex < blockCount)
-                    {
-                        blockIndex++;
-                    }
-                    else
-                    {
-                        sb.AppendLine();
-                        blockIndex = 0;
-                    }
-                }
-            }
-
-            return sb.ToString();
+            return environment.GetMemoryState();
         }
 
         public string GetRegisterStates()
-        { 
-            var sb = new StringBuilder();
-
-            string formatString;
-            string formatString_Changed;
-            if (architecture == Architecture.Rv64I)
-            {
-                // Show the register with 4 Byte lengths
-                formatString = " {0} = {1:X16}\t";
-                formatString_Changed = "!{0} = {1:X16}\t";
-            }
-            else
-            {
-                // Show the register with 8 Byte lengths
-                formatString = " {0} = {1:X8}\t";
-                formatString_Changed = "!{0} = {1:X8}\t";
-            }
-
-            sb.AppendLine("# Register States");
-            int blockCount = 0;
-            int registerLength = GetRegisterCount();
-            for (int index = 0; index <= registerLength; index++)
-            {
-                var value = register.ReadUnsignedInt(index);
-
-                if (value == 0)
-                {
-                    sb.AppendFormat(formatString, registerNames32[index], value);
-                }
-                else
-                {
-                    //TODO: Highlight this somehow...
-                    sb.AppendFormat(formatString_Changed, registerNames32[index], value);
-                }
-
-
-                // Write 4 registers in a row.
-                if (blockCount == 3)
-                {
-                    sb.AppendLine();
-                    blockCount = 0;
-                }
-                else
-                {
-                    blockCount++;
-                }
-            }
-
-            sb.AppendLine();
-            return sb.ToString();
+        {
+            return environment.GetRegisterStates();
         }
 
 
@@ -324,25 +201,7 @@ namespace RiscVSim.Environment.Hart
             }
         }
 
-        protected int GetRegisterCount()
-        {
-            if (architecture == Architecture.Rv32E)
-            {
-                return 16;
-            }
 
-            return 32;
-        }
-
-        protected int GetRegisterLength()
-        {
-            if (architecture == Architecture.Rv64I)
-            {
-                return 8;
-            }
-
-            return 4;
-        }
 
         /// <summary>
         /// Left over from the Bootstrap Core... is there a better way of doing this?
