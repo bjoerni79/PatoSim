@@ -47,7 +47,7 @@ namespace RiscVSim.Environment.Rv64I
             {
                 // mulw
                 case 0:
-                    multiplier.ExecuteMul(rd, rs1CodingLower, rs2CodingLower);
+                    multiplier.ExecuteMulw(rd, rs1CodingLower, rs2CodingLower);
                     break;
 
                 // Error

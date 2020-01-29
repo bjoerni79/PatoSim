@@ -16,7 +16,7 @@ namespace RiscVSim.Environment.Extensions
         private Architecture architecture;
         private IRegister register;
         private int boundary;
-        private int bufferSize;
+        private int defaultBufferSize;
 
         internal Multiplier(Architecture architecture, IRegister register)
         {
@@ -26,13 +26,30 @@ namespace RiscVSim.Environment.Extensions
             if (architecture == Architecture.Rv64I)
             {
                 boundary = 64;
-                bufferSize = 8;
+                defaultBufferSize = 8;
             }
             else
             {
                 boundary = 32;
-                bufferSize = 4;
+                defaultBufferSize = 4;
             }
+        }
+
+        /// <summary>
+        /// Implements the mul operation
+        /// </summary>
+        /// <param name="rd">the target register</param>
+        /// <param name="rs1Coding">the little endian coding of the rs1</param>
+        /// <param name="rs2Coding">the little endian coding of the rs2</param>
+        internal void ExecuteMulw(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
+        {
+            // Compute the result using the BigInteger type
+            var rs1 = new BigInteger(rs1Coding.ToArray());
+            var rs2 = new BigInteger(rs2Coding.ToArray());
+            var result = rs1 * rs2;
+
+            // Use the lower 4 Bytes only
+            WriteToRegister(rd, result, 4);
         }
 
         /// <summary>
@@ -48,7 +65,7 @@ namespace RiscVSim.Environment.Extensions
             var rs2 = new BigInteger(rs2Coding.ToArray());
             var result = rs1 * rs2;
 
-            WriteToRegister(rd, result);
+            WriteToRegister(rd, result, defaultBufferSize);
         }
 
         /// <summary>
@@ -66,12 +83,12 @@ namespace RiscVSim.Environment.Extensions
             // Shift the lower part to the right
             result >>= boundary;
 
-            WriteToRegister(rd, result);
+            WriteToRegister(rd, result, defaultBufferSize);
         }
 
 
 
-        private void WriteToRegister(int rd, BigInteger result)
+        private void WriteToRegister(int rd, BigInteger result, int bufferSize)
         {
             // Write the lower part (4 Bytes for RV32I and 8 Bytes for RV64I) to the register
             var byteCount = result.GetByteCount();

@@ -12,10 +12,12 @@ namespace RiscVSim.Environment.Rv32I
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         private Multiplier multiplier;
+        private Divider divider;
         public OpCode32Id0C (IMemory memory, IRegister register) : base(memory,register)
         {
             // memry and register are stored in the base class
             multiplier = new Multiplier(Architecture.Rv32I, register);
+            divider = new Divider(Architecture.Rv32I, register);
         }
 
         /*
