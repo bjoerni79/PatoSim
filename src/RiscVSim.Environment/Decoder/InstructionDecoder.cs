@@ -39,6 +39,7 @@ namespace RiscVSim.Environment.Decoder
             // R-Type
             //
             opCodeDict.Add(0x0C, InstructionType.R_Type);
+            opCodeDict.Add(0x0E, InstructionType.R_Type);
 
             //
             // I-Type  32Bit

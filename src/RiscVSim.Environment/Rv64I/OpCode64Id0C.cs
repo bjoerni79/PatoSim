@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +10,11 @@ namespace RiscVSim.Environment.Rv64I
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+        private Multiplier multiplier;
+
         public OpCode64Id0C(IMemory memory, IRegister register) : base(memory,register)
         {
-
+            multiplier = new Multiplier(Architecture.Rv64I, register);
         }
 
         public override int Opcode => 0x0C;
@@ -30,10 +33,67 @@ namespace RiscVSim.Environment.Rv64I
             var rs2SignedValue = Register.ReadSignedInt(rs2);
             var rs2UnsignedValue = Register.ReadUnsignedInt(rs2);
 
+            Logger.Info("Opcode 0C : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, funct7 = {f7}", rd, rs1, rs2, payload.Funct3, payload.Funct7);
+
+            if (funct7 == 0x01)
+            {
+                HandleRV64M(payload);
+            }
+            else
+            {
+                HandleRv64I(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+            }
+
+            
+            return true;
+        }
+
+        private void HandleRV64M(InstructionPayload payload)
+        {
+            Logger.Info("Multiplier extension detected");
+
+            switch (payload.Funct3)
+            {
+                // mul
+                case 0:
+                    multiplier.ExecuteMul(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
+
+                // mulh
+                case 1:
+                // See Mlhu
+
+                // mulhsu
+                case 2:
+                // See Mlhu
+
+                // mulhu
+                case 3:
+                    multiplier.ExecuteMulh(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
+
+                // div
+                case 4:
+
+                // divu
+                case 5:
+
+                // rem
+                case 6:
+
+                // remu
+                case 7:
+
+                // Error
+                default:
+                    throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", payload.OpCode, payload.Funct3));
+            }
+        }
+
+        private void HandleRv64I(Instruction instruction, int funct3, int funct7, int rd, int rs1, long rs1SignedValue, ulong rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
+        {
             long signedResult;
             ulong unsignedResult;
-
-            Logger.Info("Opcode 0C : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, funct7 = {f7}", rd, rs1, rs2, payload.Funct3, payload.Funct7);
 
             switch (funct3)
             {
@@ -169,8 +229,6 @@ namespace RiscVSim.Environment.Rv64I
                 default:
                     throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", instruction.OpCode, funct3));
             }
-
-            return true;
         }
     }
 }

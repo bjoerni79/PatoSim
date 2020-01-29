@@ -216,6 +216,13 @@ namespace RiscVSim.Environment.Test
             return multiply;
         }
 
+        public static IEnumerable<byte> MultiplyOP32(uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var multiply = CreateRType(0x0E, rd, f3, rs1, rs2, f7);
+            return multiply;
+        }
+
         public static IEnumerable<byte> Lui(uint rd, uint immediate)
         {
             var insLui1 = CreateUType(C.OPLUI, rd, immediate);

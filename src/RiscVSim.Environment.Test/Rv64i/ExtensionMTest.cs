@@ -79,10 +79,10 @@ namespace RiscVSim.Environment.Test.Rv64i
             var x12 = register.ReadBlock(12);
             var x13 = register.ReadBlock(13);
 
-            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF });
-            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00 });
-            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01 });
-            Assert.AreEqual(x13, new byte[] { 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01, 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x13, new byte[] { 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
         }
 
         [Test]
@@ -124,10 +124,10 @@ namespace RiscVSim.Environment.Test.Rv64i
             var x12 = register.ReadBlock(12);
             var x13 = register.ReadBlock(13);
 
-            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF });
-            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00 });
-            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01 });
-            Assert.AreEqual(x13, new byte[] { 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01, 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x13, new byte[] { 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
         }
 
         [Test]
@@ -169,10 +169,51 @@ namespace RiscVSim.Environment.Test.Rv64i
             var x12 = register.ReadBlock(12);
             var x13 = register.ReadBlock(13);
 
-            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF });
-            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00 });
-            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01 });
-            Assert.AreEqual(x13, new byte[] { 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01, 0xF0, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x13, new byte[] { 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+        }
+
+        [Test]
+        public void MulwTest1()
+        {
+            // Same test like RV32I...
+            program.AddRange(InstructionTypeFactory.Addi(10, 0, 2));
+            program.AddRange(InstructionTypeFactory.Addi(11, 0, 10));
+            program.AddRange(InstructionTypeFactory.MultiplyOP32(12, 10, 11, 0)); // MUL  : x12 = 2*10 = 20
+
+            core.Run(program);
+            var register = core.Register;
+
+            var x10 = register.ReadSignedInt(10);
+            var x11 = register.ReadSignedInt(11);
+            var x12 = register.ReadSignedInt(12);
+
+            Assert.AreEqual(x10, 2);
+            Assert.AreEqual(x11, 10);
+            Assert.AreEqual(x12, 20);
+        }
+
+        [Test]
+        public void MulwTest2()
+        {
+            // Same test like RV32I...
+            program.AddRange(InstructionTypeFactory.Lui(10, 0xFFFFF));
+            program.AddRange(InstructionTypeFactory.Lui(11, 0x00FFF));
+
+            program.AddRange(InstructionTypeFactory.MultiplyOP32(12, 10, 11, 0)); // MUL: 2*10 = 20
+
+            core.Run(program);
+            var register = core.Register;
+
+            var x10 = register.ReadBlock(10);
+            var x11 = register.ReadBlock(11);
+            var x12 = register.ReadBlock(12);
+
+            Assert.AreEqual(x10, new byte[] { 0x00, 0xF0, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x11, new byte[] { 0x00, 0xF0, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 });
         }
 
         [Test]
