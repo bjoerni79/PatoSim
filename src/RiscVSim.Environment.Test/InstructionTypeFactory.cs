@@ -203,6 +203,25 @@ namespace RiscVSim.Environment.Test
             return nop;
         }
 
+        public static IEnumerable<byte> Addi (uint rd, uint rs1, uint immediate)
+        {
+            var instAddi1 = CreateIType(C.OPIMM, rd, C.opOPIMMaddi, rs1, immediate);
+            return instAddi1;
+        }
+
+        public static IEnumerable<byte> MultiplyOP(uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var multiply = CreateRType(C.OPOP, rd, f3, rs1, rs2, f7);
+            return multiply;
+        }
+
+        public static IEnumerable<byte> Lui(uint rd, uint immediate)
+        {
+            var insLui1 = CreateUType(C.OPLUI, rd, immediate);
+            return insLui1;
+        }
+
         private static IEnumerable<byte> BuildInstruction(uint buffer)
         {
             // Build the instruction

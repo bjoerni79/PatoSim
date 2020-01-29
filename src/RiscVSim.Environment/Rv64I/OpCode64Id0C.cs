@@ -7,6 +7,8 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class OpCode64Id0C : OpCodeCommand
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public OpCode64Id0C(IMemory memory, IRegister register) : base(memory,register)
         {
 

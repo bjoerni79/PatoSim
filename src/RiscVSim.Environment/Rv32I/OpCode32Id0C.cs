@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Extensions;
 using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,13 @@ namespace RiscVSim.Environment.Rv32I
 {
     public class OpCode32Id0C : OpCodeCommand
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+        private Multiplier multiplier;
         public OpCode32Id0C (IMemory memory, IRegister register) : base(memory,register)
         {
             // memry and register are stored in the base class
+            multiplier = new Multiplier(Architecture.Rv32I, register);
         }
 
         /*
@@ -59,7 +64,7 @@ namespace RiscVSim.Environment.Rv32I
 
             if (funct7 == 0x01)
             {
-                HandleRV32M(instruction, funct3, funct7, rd, rs1, rs1SignedValue, rs1UnsignedValue, rs2SignedValue, rs2UnsignedValue);
+                HandleRV32M(payload);
             }
             else
             {
@@ -70,23 +75,29 @@ namespace RiscVSim.Environment.Rv32I
             return true;
         }
 
-        private void HandleRV32M(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
+        private void HandleRV32M(InstructionPayload payload)
         {
             Logger.Info("Multiplier extension detected");
 
-            switch (funct3)
+            switch (payload.Funct3)
             {
                 // mul
                 case 0:
+                    multiplier.ExecuteMul(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // mulh
                 case 1:
+                    // See Mlhu
 
                 // mulhsu
                 case 2:
+                    // See Mlhu
 
                 // mulhu
                 case 3:
+                    multiplier.ExecuteMulh(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // div
                 case 4:
@@ -102,9 +113,11 @@ namespace RiscVSim.Environment.Rv32I
 
                 // Error
                 default:
-                    throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", instruction.OpCode, funct3));
+                    throw new OpCodeNotSupportedException(String.Format("OpCode = {0}, Funct3 = {1}", payload.OpCode, payload.Funct3));
             }
         }
+
+
 
         private void HandleRV32I(Instruction instruction, int funct3, int funct7, int rd, int rs1, int rs1SignedValue, uint rs1UnsignedValue, int rs2SignedValue, uint rs2UnsignedValue)
         {

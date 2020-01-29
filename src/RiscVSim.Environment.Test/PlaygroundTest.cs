@@ -2,12 +2,55 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace RiscVSim.Environment.Test
 {
     public class PlaygroundTest
     {
+        [Test]
+        public void BigIntegerTest()
+        {
+            int a = 0xFFFFFF;
+            int b = 0xFFFFFF;
+
+            // ‭FF FF FE 00 00 01‬  in Big Endian
+            // 01 00 00 FE FF FF  in Little Endian
+            var expResultBytes = new byte[] { 0x01, 0x00, 0x00, 0xFE, 0xFF, 0xFF, 0x00};
+
+            var bigA = new BigInteger(a);
+            var bigB = new BigInteger(b);
+
+            var result = bigA * bigB;
+            var expResult = new BigInteger(expResultBytes);
+
+            var lowResult = result & 0xFFFFFFFF;
+            var highResult = result >> 32;
+
+
+            Assert.AreEqual(lowResult, new BigInteger(0xFE000001));
+            Assert.AreEqual(highResult, new BigInteger(0xFFFF));
+            Assert.AreEqual(result, expResult);
+        }
+
+        [Test]
+        public void BigIntegerTest1()
+        {
+            int m1 = Int32.MaxValue;
+            int m2 = 4;
+            byte[] expectedResultInBE = new byte[] { 0x01, 0xFF, 0xFF, 0xFF, 0xFC };
+
+            var big1 = new BigInteger(m1);
+            var big2 = new BigInteger(m2);
+
+            var result = big1 * big2;
+            var bytesinBE = result.ToByteArray(false, true);
+
+            Assert.IsTrue(bytesinBE.SequenceEqual(expectedResultInBE));
+        }
+
+
         [Test]
         public void SignedIntTest1()
         {
