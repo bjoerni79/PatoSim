@@ -46,10 +46,10 @@ namespace RiscVSim.Environment.Extensions
             // Compute the result using the BigInteger type
             var rs1 = new BigInteger(rs1Coding.ToArray());
             var rs2 = new BigInteger(rs2Coding.ToArray());
-            var result = rs1 * rs2;
-
+            var result = BigInteger.Multiply(rs1, rs2);
+            Logger.Debug("Mulw: {rs1} * {rs2} = {result}", rs1.ToString(), rs2.ToString(), result.ToString());
             // Use the lower 4 Bytes only
-            WriteToRegister(rd, result, 4);
+            ExtensionHelper.WriteToRegister(rd, result, 4,register);
         }
 
         /// <summary>
@@ -63,9 +63,11 @@ namespace RiscVSim.Environment.Extensions
             // Compute the result using the BigInteger type
             var rs1 = new BigInteger(rs1Coding.ToArray());
             var rs2 = new BigInteger(rs2Coding.ToArray());
-            var result = rs1 * rs2;
+            var result = BigInteger.Multiply(rs1, rs2);
 
-            WriteToRegister(rd, result, defaultBufferSize);
+            Logger.Debug("Mul: {rs1} * {rs2} = {result}", rs1.ToString(), rs2.ToString(), result.ToString());
+
+            ExtensionHelper.WriteToRegister(rd, result, defaultBufferSize, register);
         }
 
         /// <summary>
@@ -83,31 +85,10 @@ namespace RiscVSim.Environment.Extensions
             // Shift the lower part to the right
             result >>= boundary;
 
-            WriteToRegister(rd, result, defaultBufferSize);
+            Logger.Debug("Mulh: {rs1} * {rs2} = {result} (shifted) ", rs1.ToString(), rs2.ToString(), result.ToString());
+
+            ExtensionHelper.WriteToRegister(rd, result, defaultBufferSize, register);
         }
 
-
-
-        private void WriteToRegister(int rd, BigInteger result, int bufferSize)
-        {
-            // Write the lower part (4 Bytes for RV32I and 8 Bytes for RV64I) to the register
-            var byteCount = result.GetByteCount();
-            var bytes = result.ToByteArray();
-            var registerResult = new byte[bufferSize];
-
-            // Read at max. the buffer size
-            int bytesToRead = byteCount;
-            if (byteCount > bufferSize)
-            {
-                bytesToRead = bufferSize;
-            }
-
-            for (int index = 0; index < bytesToRead; index++)
-            {
-                registerResult[index] = bytes[index];
-            }
-
-            register.WriteBlock(rd, registerResult);
-        }
     }
 }

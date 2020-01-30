@@ -7,6 +7,8 @@ namespace RiscVSim.Environment.Test
 {
     public static class InstructionTypeFactory
     {
+        #region Generic
+
         public static IEnumerable<byte> CreateRType(uint opcode, uint rd, uint funct3, uint rs1, uint rs2, uint funct7)
         {
             //
@@ -197,6 +199,8 @@ namespace RiscVSim.Environment.Test
             return BuildInstruction(buffer);
         }
 
+        #endregion
+
         public static IEnumerable<byte> CreateNop()
         {
             var nop = CreateIType(C.OPIMM, 0, C.opOPIMMaddi, 0, 0);
@@ -208,6 +212,28 @@ namespace RiscVSim.Environment.Test
             var instAddi1 = CreateIType(C.OPIMM, rd, C.opOPIMMaddi, rs1, immediate);
             return instAddi1;
         }
+
+        #region M Extension
+
+        /*
+         * #    RV32M
+                mul     rd rs1 rs2 31..25=1 14..12=0 6..2=0x0C 1..0=3
+                mulh    rd rs1 rs2 31..25=1 14..12=1 6..2=0x0C 1..0=3
+                mulhsu  rd rs1 rs2 31..25=1 14..12=2 6..2=0x0C 1..0=3
+                mulhu   rd rs1 rs2 31..25=1 14..12=3 6..2=0x0C 1..0=3
+                div     rd rs1 rs2 31..25=1 14..12=4 6..2=0x0C 1..0=3
+                divu    rd rs1 rs2 31..25=1 14..12=5 6..2=0x0C 1..0=3
+                rem     rd rs1 rs2 31..25=1 14..12=6 6..2=0x0C 1..0=3
+                remu    rd rs1 rs2 31..25=1 14..12=7 6..2=0x0C 1..0=3
+
+                # RV64M
+                mulw    rd rs1 rs2 31..25=1 14..12=0 6..2=0x0E 1..0=3
+                divw    rd rs1 rs2 31..25=1 14..12=4 6..2=0x0E 1..0=3
+                divuw   rd rs1 rs2 31..25=1 14..12=5 6..2=0x0E 1..0=3
+                remw    rd rs1 rs2 31..25=1 14..12=6 6..2=0x0E 1..0=3
+                remuw   rd rs1 rs2 31..25=1 14..12=7 6..2=0x0E 1..0=3
+         * 
+         */
 
         public static IEnumerable<byte> MultiplyOP(uint rd, uint rs1, uint rs2, uint f3)
         {
@@ -223,11 +249,45 @@ namespace RiscVSim.Environment.Test
             return multiply;
         }
 
+        public static IEnumerable<byte> DivideOP(uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var divide = CreateRType(C.OPOP, rd, f3, rs1, rs2,f7);
+            return divide;
+        }
+
+        public static IEnumerable<byte> RemainderOP (uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var remainder = CreateRType(C.OPOP, rd, f3, rs1, rs2, f7);
+            return remainder;
+        }
+
+        public static IEnumerable<byte> DivideOP32(uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var divide = CreateRType(C.OPOP, rd, f3, rs1, rs2, f7);
+            return divide;
+        }
+
+        public static IEnumerable<byte> RemainderOP32(uint rd, uint rs1, uint rs2, uint f3)
+        {
+            uint f7 = 1;
+            var remainder = CreateRType(C.OPOP, rd, f3, rs1, rs2, f7);
+            return remainder;
+        }
+
+        #endregion
+
+        #region LUI
+
         public static IEnumerable<byte> Lui(uint rd, uint immediate)
         {
             var insLui1 = CreateUType(C.OPLUI, rd, immediate);
             return insLui1;
         }
+
+        #endregion
 
         private static IEnumerable<byte> BuildInstruction(uint buffer)
         {

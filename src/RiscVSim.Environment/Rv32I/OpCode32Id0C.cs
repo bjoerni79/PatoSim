@@ -103,15 +103,21 @@ namespace RiscVSim.Environment.Rv32I
 
                 // div
                 case 4:
+                    // see divu
 
                 // divu
                 case 5:
+                    divider.Div(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // rem
                 case 6:
+                    // see remu
 
                 // remu
                 case 7:
+                    divider.Rem(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // Error
                 default:

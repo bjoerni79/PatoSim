@@ -11,10 +11,12 @@ namespace RiscVSim.Environment.Rv64I
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         private Multiplier multiplier;
+        private Divider divider;
 
         public OpCode64Id0C(IMemory memory, IRegister register) : base(memory,register)
         {
             multiplier = new Multiplier(Architecture.Rv64I, register);
+            divider = new Divider(Architecture.Rv64I, register);
         }
 
         public override int Opcode => 0x0C;
@@ -74,15 +76,21 @@ namespace RiscVSim.Environment.Rv64I
 
                 // div
                 case 4:
+                // see divu
 
                 // divu
                 case 5:
+                    divider.Div(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // rem
                 case 6:
+                // see remu
 
                 // remu
                 case 7:
+                    divider.Rem(payload.Rd, Register.ReadBlock(payload.Rs1), Register.ReadBlock(payload.Rs2));
+                    break;
 
                 // Error
                 default:

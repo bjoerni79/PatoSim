@@ -10,10 +10,12 @@ namespace RiscVSim.Environment.Rv64I
     public class OpCode64Id0E : OpCodeCommand
     {
         private Multiplier multiplier;
+        private Divider divider;
 
         public OpCode64Id0E(IMemory memory, IRegister register) : base(memory,register)
         {
             multiplier = new Multiplier(Architecture.Rv64I, register);
+            divider = new Divider(Architecture.Rv64I, register);
         }
 
         public override int Opcode => 0x0E;
@@ -48,6 +50,16 @@ namespace RiscVSim.Environment.Rv64I
                 // mulw
                 case 0:
                     multiplier.ExecuteMulw(rd, rs1CodingLower, rs2CodingLower);
+                    break;
+
+                case 4:
+                case 5:
+                    divider.Divw(rd, rs1CodingLower, rs2CodingLower);
+                    break;
+
+                case 6:
+                case 7:
+                    divider.Remw(rd, rs1CodingLower, rs2CodingLower);
                     break;
 
                 // Error
