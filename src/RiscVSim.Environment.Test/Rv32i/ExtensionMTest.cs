@@ -240,6 +240,25 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(x12, new byte[] { 0x01, 0x00, 0x00, 0x00 });
         }
 
+        [Test]
+        public void RemTest2()
+        {
+            program.AddRange(InstructionTypeFactory.Addi(10, 0, 4));
+            program.AddRange(InstructionTypeFactory.Addi(11, 0, 2));
+            program.AddRange(InstructionTypeFactory.DivideOP(12, 10, 11, 6));
+
+            core.Run(program);
+            var register = core.Register;
+
+            var x10 = register.ReadBlock(10);
+            var x11 = register.ReadBlock(11);
+            var x12 = register.ReadBlock(12);
+
+            Assert.AreEqual(x10, new byte[] { 0x04, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x11, new byte[] { 0x02, 0x00, 0x00, 0x00 });
+            Assert.AreEqual(x12, new byte[] { 0x00, 0x00, 0x00, 0x00 });
+        }
+
         //[Test]
         //public void RemuTest1()
         //{

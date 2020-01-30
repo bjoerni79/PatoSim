@@ -51,7 +51,7 @@ namespace RiscVSim.Environment.Extensions
         {
             var rs1 = new BigInteger(rs1Coding.ToArray());
             var rs2 = new BigInteger(rs2Coding.ToArray());
-            var result = BigInteger.Divide(rs1, rs2);
+            var result = BigInteger.Remainder(rs1, rs2);
 
             ExtensionHelper.WriteToRegister(rd, result, 4, register);
 
@@ -73,7 +73,7 @@ namespace RiscVSim.Environment.Extensions
         {
             var rs1 = new BigInteger(rs1Coding.ToArray());
             var rs2 = new BigInteger(rs2Coding.ToArray());
-            var result = BigInteger.Divide(rs1, rs2);
+            var result = BigInteger.Remainder(rs1, rs2);
 
             ExtensionHelper.WriteToRegister(rd, result, defaultBufferSize, register);
 
