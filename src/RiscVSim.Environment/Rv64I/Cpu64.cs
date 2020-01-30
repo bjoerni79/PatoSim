@@ -104,6 +104,7 @@ namespace RiscVSim.Environment.Rv64I
             //// FENCE
             ////
             opCodeRegistry.Add(0x03, new OpCode64Id03(memory, register));
+            opCodeRegistry.Add(0x0B, new OpCode64Id0B(memory, register));
 
             ////
             //// System

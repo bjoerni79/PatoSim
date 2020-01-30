@@ -97,9 +97,10 @@ namespace RiscVSim.Environment.Rv32I
             opCodeRegistry.Add(0x08, new OpCode32Id08(memory, register));
 
             //
-            // FENCE
+            // FENCE, A Ext.
             //
             opCodeRegistry.Add(0x03, new OpCode32Id03(memory, register));
+            opCodeRegistry.Add(0x0B, new OpCode32Id0B(memory, register));
 
             //
             // System
