@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,29 +8,31 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class OpCode64Id0B : OpCodeCommand
     {
+        private AtomicInstruction atomic;
+
         public OpCode64Id0B(IMemory memory, IRegister register) : base(memory,register)
         {
-
+            atomic = new AtomicInstruction(memory, register);
         }
 
         public override int Opcode => 0x0B;
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
-            /*
-             *  # RV64A
-                amoadd.d    rd rs1 rs2      aqrl 31..29=0 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amoxor.d    rd rs1 rs2      aqrl 31..29=1 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amoor.d     rd rs1 rs2      aqrl 31..29=2 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amoand.d    rd rs1 rs2      aqrl 31..29=3 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amomin.d    rd rs1 rs2      aqrl 31..29=4 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amomax.d    rd rs1 rs2      aqrl 31..29=5 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amominu.d   rd rs1 rs2      aqrl 31..29=6 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amomaxu.d   rd rs1 rs2      aqrl 31..29=7 28..27=0 14..12=3 6..2=0x0B 1..0=3
-                amoswap.d   rd rs1 rs2      aqrl 31..29=0 28..27=1 14..12=3 6..2=0x0B 1..0=3
-                lr.d        rd rs1 24..20=0 aqrl 31..29=0 28..27=2 14..12=3 6..2=0x0B 1..0=3
-                sc.d        rd rs1 rs2      aqrl 31..29=0 28..27=3 14..12=3 6..2=0x0B 1..0=3
-             */
+            var rs1 = payload.Rs1;
+            var rs2 = payload.Rs2;
+            var rd = payload.Rd;
+            var f3 = payload.Rd;
+
+            // F7 pattern
+            var f7 = payload.Funct7;
+            var f5 = f7 >> 2;           // bits 31 ... 27
+            var aq = (f7 & 0x02) >> 1;  // acquire bit 26
+            var rl = f7 & 0x01;         // release bit 25
+
+            Logger.Info("OpCode 0B : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, aq = {aq}, rl = {rl}, f5 = {f5}", rd, rs1, rs2, f3, aq, rl, f5);
+
+            atomic.ExecuteD(rd, rs1, rs2, rl, aq, f5);
 
             return true;
         }
