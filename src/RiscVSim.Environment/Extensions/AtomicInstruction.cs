@@ -58,12 +58,14 @@ namespace RiscVSim.Environment.Extensions
 
         internal void ExecuteW (int rd, int rs1, int rs2, int release, int acquire, int f5)
         {
-            // RV32I
+            // RV32I, RV64I
+
         }
 
         internal void ExecuteD(int rd, int rs1, int rs2, int release, int acquire, int f5)
         {
             // RV64I
+
         }
     }
 }

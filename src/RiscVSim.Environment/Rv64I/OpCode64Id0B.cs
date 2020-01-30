@@ -32,7 +32,24 @@ namespace RiscVSim.Environment.Rv64I
 
             Logger.Info("OpCode 0B : rd = {rd}, rs1 = {rs1}, rs2 = {rs2}, funct3 = {f3}, aq = {aq}, rl = {rl}, f5 = {f5}", rd, rs1, rs2, f3, aq, rl, f5);
 
-            atomic.ExecuteD(rd, rs1, rs2, rl, aq, f5);
+            // f3 = 2 => RV32I  W operations
+            // f3 = 3 => RV64I  D operations
+
+            if (f3 == 2)
+            {
+                atomic.ExecuteW(rd, rs1, rs2, rl, aq, f5);
+            }
+            else if (f3 == 3)
+            {
+                atomic.ExecuteD(rd, rs1, rs2, rl, aq, f5);
+            }
+            else
+            {
+                string message = String.Format("Invalid coding (fe={0:X} detected for the F3 coding in the A-Extension", f3);
+                Logger.Error(message);
+                throw new RiscVSimException(message);
+            }
+            
 
             return true;
         }
