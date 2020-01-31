@@ -17,8 +17,8 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | RV32E | Complete | Version 1.9 |
 | CSR | Complete | Version 2.0 |
 | RISC-V Assembly Language book support | *Under Test* | Supports the Opcode from the book written by Anthony J. Dos Reis |
-| A | *Under Test* | Implementation done. More testing required |
-| M | *Prepared* | The memory model needs an overhaul first |
+| A | *Under Test* | The memory model needs an revise first |
+| M | *Prepared* | Implementation done. More testing required |
 | Compressed Instruction | *Next milestone* | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
