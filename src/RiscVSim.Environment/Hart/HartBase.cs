@@ -164,6 +164,11 @@ namespace RiscVSim.Environment.Hart
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="pc"></param>
+        /// <param name="instructionCoding"></param>
+        /// <param name="instruction"></param>
         private void HandleCompliantMode(uint pc, IEnumerable<byte> instructionCoding, Instruction instruction)
         {
             Logger.Info("Instruction Detected with Opcode {opcode:X2} and Type {type}", instruction.OpCode, instruction.Type);

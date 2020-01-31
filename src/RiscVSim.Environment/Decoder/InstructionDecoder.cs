@@ -21,6 +21,8 @@ namespace RiscVSim.Environment.Decoder
     /// </summary>
     public class InstructionDecoder
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
 
         private byte OPCODE_FILTER = 0x7C;       // 0111 1100 = OPCODE!
 
@@ -104,19 +106,30 @@ namespace RiscVSim.Environment.Decoder
 
             int instLength = GetInstructionLength(decodingBuffer);
 
-
-            //TODO: Add Instruction Check (See patterns in the declaration!)
-            var opCode = GetOpCode(decodingBuffer);
-            var rd = GetDestinationRegister(decodingBuffer);
-
-            InstructionType type = InstructionType.Unknown;
-            if (opCodeDict.ContainsKey(opCode))
+            if (instLength == 4)
             {
-                type = opCodeDict[opCode];
-            }
+                // Code for 4 Bytes INST32 coding....
+                var opCode = GetOpCode(decodingBuffer);
+                var rd = GetDestinationRegister(decodingBuffer);
 
-            var instruction = new Instruction(type, opCode, rd,instLength);
-            return instruction;
+                InstructionType type = InstructionType.Unknown;
+                if (opCodeDict.ContainsKey(opCode))
+                {
+                    type = opCodeDict[opCode];
+                }
+
+                var instruction = new Instruction(type, opCode, rd, instLength);
+                return instruction;
+            }
+            else
+            {
+                // Code for 2 Bytes RVC
+
+                Logger.Info("RVC Instruction detected : {coding}", BitConverter.ToString(decodingBuffer.ToArray()));
+                string errorMessage = "RVC is currently not supported";
+                Logger.Error(errorMessage);
+                throw new RiscVSimException(errorMessage);
+            }
         }
 
 
