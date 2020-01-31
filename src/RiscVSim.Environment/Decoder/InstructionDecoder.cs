@@ -106,8 +106,8 @@ namespace RiscVSim.Environment.Decoder
 
             int instLength = GetInstructionLength(decodingBuffer);
 
-            if (instLength == 4)
-            {
+            //if (instLength == 4)
+            //{
                 // Code for 4 Bytes INST32 coding....
                 var opCode = GetOpCode(decodingBuffer);
                 var rd = GetDestinationRegister(decodingBuffer);
@@ -120,16 +120,16 @@ namespace RiscVSim.Environment.Decoder
 
                 var instruction = new Instruction(type, opCode, rd, instLength);
                 return instruction;
-            }
-            else
-            {
-                // Code for 2 Bytes RVC
+            //}
+            //else
+            //{
+            //    // Code for 2 Bytes RVC
 
-                Logger.Info("RVC Instruction detected : {coding}", BitConverter.ToString(decodingBuffer.ToArray()));
-                string errorMessage = "RVC is currently not supported";
-                Logger.Error(errorMessage);
-                throw new RiscVSimException(errorMessage);
-            }
+            //    //Logger.Info("RVC Instruction detected : {coding}", BitConverter.ToString(decodingBuffer.ToArray()));
+            //    //string errorMessage = "RVC is currently not supported";
+            //    //Logger.Error(errorMessage);
+            //    //throw new RiscVSimException(errorMessage);
+            //}
         }
 
 
