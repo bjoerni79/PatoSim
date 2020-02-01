@@ -2,7 +2,7 @@
   "profiles": {
     "RiscVSim": {
       "commandName": "Project",
-      "commandLineArgs": "/RvMode:off D:\\temp\\rv\\playground\\insertion_sort.txt"
+      "commandLineArgs": "/RvMode:on C:\\patoSim\\source\\fib.e"
     }
   }
 }

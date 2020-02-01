@@ -9,19 +9,13 @@ namespace RiscVSim.Environment.Hart
     internal class HartEnvironment : IHartEnvironment
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private IRegister register;
         private ICsrRegister csrRegister;
         private IMemory memory;
         private Architecture architecture;
 
-        private string[] registerNames32 = new string[]
-{
-            "x0","ra","sp","gp","tp","t0","t1","t2",
-            "s0","s1", "a0","a1","a2","a3","a4","a5",
-            "a6","a7","s2","s3","s4","s5","s6","s7",
-            "s8","s9","s10","s11","t3","t4","t5","t6",
-            "pc"
-};
+        private Common common;
 
         internal HartEnvironment(Architecture architecture, IRegister register, IMemory memory, ICsrRegister csrRegister)
         {
@@ -29,6 +23,8 @@ namespace RiscVSim.Environment.Hart
             this.register = register;
             this.csrRegister = csrRegister;
             this.memory = memory;
+
+            common = new Common();
         }
 
         public int NopCounter { get; private set; }
@@ -133,12 +129,12 @@ namespace RiscVSim.Environment.Hart
 
                 if (value == 0)
                 {
-                    sb.AppendFormat(formatString, registerNames32[index], value);
+                    sb.AppendFormat(formatString, common.DecocdeRegisterIndex(index), value);
                 }
                 else
                 {
                     //TODO: Highlight this somehow...
-                    sb.AppendFormat(formatString_Changed, registerNames32[index], value);
+                    sb.AppendFormat(formatString_Changed, common.DecocdeRegisterIndex(index), value);
                 }
 
 
@@ -305,6 +301,15 @@ namespace RiscVSim.Environment.Hart
             }
         }
 
+        public void NotifyBeforeExec(InstructionPayload payload)
+        { 
+            if (payload == null)
+            {
+                throw new ArgumentNullException("payload");
+            }
+
+            Console.WriteLine(payload.GetHumanReadbleContent());
+        }
 
         private int GetRegisterCount()
         {

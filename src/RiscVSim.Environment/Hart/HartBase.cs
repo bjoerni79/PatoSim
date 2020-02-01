@@ -134,6 +134,8 @@ namespace RiscVSim.Environment.Hart
 
                         var payload = typeDecoder.DecodeCustom(instruction, customCoding);
 
+                        environment.NotifyBeforeExec(payload);
+
                         var rvOpcode = new RvOpcode(memory, register, environment);
                         var inc = rvOpcode.Execute(instruction, payload);
 
@@ -200,8 +202,8 @@ namespace RiscVSim.Environment.Hart
                     throw new RiscVSimException("No Payload available!");
                 }
 
-
                 // Execute the command
+                environment.NotifyBeforeExec(payload);
                 ExecuteOpcode(instruction, payload);
             }
         }

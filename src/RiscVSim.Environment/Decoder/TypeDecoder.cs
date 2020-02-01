@@ -66,7 +66,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 
@@ -138,7 +138,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 
@@ -204,7 +204,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 
@@ -266,7 +266,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 
@@ -365,7 +365,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 
@@ -422,7 +422,7 @@ namespace RiscVSim.Environment.Decoder
                 throw new ArgumentNullException("instruction");
             }
 
-            var payload = new InstructionPayload(instruction);
+            var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
             uint workingBuffer;
 

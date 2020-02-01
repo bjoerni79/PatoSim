@@ -25,5 +25,11 @@ namespace RiscVSim.Environment
         /// Gets the No-Op counter
         /// </summary>
         int NopCounter { get; }
+
+        /// <summary>
+        /// Called by the Fetch module before the execution of an opcode
+        /// </summary>
+        /// <param name="payload">the opcode bytes and already extracted values</param>
+        void NotifyBeforeExec(InstructionPayload payload);
     }
 }
