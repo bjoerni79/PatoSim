@@ -10,6 +10,8 @@ namespace RiscVSim.Environment
     /// </summary>
     public interface IHartEnvironment
     {
+        void ApplyOutputParameter(DebugMode debugMode, bool verbose);
+
         string GetRegisterStates();
 
         string GetMemoryState();

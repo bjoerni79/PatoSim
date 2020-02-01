@@ -18,6 +18,7 @@ namespace RiscVSim
         private string memory;
         private string rvMode;
         private string rvModeL;
+        private string verbose;
 
         public SimConfiguration()
         {
@@ -43,6 +44,7 @@ namespace RiscVSim
                   <default>
                     <CPU>RV64I</CPU>
                     <Debug>Off</Debug>
+                    <Verbose>Off</Verbose>
                     <Memory>Dynamic</Memory>
                     <RvMode>Off</RvMode>
                     <RvModeL>0</RvModeL>
@@ -61,6 +63,10 @@ namespace RiscVSim
                 var cpuNav = navigator.SelectSingleNode("root/default/CPU");
                 cpu = cpuNav.Value;
                 Logger.Info("CPU = {cpu}", cpu);
+
+                var verboseNav = navigator.SelectSingleNode("root/default/Verbose");
+                verbose = verboseNav.Value;
+                Logger.Info("Verbose = {verbose}", verbose);
 
                 var debugNav = navigator.SelectSingleNode("root/default/Debug");
                 debug = debugNav.Value;
@@ -98,6 +104,11 @@ namespace RiscVSim
             return memory;
         }
 
+        public string GetVerbose()
+        {
+            return verbose;
+        }
+
         public string GetRvMode()
         {
             return rvMode;
@@ -127,6 +138,9 @@ namespace RiscVSim
 
                 // Write Debug
                 writer.WriteElementString("Debug", "Off");
+
+                // Write Verbose
+                writer.WriteElementString("Verbose", "Off");
 
                 // Write Memory
                 writer.WriteElementString("Memory", "Dynamic");

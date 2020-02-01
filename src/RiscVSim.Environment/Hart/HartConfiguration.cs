@@ -19,6 +19,8 @@ namespace RiscVSim.Environment.Hart
 
         public bool RvMode { get; set; }
 
+        public bool VerboseMode { get; set; }
+
         public int RvLoadOffset { get; set; }
 
         public MemoryConfiguration Memory { get;  set; }

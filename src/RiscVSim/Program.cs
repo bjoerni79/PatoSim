@@ -18,6 +18,7 @@ namespace RiscVSim
         private static string file = null;
         private static string rv = null;
         private static string rvL = null;
+        private static string verbose = null;
 
         static void Main(string[] args)
         {
@@ -85,6 +86,11 @@ namespace RiscVSim
                     debug = arg;
                 }
 
+                if (toUpper.StartsWith("/VERBOSE:"))
+                {
+                    verbose = arg;
+                }
+
                 if (toUpper.StartsWith("/RVMODE:"))
                 {
                     rv = arg;
@@ -115,9 +121,11 @@ namespace RiscVSim
             var debugMode = debug.Split(new char[] { ':' });
             var rvMode = rv.Split(new char[] { ':' });
             var rvModeL = rvL.Split(new char[] { ':'});
+            var verboseMode = verbose.Split(new char[] { ':' });
 
             ApplyCpu(config, cpuMode[1]);
             ApplyMemory(config, memoryMode[1]);
+            ApplyVerbose(config, verboseMode[1]);
             ApplyDebug(config, debugMode[1]);
             ApplyRvMode(config, rvMode[1]);
             ApplyRvModeL(config, rvModeL[1]);
@@ -144,6 +152,11 @@ namespace RiscVSim
             if (debug == null)
             {
                 debug = "/Debug:" + simConfig.GetDebug();
+            }
+
+            if (verbose == null)
+            {
+                verbose = "/Verbose:" + simConfig.GetVerbose();
             }
 
             if (rv == null)
@@ -177,22 +190,32 @@ namespace RiscVSim
             var toUpper = mode.ToUpper();
             Architecture architecture = Architecture.Unknown;
 
-            if (mode == "RV32I")
+            if (toUpper == "RV32I")
             {
                 architecture = Architecture.Rv32I;
             }
 
-            if (mode == "RV32E")
+            if (toUpper == "RV32E")
             {
                 architecture = Architecture.Rv32E;
             }
 
-            if (mode == "RV64I")
+            if (toUpper == "RV64I")
             {
                 architecture = Architecture.Rv64I;
             }
 
             config.Architecture = architecture;
+        }
+
+        private static void ApplyVerbose(HartConfiguration config, string mode)
+        {
+            var toUpper = mode.ToUpper();
+
+            if (toUpper == "ON")
+            {
+                config.VerboseMode = true;
+            }
         }
 
         private static void ApplyMemory(HartConfiguration config, string mode)
@@ -206,7 +229,7 @@ namespace RiscVSim
         {
             var toUpper = mode.ToUpper();
 
-            if (mode == "ON")
+            if (toUpper == "ON")
             {
                 config.Debug = DebugMode.Enabled;
             }
@@ -224,6 +247,7 @@ namespace RiscVSim
             sb.AppendLine(" CPU: RV32I,RV32E,RV64I,");
             sb.AppendLine(" /Memory : Dynamic");
             sb.AppendLine(" /Debug: On,Off");
+            sb.AppendLine(" /Verbose: On,Off");
             sb.AppendLine();
             sb.AppendLine("RV Options:\n");
             sb.AppendLine(" /RvMode: On,Off");

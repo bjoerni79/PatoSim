@@ -15,6 +15,9 @@ namespace RiscVSim.Environment.Hart
         private IMemory memory;
         private Architecture architecture;
 
+        private DebugMode debugMode;
+        private bool verboseMode;
+
         private Common common;
 
         internal HartEnvironment(Architecture architecture, IRegister register, IMemory memory, ICsrRegister csrRegister)
@@ -23,6 +26,8 @@ namespace RiscVSim.Environment.Hart
             this.register = register;
             this.csrRegister = csrRegister;
             this.memory = memory;
+
+            debugMode = DebugMode.Disabled;
 
             common = new Common();
         }
@@ -308,7 +313,12 @@ namespace RiscVSim.Environment.Hart
                 throw new ArgumentNullException("payload");
             }
 
-            Console.WriteLine(payload.GetHumanReadbleContent());
+            if (verboseMode)
+            {
+                Console.WriteLine(payload.GetHumanReadbleContent());
+            }
+
+
         }
 
         private int GetRegisterCount()
@@ -321,6 +331,10 @@ namespace RiscVSim.Environment.Hart
             return 32;
         }
 
-
+        public void ApplyOutputParameter(DebugMode debugMode, bool verbose)
+        {
+            this.debugMode = debugMode;
+            this.verboseMode = verbose;
+        }
     }
 }

@@ -70,8 +70,10 @@ namespace RiscVSim.Environment.Hart
             instructionDecoder = new InstructionDecoder(EndianType.Little);
             typeDecoder = new TypeDecoder();
 
-            isInitialized = true;
             InitDetails(programCounter);
+            environment.ApplyOutputParameter(configuration.Debug, configuration.VerboseMode);
+
+            isInitialized = true;
         }
 
         public void Start()

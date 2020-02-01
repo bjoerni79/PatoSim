@@ -62,31 +62,31 @@ namespace RiscVSim.Environment.Decoder
             switch (Type)
             {
                 case InstructionType.R_Type:
-                    sb.AppendFormat("Type = R, Rd = {0}, f3 = {1:X}, Rs1 = {2}, Rs2 = {3}, f7 = {4:X}", common.DecocdeRegisterIndex(Rd), Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), Funct7);
+                    sb.AppendFormat("Type = R\tRd = {0}\tf3 = {1:X}\tRs1 = {2}\tRs2 = {3}\tf7 = {4:X}", common.DecocdeRegisterIndex(Rd), Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), Funct7);
                     break;
 
                 case InstructionType.I_Type:
-                    sb.AppendFormat("Type = I, Rd= {0}, f3 = {1:X}, Rs1 = {2}, Signed Imm = {3:X}, Unsigned Imm = {4:X}", common.DecocdeRegisterIndex(Rd), Funct3, common.DecocdeRegisterIndex(Rs1), SignedImmediate, UnsignedImmediate);
+                    sb.AppendFormat("Type = I\tRd = {0}\tf3 = {1:X}\tRs1 = {2}\tSigned Imm = {3:X}\tUnsigned Imm = {4:X}", common.DecocdeRegisterIndex(Rd), Funct3, common.DecocdeRegisterIndex(Rs1), SignedImmediate, UnsignedImmediate);
                     break;
 
                 case InstructionType.S_Type:
-                    sb.AppendFormat("Type = S, f3 = {0:X}, Rs1 = {1}, Rs2 = {2}, Signed Imm = {3:X}", Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), SignedImmediate);
+                    sb.AppendFormat("Type = S\tf3 = {0:X}\tRs1 = {1}\tRs2 = {2}\tSigned Imm = {3:X}", Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), SignedImmediate);
                     break;
 
                 case InstructionType.U_Type:
-                    sb.AppendFormat("Type = U, Rd = {0},  Unsigned Imm = {1:X}", common.DecocdeRegisterIndex(Rd), SignedImmediate, UnsignedImmediate);
+                    sb.AppendFormat("Type = U\tRd = {0}\tUnsigned Imm = {1:X}", common.DecocdeRegisterIndex(Rd), SignedImmediate, UnsignedImmediate);
                     break;
 
                 case InstructionType.B_Type:
-                    sb.AppendFormat("Type = B, F3 = {0:X}, Rs1 = {1}, Rs2 = {2} , Signed Immediate = {3:X}", Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), SignedImmediate);
+                    sb.AppendFormat("Type = B\tF3 = {0:X}\tRs1 = {1}\tRs2 = {2}\tSigned Immediate = {3:X}", Funct3, common.DecocdeRegisterIndex(Rs1), common.DecocdeRegisterIndex(Rs2), SignedImmediate);
                     break;
 
                 case InstructionType.J_Type:
-                    sb.AppendFormat("Type = J, Rd = {0}, Immediate = {1:X}", common.DecocdeRegisterIndex(Rd), SignedImmediate);
+                    sb.AppendFormat("Type = J\tRd = {0}\tImmediate = {1:X}", common.DecocdeRegisterIndex(Rd), SignedImmediate);
                     break;
 
                 default:
-                    sb.AppendFormat("Type = Unknown, Opcode={0:X} Rd = {1}", OpCode, common.DecocdeRegisterIndex(Rd));
+                    sb.AppendFormat("Type = Unknown, Opcode={0:X}\tRd = {1}", OpCode, common.DecocdeRegisterIndex(Rd));
                     break;
             }
 
