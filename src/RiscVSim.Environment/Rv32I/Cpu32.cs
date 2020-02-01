@@ -105,7 +105,7 @@ namespace RiscVSim.Environment.Rv32I
             //
             // System
             //
-            opCodeRegistry.Add(0x1C, new OpCode32Id1C(memory, register,csrRegister));
+            opCodeRegistry.Add(0x1C, new OpCode32Id1C(memory, register,csrRegister, environment));
         }
 
         public void AssignCrs(ICsrRegister csrRegister)

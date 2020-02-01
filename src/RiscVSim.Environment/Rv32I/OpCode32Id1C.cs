@@ -8,10 +8,12 @@ namespace RiscVSim.Environment.Rv32I
     public class OpCode32Id1C : OpCodeCommand
     {
         private ICsrRegister csrRegister;
+        private IHartEnvironment environment;
 
-        public OpCode32Id1C(IMemory memory, IRegister register, ICsrRegister csrRegister) : base(memory,register)
+        public OpCode32Id1C(IMemory memory, IRegister register, ICsrRegister csrRegister, IHartEnvironment environment) : base(memory,register)
         {
             this.csrRegister = csrRegister;
+            this.environment = environment;
         }
 
         /*
@@ -67,7 +69,7 @@ namespace RiscVSim.Environment.Rv32I
         {
             Logger.Info("System Call detected");
 
-
+            environment.NoitfySystemCall(payload.UnsignedImmediate);
         }
 
         private void HandleCsr(InstructionPayload payload)

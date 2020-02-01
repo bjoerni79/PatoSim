@@ -318,7 +318,19 @@ namespace RiscVSim.Environment.Hart
                 Console.WriteLine(payload.GetHumanReadbleContent());
             }
 
+            if (debugMode == DebugMode.Enabled)
+            {
+                // do something clever ...
+            }
+        }
 
+        public void NoitfySystemCall(uint f12)
+        {
+            /*
+             *  What to do now? 
+             *  
+             *  
+             */
         }
 
         private int GetRegisterCount()
@@ -336,5 +348,7 @@ namespace RiscVSim.Environment.Hart
             this.debugMode = debugMode;
             this.verboseMode = verbose;
         }
+
+
     }
 }

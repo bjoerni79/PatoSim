@@ -33,5 +33,7 @@ namespace RiscVSim.Environment
         /// </summary>
         /// <param name="payload">the opcode bytes and already extracted values</param>
         void NotifyBeforeExec(InstructionPayload payload);
+
+        void NoitfySystemCall(uint f12);
     }
 }
