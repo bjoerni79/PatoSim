@@ -190,6 +190,14 @@ namespace RiscVSim.Environment.Hart
                 };
             }
 
+            if (instruction.InstructionLength == 2)
+            {
+                // RVC, Compressed Opcode detected
+
+                Logger.Info("RVC Compressed Opcode detected");
+                throw new RiscVSimException("RVC extension is not supported");
+            }
+
             if (instruction.InstructionLength == 4)
             {
                 // Read the complete 32 Bit instruction set for the decoding

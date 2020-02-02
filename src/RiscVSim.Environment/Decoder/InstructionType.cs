@@ -15,6 +15,7 @@ namespace RiscVSim.Environment.Decoder
         J_Type,
         B_Type,
         // Compressed types
+        C_Unknown,
         CR,Type,
         CI_Type,
         CSS_Type,
