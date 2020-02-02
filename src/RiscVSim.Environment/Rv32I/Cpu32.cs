@@ -14,7 +14,7 @@ namespace RiscVSim.Environment.Rv32I
         private IMemory memory;
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
-        private IHartEnvironment environment;
+        private ISystemNotifier environment;
         private ICsrRegister csrRegister;
 
         private Stack<uint> rasStack;
@@ -24,7 +24,7 @@ namespace RiscVSim.Environment.Rv32I
             opCodeRegistry = new OpCodeRegistry();
         }
 
-        public void AssignEEI(IHartEnvironment environment)
+        public void AssignEEI(ISystemNotifier environment)
         {
             this.environment = environment;
         }

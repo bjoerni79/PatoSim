@@ -32,6 +32,12 @@ namespace RiscVSim.Environment.Hart
             common = new Common();
         }
 
+        public void ApplyOutputParameter(DebugMode debugMode, bool verbose)
+        {
+            this.debugMode = debugMode;
+            this.verboseMode = verbose;
+        }
+
         public int NopCounter { get; private set; }
 
         public string GetMemoryState()
@@ -321,10 +327,13 @@ namespace RiscVSim.Environment.Hart
             if (debugMode == DebugMode.Enabled)
             {
                 // do something clever ...
+
+                // TESTING
+                OpenDebugConsole(payload);
             }
         }
 
-        public void NoitfySystemCall(uint f12)
+        public void NotifySystemCall(uint f12)
         {
             /*
              *  What to do now? 
@@ -332,6 +341,8 @@ namespace RiscVSim.Environment.Hart
              *  
              */
         }
+
+        #region Debug Console
 
         private int GetRegisterCount()
         {
@@ -343,12 +354,63 @@ namespace RiscVSim.Environment.Hart
             return 32;
         }
 
-        public void ApplyOutputParameter(DebugMode debugMode, bool verbose)
+        private const string command_rr = "RR";
+        private const string command_rw = "RW";
+        private const string command_rd = "RD";
+
+        private const string command_mr = "MR";
+        private const string command_mw = "MR";
+
+        private const string command_c = "C";
+        private const string command_n = "N";
+        private const string command_q = "Q";
+
+        private void OpenDebugConsole(InstructionPayload payload)
         {
-            this.debugMode = debugMode;
-            this.verboseMode = verbose;
+            Console.WriteLine(">> Debug Console. Type h for help");
+            var continueDebug = true;
+            
+            while (continueDebug)
+            {
+                Console.WriteLine(">> Next "+ payload.GetHumanReadbleContent() + "\n");
+
+                Console.Write(">>");
+                var input = Console.ReadLine();
+                var toUpper = input.ToUpper();
+
+                if (toUpper.Equals("H"))
+                {
+                    ShowDebugHelp();
+                }
+
+                if (toUpper.Equals(command_rd))
+                {
+                    var registerdump = GetRegisterStates();
+                    Console.WriteLine(registerdump);
+                }
+
+                if (toUpper.Equals("C") || toUpper.Equals("N") || toUpper.Equals("Q"))
+                {
+                    continueDebug = false;
+                }
+            }
         }
 
+        private void ShowDebugHelp()
+        {
+            Console.WriteLine("\nCommands:");
+            //Console.WriteLine("rr [register]");
+            //Console.WriteLine("rw [register]");
+            Console.WriteLine("rd");
+            //Console.WriteLine();
+            //Console.WriteLine("mr [address] [offset]");
+            //Console.WriteLine("mw [address] [content]");
+            Console.WriteLine();
+            Console.WriteLine("c");
+            Console.WriteLine("n");
+            Console.WriteLine("q");
+        }
 
+        #endregion
     }
 }

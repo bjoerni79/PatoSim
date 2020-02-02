@@ -7,7 +7,7 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class OpCode64Id04 : OpCodeCommand
     {
-        private IHartEnvironment environment;
+        private ISystemNotifier environment;
 
         private const int addi = 0;
         private const int slli = 1; // Shift Logical left ..
@@ -18,7 +18,7 @@ namespace RiscVSim.Environment.Rv64I
         private const int ori = 6;
         private const int andi = 7;
 
-        public OpCode64Id04(IMemory memory, IRegister register, IHartEnvironment environment) : base(memory, register)
+        public OpCode64Id04(IMemory memory, IRegister register, ISystemNotifier environment) : base(memory, register)
         {
             this.environment = environment;
             // base()..

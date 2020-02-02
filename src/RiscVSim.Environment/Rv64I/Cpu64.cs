@@ -13,7 +13,7 @@ namespace RiscVSim.Environment.Rv64I
         private IRegister register;
         private OpCodeRegistry opCodeRegistry;
         private ICsrRegister csrRegister;
-        private IHartEnvironment environment;
+        private ISystemNotifier environment;
         private Stack<ulong> rasStack;
 
         internal Cpu64()
@@ -26,7 +26,7 @@ namespace RiscVSim.Environment.Rv64I
             this.csrRegister = csrRegister;
         }
 
-        public void AssignEEI(IHartEnvironment environment)
+        public void AssignEEI(ISystemNotifier environment)
         {
             this.environment = environment;
         }

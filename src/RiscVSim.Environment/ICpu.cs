@@ -29,7 +29,7 @@ namespace RiscVSim.Environment
         /// <param name="register">the register instance</param>
         void AssignRegister(IRegister register);
 
-        void AssignEEI(IHartEnvironment environment);
+        void AssignEEI(ISystemNotifier environment);
 
         /// <summary>
         /// Initializes the CPU 

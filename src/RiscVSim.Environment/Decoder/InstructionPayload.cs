@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RiscVSim.Environment.Decoder
@@ -57,7 +58,7 @@ namespace RiscVSim.Environment.Decoder
         {
             var common = new Common();
             var sb = new StringBuilder();
-            sb.AppendFormat("Opcode = {0:X2}, ", OpCode);
+            sb.AppendFormat("{0:X8}, Opcode = {1:X2}, ",BitConverter.ToString(Coding.ToArray()),  OpCode);
 
             switch (Type)
             {

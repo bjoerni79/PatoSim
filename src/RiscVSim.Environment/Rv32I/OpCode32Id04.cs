@@ -9,9 +9,9 @@ namespace RiscVSim.Environment.Rv32I
 {
     public sealed class OpCode32Id04 : OpCodeCommand
     {
-        private IHartEnvironment environment;
+        private ISystemNotifier environment;
 
-        public OpCode32Id04(IMemory memory, IRegister register, IHartEnvironment environment) : base(memory, register)
+        public OpCode32Id04(IMemory memory, IRegister register, ISystemNotifier environment) : base(memory, register)
         {
 
             this.environment = environment;

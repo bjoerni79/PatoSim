@@ -8,9 +8,9 @@ namespace RiscVSim.Environment.Rv64I
     public class OpCode64Id1C : OpCodeCommand
     {
         private ICsrRegister csrRegister;
-        private IHartEnvironment environment;
+        private ISystemNotifier environment;
 
-        public OpCode64Id1C(IMemory memory, IRegister register, ICsrRegister csrRegister, IHartEnvironment environment) : base(memory, register)
+        public OpCode64Id1C(IMemory memory, IRegister register, ICsrRegister csrRegister, ISystemNotifier environment) : base(memory, register)
         {
             this.csrRegister = csrRegister;
             this.environment = environment;
@@ -69,7 +69,7 @@ namespace RiscVSim.Environment.Rv64I
         {
             Logger.Info("System Call detected");
 
-            environment.NoitfySystemCall(payload.UnsignedImmediate);
+            environment.NotifySystemCall(payload.UnsignedImmediate);
         }
 
         private void HandleCsr(InstructionPayload payload)

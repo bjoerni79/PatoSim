@@ -8,7 +8,7 @@ namespace RiscVSim.Environment
     /// <summary>
     /// Represents the EEI (Execution Environment Interface) of the RVxxx implementations
     /// </summary>
-    public interface IHartEnvironment
+    public interface IHartEnvironment : ISystemNotifier
     {
         void ApplyOutputParameter(DebugMode debugMode, bool verbose);
 
@@ -21,7 +21,7 @@ namespace RiscVSim.Environment
         /// <summary>
         /// Increases the No-Op counter
         /// </summary>
-        void IncreaseNopCounter();
+        
 
         /// <summary>
         /// Gets the No-Op counter
@@ -34,6 +34,6 @@ namespace RiscVSim.Environment
         /// <param name="payload">the opcode bytes and already extracted values</param>
         void NotifyBeforeExec(InstructionPayload payload);
 
-        void NoitfySystemCall(uint f12);
+        
     }
 }
