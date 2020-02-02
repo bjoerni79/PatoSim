@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RiscVSim.Environment.Decoder
 {
     public class RvcDecoder
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         private Architecture architecture;
 
         public RvcDecoder(Architecture architecture)
@@ -16,6 +19,35 @@ namespace RiscVSim.Environment.Decoder
         public RvcPayload Decode (IEnumerable<byte> rvcCoding)
         {
             RvcPayload payload = null;
+
+            if (rvcCoding == null)
+            {
+                throw new ArgumentNullException("rvcCoding");
+            }
+
+            // Start the parsing with the the opcode and the F3
+
+            var firstByte = rvcCoding.First();
+            var secondByte = rvcCoding.ElementAt(1);
+            var opCode = firstByte & 0x03;
+            var f3 = secondByte >> 5;
+
+            Logger.Info("RVC = {0}, OpCode = {0:X}, F3 = {1:X}", BitConverter.ToString(rvcCoding.ToArray(), 0), opCode, f3);
+
+            if (opCode==0x00)
+            {
+                throw new RiscVSimException("Opcode 00 is not supported yet");
+            }
+
+            if (opCode == 0x01)
+            {
+                payload = DecodeGroup01(rvcCoding, opCode, f3);
+            }
+
+            if (opCode == 0x10)
+            {
+                throw new RiscVSimException("Opcode 10 is not supported yet");
+            }
 
             return payload;
         }
@@ -58,5 +90,93 @@ namespace RiscVSim.Environment.Decoder
          * 
          */
         // ...........................
+
+        #region Group decoder
+
+        private RvcPayload DecodeGroup00(IEnumerable<byte> rvcCoding, int opcode, int f3)
+        {
+            var payload = new RvcPayload();
+            return payload;
+        }
+
+        private RvcPayload DecodeGroup01(IEnumerable<byte> rvcCoding, int opcode, int f3)
+        {
+            var payload = new RvcPayload();
+
+            throw new RiscVSimException("Opcode 00 is not supported yet");
+
+            // 000 C.NOP (CI)
+            // 000 C.ADDI (CI)
+
+            // 001 C.JAL (CJ)
+            // 001 C.ADDIW (CI)
+
+            // 010 C.LI (CI)
+
+            // 011 C.ADDI16SP (CI)
+            // 011 C.LUI (CI)
+
+            // 100 C.SRLI (CA)
+            // 100 C.SRLI64 (CA)
+            // 100 C.SRAI (CA)
+            // 100 C.SRAI64 (CA)
+            // 100 C.ANDI (CA)
+            // 100 C.SUB (CA)
+            // 100 C.XOR (CA)
+            // 100 C.OR (CA)
+            // 100 C.AND (CA)
+            // 100 C.SUBW (CA)
+            // 100 C.ADDW (CA)
+
+            // 101 C.J (CJ)
+
+            // 110 C.BEQZ (CB)
+
+            // 111 C.BNEZ
+
+            return payload;
+        }
+
+        private RvcPayload DecodeGroup10(IEnumerable<byte> rvcCoding, int opcode, int f3)
+        {
+            var payload = new RvcPayload();
+
+            return payload;
+        }
+
+        #endregion
+
+        #region Type decoder
+
+        private RvcPayload DecodeCI(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+
+            return payload;
+        }
+
+        private RvcPayload DecodeCA(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+
+            return payload;
+        }
+
+        private RvcPayload DecodeCJ(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+
+            return payload;
+        }
+
+        private RvcPayload DecodeCB(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+
+            return payload;
+        }
+
+        #endregion
+
     }
 }

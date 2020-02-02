@@ -11,6 +11,13 @@ namespace RiscVSim.Environment.Decoder
 
         }
 
+        public void LoadCI(int op)
+        {
+            Op = op;
+        }
+
+        public InstructionType Type { get; private set; }
+
         public int Op { get; private set; }
 
         public int Rs1 { get; private set; }
