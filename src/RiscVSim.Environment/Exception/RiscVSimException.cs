@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment
+namespace RiscVSim.Environment.Exception
 {
     public class RiscVSimException : ApplicationException
     {
@@ -11,7 +11,7 @@ namespace RiscVSim.Environment
 
         }
 
-        public RiscVSimException(string message, Exception inner) : base (message,inner)
+        public RiscVSimException(string message, System.Exception inner) : base (message,inner)
         {
 
         }

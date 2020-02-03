@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiscVSim.Environment.Exception;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Hart;
 using RiscVSim.Input.OpCode;
 using System;

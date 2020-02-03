@@ -1,5 +1,6 @@
 ﻿using RiscVSim.Environment.Custom;
 using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Exception;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,7 +92,7 @@ namespace RiscVSim.Environment.Hart
                 // All set up and start the loop
                 Fetch();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 Logger.Error(ex);
                 throw;

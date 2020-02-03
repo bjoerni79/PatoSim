@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;

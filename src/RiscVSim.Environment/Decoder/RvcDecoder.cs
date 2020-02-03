@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiscVSim.Environment.Exception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,11 @@ namespace RiscVSim.Environment.Decoder
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private Architecture architecture;
+        //private Architecture architecture;
 
         public RvcDecoder(Architecture architecture)
         {
-            this.architecture = architecture;
+            //this.architecture = architecture;
         }
 
         public RvcPayload Decode (IEnumerable<byte> rvcCoding)
@@ -46,7 +47,7 @@ namespace RiscVSim.Environment.Decoder
 
             if (opCode == 0x10)
             {
-                throw new RiscVSimException("Opcode 10 is not supported yet");
+                payload = DecodeGroup10(rvcCoding, opCode, f3);
             }
 
             return payload;
@@ -139,7 +140,20 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeGroup10(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
+            
+            // C.LWSP = 010
+
+            // C.LQSP = 001
+            // C.FLDSP = 001
+
+            // C.FLWSP = 011
+            // C.LDSP = 011
+
+
+
             var payload = new RvcPayload();
+
+
 
             return payload;
         }
@@ -151,6 +165,12 @@ namespace RiscVSim.Environment.Decoder
         private RvcPayload DecodeCI(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
+
+            uint buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+
 
             return payload;
         }

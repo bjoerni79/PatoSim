@@ -1,4 +1,5 @@
-﻿using RiscVSim.Environment.Hart;
+﻿using RiscVSim.Environment.Exception;
+using RiscVSim.Environment.Hart;
 using System;
 using System.Collections.Generic;
 using System.Text;

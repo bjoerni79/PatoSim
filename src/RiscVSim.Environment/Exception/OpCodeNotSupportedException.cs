@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment
+namespace RiscVSim.Environment.Exception
 {
     public class OpCodeNotSupportedException : RiscVSimException    
     {
@@ -13,7 +13,7 @@ namespace RiscVSim.Environment
 
         }
 
-        public OpCodeNotSupportedException(string message, Exception inner) : base(message,inner)
+        public OpCodeNotSupportedException(string message, System.Exception inner) : base(message,inner)
         {
 
         }

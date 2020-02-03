@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiscVSim.Environment.Exception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -125,7 +126,7 @@ namespace RiscVSim.Environment.Decoder
             {
                 // Code for 2 Bytes RVC
 
-                var instruction = new Instruction(InstructionType.C_Unknown, 0, 0, 2);
+                var instruction = new Instruction(InstructionType.RVC, 0, 0, 2);
                 return instruction;
             }
         }

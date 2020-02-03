@@ -16,6 +16,8 @@ namespace RiscVSim.Environment.Decoder
             Op = op;
         }
 
+        public RvcCommandType RvcCommand { get; private set; }
+
         public InstructionType Type { get; private set; }
 
         public int Op { get; private set; }

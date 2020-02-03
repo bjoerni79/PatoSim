@@ -35,7 +35,7 @@ namespace RiscVSim.Environment.Test.RVC
         {
             var payload = new RvcPayload();
             payload.LoadCI(op);
-
+            
             return payload;
         }
 
