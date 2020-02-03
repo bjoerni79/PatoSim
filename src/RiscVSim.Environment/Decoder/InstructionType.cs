@@ -15,6 +15,15 @@ namespace RiscVSim.Environment.Decoder
         J_Type,
         B_Type,
         // Compressed types
-        RVC,
+        RVC_Unknown,
+        RVC_CR,
+        RVC_CI,
+        RVC_CSS,
+        RVC_CIW,
+        RVC_CL,
+        RVC_CS,
+        RVC_CA,
+        RVC_CB,
+        RVC_CJ
     }
 }

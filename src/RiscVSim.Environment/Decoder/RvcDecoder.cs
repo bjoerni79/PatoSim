@@ -10,11 +10,10 @@ namespace RiscVSim.Environment.Decoder
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //private Architecture architecture;
 
-        public RvcDecoder(Architecture architecture)
+        public RvcDecoder()
         {
-            //this.architecture = architecture;
+
         }
 
         public RvcPayload Decode (IEnumerable<byte> rvcCoding)
@@ -37,15 +36,16 @@ namespace RiscVSim.Environment.Decoder
 
             if (opCode==0x00)
             {
-                throw new RiscVSimException("Opcode 00 is not supported yet");
+                throw new RvcFormatException("Opcode 00 is not supported yet");
             }
 
             if (opCode == 0x01)
             {
+                throw new RvcFormatException("Opcode 00 is not supported yet");
                 payload = DecodeGroup01(rvcCoding, opCode, f3);
             }
 
-            if (opCode == 0x10)
+            if (opCode == 0x02)
             {
                 payload = DecodeGroup10(rvcCoding, opCode, f3);
             }
@@ -140,20 +140,27 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeGroup10(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
-            
-            // C.LWSP = 010
-
-            // C.LQSP = 001
-            // C.FLDSP = 001
-
-            // C.FLWSP = 011
-            // C.LDSP = 011
-
-
-
             var payload = new RvcPayload();
 
+            //
+            // Decode the CI Type opcodes
+            //
+            // C.LWSP = 010
+            // C.LQSP = 001 
+            // C.FLDSP = 001
+            // C.FLWSP = 011
+            // C.LDSP = 011
+            bool isCiType = (f3 == 0x02) || (f3 == 0x01) || (f3 == 0x03);
+            if (isCiType)
+            {
+                payload = DecodeCI(rvcCoding);
+            }
+            else
+            {
+                throw new RvcFormatException("Not supported");
+            }
 
+            
 
             return payload;
         }
@@ -165,13 +172,33 @@ namespace RiscVSim.Environment.Decoder
         private RvcPayload DecodeCI(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
+            var immediate = 0;
 
-            uint buffer = rvcCoding.ElementAt(1);
+            int buffer = rvcCoding.ElementAt(1);
             buffer <<= 8;
             buffer |= rvcCoding.First();
 
+            // Read the opcode
+            var opCode = buffer & 0x3;
 
+            // Read the Immediate coding Bit 2..6
+            buffer >>= 2;
+            immediate = buffer & 0x1F;
 
+            // Read the rd register
+            buffer >>= 5;
+            var rd = buffer & 0x1F;
+
+            // Read the imm. Bit 12
+            buffer >>= 5;
+            var imm12 = (buffer & 0x01) << 5;
+            immediate |= imm12;
+
+            // read F3
+            buffer >>= 1;
+            var f3 = buffer & 0x7;
+
+            payload.LoadCI(opCode, immediate,rd,f3);
             return payload;
         }
 

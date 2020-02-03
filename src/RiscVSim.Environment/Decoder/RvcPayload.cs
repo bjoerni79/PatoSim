@@ -11,12 +11,14 @@ namespace RiscVSim.Environment.Decoder
 
         }
 
-        public void LoadCI(int op)
+        public void LoadCI(int op, int immm, int rd, int f3)
         {
             Op = op;
+            Rd = rd;
+            Funct3 = f3;
+            Immediate = immm;
+            Type = InstructionType.RVC_CI;
         }
-
-        public RvcCommandType RvcCommand { get; private set; }
 
         public InstructionType Type { get; private set; }
 
@@ -28,18 +30,9 @@ namespace RiscVSim.Environment.Decoder
 
         public int Rd { get; private set; }
 
-        public int funct2 { get; private set; }
-
-        public int funct3 { get; private set; }
-
-        public int funct4 { get; private set; }
-
-        public int funct6 { get; private set; }
+        public int Funct3 { get; private set; }
 
         public int Immediate { get; private set; }
 
-        public int Offset { get; private set; }
-
-        public int JumpTarget { get; set; }
     }
 }

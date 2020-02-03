@@ -126,7 +126,7 @@ namespace RiscVSim.Environment.Decoder
             {
                 // Code for 2 Bytes RVC
 
-                var instruction = new Instruction(InstructionType.RVC, 0, 0, 2);
+                var instruction = new Instruction(InstructionType.RVC_Unknown, 0, 0, 2);
                 return instruction;
             }
         }
