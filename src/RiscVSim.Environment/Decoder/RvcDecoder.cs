@@ -146,11 +146,21 @@ namespace RiscVSim.Environment.Decoder
             //
             // C.BEQZ
             // C.BNEZ
-            // C.SRLI 100
-            // C.SRAI 100
-            var isCbType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x04);
+            var isCbType = (f3 == 0x06) || (f3 == 0x07);
             if (isCbType)
             {
+                payload = DecodeCB(rvcCoding);
+            }
+
+            // C.SRLI 100
+            // C.SRAI 100
+            // C.AND / C.OR / C.XOR / C.SUB / C.ADDW / C.SUBW 100
+            var isCbTypeOrCaType = (f3 == 0x04);
+            if (isCbTypeOrCaType)
+            {
+                // See Bit 11 10..
+                // 
+                throw new RvcFormatException("Needs to be done!");
                 payload = DecodeCB(rvcCoding);
             }
 
@@ -165,6 +175,8 @@ namespace RiscVSim.Environment.Decoder
             {
                 payload = DecodeCI(rvcCoding);
             }
+
+
 
             return payload;
         }
@@ -352,6 +364,8 @@ namespace RiscVSim.Environment.Decoder
         private RvcPayload DecodeCA(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
+
+
 
             return payload;
         }
