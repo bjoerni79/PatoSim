@@ -12,8 +12,6 @@ namespace RiscVSim.Environment.Test.RVC
 
         }
 
-        public Architecture Target { get; set; }
-
         public IEnumerable<byte> Coding { get; set; }
 
         public RvcPayload ExpectedPayload { get; set; }

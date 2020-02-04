@@ -36,12 +36,11 @@ namespace RiscVSim.Environment.Decoder
 
             if (opCode==0x00)
             {
-                throw new RvcFormatException("Opcode 00 is not supported yet");
+                payload = DecodeGroup00(rvcCoding, opCode, f3);
             }
 
             if (opCode == 0x01)
             {
-                throw new RvcFormatException("Opcode 00 is not supported yet");
                 payload = DecodeGroup01(rvcCoding, opCode, f3);
             }
 
@@ -97,6 +96,37 @@ namespace RiscVSim.Environment.Decoder
         private RvcPayload DecodeGroup00(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
             var payload = new RvcPayload();
+
+            //
+            // C.LW = 010
+            // C.LD = 011
+            // C.FLW = 011
+            // C.FLD = 001
+            bool isClType = (f3 == 0x02) || (f3 == 0x03) || (f3 == 0x01);
+            if (isClType)
+            {
+                payload = DecodeCL(rvcCoding);
+            }
+
+            //
+            // C.SW = 110
+            // C.SD = 111
+            // C.SQ = 101
+            // C.FSW = 111
+            // C.FSD = 101
+            bool isCsType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x05);
+            if (isCsType)
+            {
+                payload = DecodeCS(rvcCoding);
+            }
+
+            // C.ADDI4SPN 000
+            bool isCiwType = (f3 == 0x00);
+            if (isCiwType)
+            {
+                payload = DecodeCIW(rvcCoding);
+            }
+
             return payload;
         }
 
@@ -104,36 +134,37 @@ namespace RiscVSim.Environment.Decoder
         {
             var payload = new RvcPayload();
 
-            throw new RiscVSimException("Opcode 00 is not supported yet");
+            //
+            //  C.J = 101
+            //  C.JAL = 001
+            bool isCjType = (f3 == 0x05) || (f3 == 0x01);
+            if (isCjType)
+            {
+                payload = DecodeCJ(rvcCoding);
+            }
 
-            // 000 C.NOP (CI)
-            // 000 C.ADDI (CI)
+            //
+            // C.BEQZ
+            // C.BNEZ
+            // C.SRLI 100
+            // C.SRAI 100
+            var isCbType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x04);
+            if (isCbType)
+            {
+                payload = DecodeCB(rvcCoding);
+            }
 
-            // 001 C.JAL (CJ)
-            // 001 C.ADDIW (CI)
-
-            // 010 C.LI (CI)
-
-            // 011 C.ADDI16SP (CI)
-            // 011 C.LUI (CI)
-
-            // 100 C.SRLI (CA)
-            // 100 C.SRLI64 (CA)
-            // 100 C.SRAI (CA)
-            // 100 C.SRAI64 (CA)
-            // 100 C.ANDI (CA)
-            // 100 C.SUB (CA)
-            // 100 C.XOR (CA)
-            // 100 C.OR (CA)
-            // 100 C.AND (CA)
-            // 100 C.SUBW (CA)
-            // 100 C.ADDW (CA)
-
-            // 101 C.J (CJ)
-
-            // 110 C.BEQZ (CB)
-
-            // 111 C.BNEZ
+            //
+            // C.LI 010
+            // C.LUI 011
+            // C.ADDI 000
+            // C.ADDIW 001
+            // C.ADDI16SP 011
+            var isCiType = (f3 == 0x02) || (f3 == 0x03) || (f3 == 0x01) || (f3 == 0x00);
+            if (isCiType)
+            {
+                payload = DecodeCI(rvcCoding);
+            }
 
             return payload;
         }
@@ -145,22 +176,39 @@ namespace RiscVSim.Environment.Decoder
             //
             // Decode the CI Type opcodes
             //
+            // C.SLLI 000
+            // C.SLLI64 0000
             // C.LWSP = 010
             // C.LQSP = 001 
             // C.FLDSP = 001
             // C.FLWSP = 011
             // C.LDSP = 011
-            bool isCiType = (f3 == 0x02) || (f3 == 0x01) || (f3 == 0x03);
+            bool isCiType = (f3 == 0x02) || (f3 == 0x01) || (f3 == 0x03) || (f3 == 0x00);
             if (isCiType)
             {
                 payload = DecodeCI(rvcCoding);
             }
-            else
+
+            // C.SWSP
+            // C.SDSP
+            // C.SQSP
+            // C.FSWPSP
+            // C.FSDSP
+            bool isCssType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x05);
+            if (isCssType)
             {
-                throw new RvcFormatException("Not supported");
+                payload = DecodeCSS(rvcCoding);
             }
 
-            
+            // C.JR 100
+            // C.JALR 
+            // C.MV 100
+            // C.ADD 100
+            bool isCrType = f3 == 0x04;
+            if (isCrType)
+            {
+                payload = DecodeCR(rvcCoding);
+            }
 
             return payload;
         }
@@ -202,6 +250,105 @@ namespace RiscVSim.Environment.Decoder
             return payload;
         }
 
+        private RvcPayload DecodeCSS(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            var immediate = 0;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // Read RS2
+            buffer >>= 2;
+            var rs2 = buffer & 0x1F;
+
+            // Immediates
+            buffer >>= 5;
+            immediate = buffer & 0x3F;
+
+            // F3
+            buffer >>= 6;
+            var f3 = buffer & 0x7;
+
+            payload.LoadCSS(opCode, rs2, immediate, f3);
+            return payload;
+        }
+
+        private RvcPayload DecodeCL(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            int immediate;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // Rd'
+            buffer >>= 2;
+            var rdc = buffer & 0x07;
+
+            // Imm
+            buffer >>= 3;
+            immediate = buffer & 0x03;
+
+            // Rs1'
+            buffer >>= 2;
+            var rs1c = buffer & 0x07;
+
+            // Imme
+            buffer >>= 3;
+            var imm2 = buffer & 0x07;
+            immediate = immediate | (imm2 >> 2);
+
+            // f3
+            buffer >>= 3;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCL(opCode, rdc, immediate, rs1c, f3);
+            return payload;
+        }
+
+        private RvcPayload DecodeCS(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            int immediate;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // rs2'
+            buffer >>= 2;
+            var rs2c = opCode & 0x07;
+
+            // imm
+            buffer >>= 3;
+            immediate = buffer & 0x03;
+
+            // rs1'
+            buffer >>= 3;
+            var rs1c = buffer & 0x07;
+
+            // immm 2
+            buffer >>= 3;
+            var imm2 = buffer & 0x07;
+            immediate = immediate | (imm2 >> 2);
+
+            // f3
+            buffer >>= 3;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCS(opCode, rs2c, immediate, rs1c, f3);
+            return payload;
+        }
+
         private RvcPayload DecodeCA(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
@@ -212,14 +359,108 @@ namespace RiscVSim.Environment.Decoder
         private RvcPayload DecodeCJ(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
+            int immediate;
 
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // imm
+            immediate = 0x3FF;
+
+            // f3
+            buffer >>= 11;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCJ(opCode, immediate, f3);
+            return payload;
+        }
+
+        private RvcPayload DecodeCR(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            int immediate;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // rs2
+            buffer >>= 2;
+            var rs2 = buffer & 0x1F;
+
+            // rs1
+            buffer >>= 5;
+            var rs1 = buffer & 0x1F;
+
+            // funct 4
+            buffer >>= 5;
+            var f4 = buffer & 0x0F;
+
+            payload.LoadCR(opCode, rs1, rs2, f4);
             return payload;
         }
 
         private RvcPayload DecodeCB(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
+            int immediate;
 
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // Imm 1
+            buffer >>= 2;
+            immediate = buffer & 0x1F;
+
+            // Rs1'
+            buffer >>= 5;
+            var rs1c = buffer & 0x7;
+
+            // Imm 2
+            buffer >>= 3;
+            var imm2 = buffer & 0x07;
+            immediate |= (imm2 << 5);
+
+            // f3
+            buffer >>= 3;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCB(opCode, immediate, rs1c, f3);
+            return payload;
+        }
+
+        private RvcPayload DecodeCIW(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            int immediate;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            var opCode = buffer & 0x03;
+
+            // rd'
+            buffer >>= 2;
+            var rdc = buffer & 0x07;
+
+            // immm
+            buffer >>= 3;
+            immediate = 0xFF;
+
+            // f3
+            buffer >>= 8;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCIW(opCode, rdc, immediate, f3);
             return payload;
         }
 
