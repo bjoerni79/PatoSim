@@ -9,11 +9,12 @@ namespace RiscVSim.Environment.Decoder
     public class RvcDecoder
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private Architecture architecture;
 
 
-        public RvcDecoder()
+        public RvcDecoder(Architecture architecture)
         {
-
+            this.architecture = architecture;
         }
 
         public RvcPayload Decode (IEnumerable<byte> rvcCoding)
