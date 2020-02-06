@@ -99,6 +99,8 @@ namespace RiscVSim.Environment.Decoder
 
         public int Funct4 { get; private set; }
 
+        public int Funct2 { get; private set; }
+
         public int Immediate { get; private set; }
 
 

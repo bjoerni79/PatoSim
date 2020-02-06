@@ -135,11 +135,13 @@ namespace RiscVSim.Environment.Decoder
             var payload = new RvcPayload();
 
             //
-            //  C.J = 101
-            //  C.JAL = 001
+            //  C.J = 101 
+            //  C.JAL = 001 (only RV32I)
             bool isCjType = (f3 == 0x05) || (f3 == 0x01);
             if (isCjType)
             {
+                throw new RiscVSimException("Not implemented yet!");
+
                 payload = DecodeCJ(rvcCoding);
             }
 
@@ -149,19 +151,30 @@ namespace RiscVSim.Environment.Decoder
             var isCbType = (f3 == 0x06) || (f3 == 0x07);
             if (isCbType)
             {
-                payload = DecodeCB(rvcCoding);
+                payload = DecodeCB_Branch(rvcCoding);
             }
 
+            // CB Format:
             // C.SRLI 100
             // C.SRAI 100
-            // C.AND / C.OR / C.XOR / C.SUB / C.ADDW / C.SUBW 100
+            // C.ANDI 
+            // 
+            // CA Format:
+            // C.AND / C.OR / C.XOR / C.SUB / C.ADDW / C.SUBW 
             var isCbTypeOrCaType = (f3 == 0x04);
             if (isCbTypeOrCaType)
             {
-                // See Bit 11 10..
-                // 
-                throw new RvcFormatException("Needs to be done!");
-                payload = DecodeCB(rvcCoding);
+                throw new RiscVSimException("Not implemented yet!");
+
+                var bit11to10 = rvcCoding.ElementAt(1) & 0xC0;
+                if (bit11to10 == 0x03)
+                {
+                    // CA coding
+                }
+                else
+                {
+                    // CB coding
+                }
             }
 
             //
@@ -175,8 +188,6 @@ namespace RiscVSim.Environment.Decoder
             {
                 payload = DecodeCI(rvcCoding);
             }
-
-
 
             return payload;
         }
@@ -419,7 +430,7 @@ namespace RiscVSim.Environment.Decoder
             return payload;
         }
 
-        private RvcPayload DecodeCB(IEnumerable<byte> rvcCoding)
+        private RvcPayload DecodeCB_Branch(IEnumerable<byte> rvcCoding)
         {
             var payload = new RvcPayload();
             int immediate;
