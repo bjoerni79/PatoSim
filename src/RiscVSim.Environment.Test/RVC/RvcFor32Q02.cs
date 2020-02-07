@@ -67,6 +67,28 @@ namespace RiscVSim.Environment.Test.RVC
             // C.FSDSP
         }
 
+        [Test]
+        public void ControlTransferInstructionTest()
+        {
 
+            // C.JR
+            var pairCjr = new RvcTestPair(architecture)
+            {
+                ExpectedPayload = te.LoadJCR(2, 2, 1, 8),
+                Coding = te.ToBytes(0x06, 0x81)
+            };
+
+            te.Test(pairCjr);
+
+            // C.JALR
+            var pairCjalr = new RvcTestPair(architecture)
+            {
+                ExpectedPayload = te.LoadJCR(2, 2, 1, 9),
+                Coding = te.ToBytes(0x06, 0x91)
+            };
+
+            te.Test(pairCjalr);
+
+        }
     }
 }

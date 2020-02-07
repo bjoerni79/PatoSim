@@ -174,12 +174,45 @@ namespace RiscVSim.Environment.Decoder
 
             //// RV32I / RV64I ////
 
+            // C.J (101)
+            var isJ = f3 == 0x05;
+            if (isJ)
+            {
+                payload = DecodeCJ(rvcCoding);
+            }
+
+            // C.BEQZ
+            var isBeqz = f3 == 0x06;
+            if (isBeqz)
+            {
+                payload = DecodeCB_Branch(rvcCoding);
+            }
+
+            // C.BNEZ
+            var isBnez = f3 == 0x07;
+            if (isBnez)
+            {
+                payload = DecodeCB_Branch(rvcCoding);
+            }
 
             //// RV32I only ////
+            if (is32)
+            {
+                // C.JAL (001)
+                var isJal = f3 == 0x01;
+                if (isJal)
+                {
+                    payload = DecodeCJ(rvcCoding);
+                }
 
+
+            }
 
             //// RV64I only ////
+            if (is64)
+            {
 
+            }
 
             //// RV128I only ////
             // Not supported...
@@ -209,6 +242,14 @@ namespace RiscVSim.Environment.Decoder
 
             // C.FSDSP (101)  (according to the table RV32 and RVC64..)
             // not supported
+
+            // C.JR   (100)
+            // C.JALR (100)
+            var isF3100 = f3 == 0x04;
+            if (isF3100)
+            {
+                payload = DecodeCR(rvcCoding);
+            }
 
             //// RV32I only ////
             if (is32)
@@ -431,7 +472,8 @@ namespace RiscVSim.Environment.Decoder
             var opCode = buffer & 0x03;
 
             // imm
-            immediate = 0x3FF;
+            buffer >>= 2;
+            immediate = buffer & 0x3FF;
 
             // f3
             buffer >>= 11;

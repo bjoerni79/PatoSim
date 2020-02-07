@@ -50,6 +50,38 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
+        public RvcPayload LoadCJ(int op, int offset, int f3)
+        {
+            var payload = new RvcPayload();
+
+            payload.LoadCJ(op, offset, f3);
+            return payload;
+        }
+
+        public RvcPayload LoadJCR(int op, int rs1, int rs2, int funct4)
+        {
+            var payload = new RvcPayload();
+            payload.LoadCR(op, rs1, rs2, funct4);
+
+            return payload;
+        }
+
+        public RvcPayload LoadCB(int op, int rs1c, int imm, int funct3)
+        {
+            var payload = new RvcPayload();
+
+            payload.LoadCB(1, imm, rs1c, funct3);
+            return payload;
+        }
+
+        public RvcPayload LoadCLI(int op, int rd, int imm, int f3)
+        {
+            var payload = new RvcPayload();
+
+            //payload.LoadCLI( )
+            return payload;
+        }
+
         public void Test(RvcTestPair pair)
         {
             RvcDecoder decoderUT = null;
