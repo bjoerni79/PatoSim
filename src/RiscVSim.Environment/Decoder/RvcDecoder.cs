@@ -129,6 +129,12 @@ namespace RiscVSim.Environment.Decoder
                 payload = DecodeCS(rvcCoding);
             }
 
+            var isAddi4Spn = f3 == 0x00;
+            if (isAddi4Spn)
+            {
+                payload = DecodeCIW(rvcCoding);
+            }
+
             //// RV32I only ////
             if (is32)
             {
@@ -285,6 +291,12 @@ namespace RiscVSim.Environment.Decoder
                 // C.FSWSP (111)
                 // Not supported
 
+                var isSlli = f3 == 0x00;
+                if (isSlli)
+                {
+                    payload = DecodeCI(rvcCoding);
+                }
+
             }
 
             //// RV64I only ////
@@ -306,6 +318,12 @@ namespace RiscVSim.Environment.Decoder
 
                 // C.FLDSP (011)
                 // Not supported
+
+                var isSlli = f3 == 0x00;
+                if (isSlli)
+                {
+                    payload = DecodeCI(rvcCoding);
+                }
             }
 
             //// RV128I only ////
@@ -586,7 +604,7 @@ namespace RiscVSim.Environment.Decoder
 
             // immm
             buffer >>= 3;
-            immediate = 0xFF;
+            immediate = 0xFFFF;
 
             // f3
             buffer >>= 8;

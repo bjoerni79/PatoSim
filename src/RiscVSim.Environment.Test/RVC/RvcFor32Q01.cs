@@ -108,6 +108,13 @@ namespace RiscVSim.Environment.Test.RVC
             };
 
             te.Test(pairAddi16sp);
+
+            // C.SRLI
+
+
+            // C.SRAI
         }
+
+
     }
 }

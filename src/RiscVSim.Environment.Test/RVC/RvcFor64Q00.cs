@@ -60,5 +60,17 @@ namespace RiscVSim.Environment.Test.RVC
 
             te.Test(pairLd);
         }
+
+        [Test]
+        public void IntegerRegisterImmediateTest()
+        {
+            var pairAddi4Spn = new RvcTestPair(architecture)
+            {
+                ExpectedPayload = te.LoadCIW(0, 1, 0xFFFF, 0),
+                Coding = te.ToBytes(0xE4, 0x1F)
+            };
+
+            te.Test(pairAddi4Spn);
+        }
     }
 }

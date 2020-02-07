@@ -74,11 +74,12 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
-        public RvcPayload LoadCLI(int op, int rd, int imm, int f3)
+
+        public RvcPayload LoadCIW(int op, int rdc, int imm, int f3)
         {
             var payload = new RvcPayload();
 
-            //payload.LoadCLI( )
+            payload.LoadCIW(op, rdc, imm, f3);
             return payload;
         }
 

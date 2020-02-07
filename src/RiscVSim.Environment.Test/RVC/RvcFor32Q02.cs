@@ -90,5 +90,19 @@ namespace RiscVSim.Environment.Test.RVC
             te.Test(pairCjalr);
 
         }
+
+        [Test]
+        public void IntegerRegisterImmediateTest()
+        {
+            // C.SLLI
+
+            var pairSlli = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFE, 0x10),
+                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 0)
+            };
+
+            te.Test(pairSlli);
+        }
     }
 }
