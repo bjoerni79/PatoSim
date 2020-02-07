@@ -33,9 +33,9 @@ namespace RiscVSim.Environment.Decoder
         public void LoadCL(int op, int rdc, int imm, int rs1c, int f3)
         {
             Op = op;
-            Rd = ConvertCompressRegister(rdc);
+            Rd = ToRegisterIndex(rdc);
             Immediate = imm;
-            Rs1 = ConvertCompressRegister(rs1c);
+            Rs1 = ToRegisterIndex(rs1c);
             Funct3 = f3;
             Type = InstructionType.RVC_CL;
         }
@@ -43,9 +43,9 @@ namespace RiscVSim.Environment.Decoder
         public void LoadCS(int op, int rs2c, int imm, int rs1c, int f3)
         {
             Op = op;
-            Rs2 = ConvertCompressRegister(rs2c);
+            Rs2 = ToRegisterIndex(rs2c);
             Immediate = imm;
-            Rs1 = ConvertCompressRegister(rs1c);
+            Rs1 = ToRegisterIndex(rs1c);
             Funct3 = f3;
             Type = InstructionType.RVC_CS;
         }
@@ -71,7 +71,7 @@ namespace RiscVSim.Environment.Decoder
         {
             Op = op;
             Immediate = imm;
-            Rs1 = ConvertCompressRegister(rs1c);
+            Rs1 = ToRegisterIndex(rs1c);
             Funct3 = f3;
             Type = InstructionType.RVC_CB;
         }
@@ -79,10 +79,22 @@ namespace RiscVSim.Environment.Decoder
         public void LoadCIW(int op, int rdc, int imm, int f3)
         {
             Op = op;
-            Rd = ConvertCompressRegister(rdc);
+            Rd = ToRegisterIndex(rdc);
             Immediate = imm;
             Funct3 = f3;
             Type = InstructionType.RVC_CIW;
+        }
+
+        public void LoadCA(int op, int rs2c, int f2, int rdcrs1c, int f6, int f3)
+        {
+            Op = op;
+            Rs2 = ToRegisterIndex(rs2c);
+            Funct2 = f2;
+            Rd = ToRegisterIndex(rdcrs1c);
+            Rs1 = ToRegisterIndex(rdcrs1c);
+            Funct6 = f6;
+            Funct3 = f3;
+            Type = InstructionType.RVC_CA;
         }
 
         public InstructionType Type { get; private set; }
@@ -99,12 +111,14 @@ namespace RiscVSim.Environment.Decoder
 
         public int Funct4 { get; private set; }
 
+        public int Funct6 { get; private set; }
+
         public int Funct2 { get; private set; }
 
         public int Immediate { get; private set; }
 
 
-        private int ConvertCompressRegister(int compressed)
+        private int ToRegisterIndex(int compressed)
         {
             return compressed + 8;
         }

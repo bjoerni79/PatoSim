@@ -5,10 +5,10 @@ using System.Text;
 
 namespace RiscVSim.Environment.Test.RVC
 {
-    public class RvcFor32Q02
+    public class RvcFor64Q02
     {
         private RvcTestEnvironment te;
-        private int architecture = 32;
+        private int architecture = 64;
 
         [SetUp]
         public void Setup()
@@ -22,15 +22,16 @@ namespace RiscVSim.Environment.Test.RVC
             // C.LWSP
             var pairLwsp = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadCI(2, 0x3F,1, 2),
+                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 2),
                 Coding = new byte[] { 0xFE, 0x50 }
             };
 
             te.Test(pairLwsp);
 
             // C.LDSP (RV64 / 128) 
-            var pairLdsp = new RvcTestPair(architecture, false)
+            var pairLdsp = new RvcTestPair(architecture)
             {
+                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 3),
                 Coding = new byte[] { 0xFE, 0x70 }
             };
 
@@ -45,24 +46,6 @@ namespace RiscVSim.Environment.Test.RVC
 
 
             // C.FLDSP
-        }
-
-        public void StoreSpTest()
-        {
-            TestHelper.NotImplementedYet();
-            // C.SWSP
-
-
-            // C.SDSP
-
-
-            // C.SQSP
-
-
-            // C.FSWSP
-
-
-            // C.FSDSP
         }
     }
 }

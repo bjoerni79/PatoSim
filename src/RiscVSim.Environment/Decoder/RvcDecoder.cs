@@ -11,10 +11,16 @@ namespace RiscVSim.Environment.Decoder
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private Architecture architecture;
 
+        private bool is64;
+        private bool is32;
+
 
         public RvcDecoder(Architecture architecture)
         {
             this.architecture = architecture;
+
+            is64 = architecture == Architecture.Rv64I;
+            is32 = architecture == Architecture.Rv32I;
         }
 
         public RvcPayload Decode (IEnumerable<byte> rvcCoding)
@@ -48,6 +54,15 @@ namespace RiscVSim.Environment.Decoder
             if (opCode == 0x02)
             {
                 payload = DecodeGroup10(rvcCoding, opCode, f3);
+            }
+
+            // Something went wrong.. raise an exception!
+            if (payload == null)
+            {
+                var rvcError = String.Format("Could not decode coding {0} on {1}", BitConverter.ToString(rvcCoding.ToArray(), 0), architecture);
+                Logger.Error(rvcError);
+                throw new RvcFormatException(rvcError);
+
             }
 
             return payload;
@@ -96,143 +111,84 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeGroup00(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
-            var payload = new RvcPayload();
+            RvcPayload payload = null;
 
-            //
-            // C.LW = 010
-            // C.LD = 011
-            // C.FLW = 011
-            // C.FLD = 001
-            bool isClType = (f3 == 0x02) || (f3 == 0x03) || (f3 == 0x01);
-            if (isClType)
-            {
-                payload = DecodeCL(rvcCoding);
-            }
+            //// RV32I / RV64I ////
 
-            //
-            // C.SW = 110
-            // C.SD = 111
-            // C.SQ = 101
-            // C.FSW = 111
-            // C.FSD = 101
-            bool isCsType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x05);
-            if (isCsType)
-            {
-                payload = DecodeCS(rvcCoding);
-            }
 
-            // C.ADDI4SPN 000
-            bool isCiwType = (f3 == 0x00);
-            if (isCiwType)
-            {
-                payload = DecodeCIW(rvcCoding);
-            }
+            //// RV32I only ////
+
+
+            //// RV64I only ////
+
+
+            //// RV128I only ////
+            // Not supported...
 
             return payload;
         }
 
         private RvcPayload DecodeGroup01(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
-            var payload = new RvcPayload();
+            RvcPayload payload = null;
 
-            //
-            //  C.J = 101 
-            //  C.JAL = 001 (only RV32I)
-            bool isCjType = (f3 == 0x05) || (f3 == 0x01);
-            if (isCjType)
-            {
-                throw new RiscVSimException("Not implemented yet!");
+            //// RV32I / RV64I ////
 
-                payload = DecodeCJ(rvcCoding);
-            }
 
-            //
-            // C.BEQZ
-            // C.BNEZ
-            var isCbType = (f3 == 0x06) || (f3 == 0x07);
-            if (isCbType)
-            {
-                payload = DecodeCB_Branch(rvcCoding);
-            }
+            //// RV32I only ////
 
-            // CB Format:
-            // C.SRLI 100
-            // C.SRAI 100
-            // C.ANDI 
-            // 
-            // CA Format:
-            // C.AND / C.OR / C.XOR / C.SUB / C.ADDW / C.SUBW 
-            var isCbTypeOrCaType = (f3 == 0x04);
-            if (isCbTypeOrCaType)
-            {
-                throw new RiscVSimException("Not implemented yet!");
 
-                var bit11to10 = rvcCoding.ElementAt(1) & 0xC0;
-                if (bit11to10 == 0x03)
-                {
-                    // CA coding
-                }
-                else
-                {
-                    // CB coding
-                }
-            }
+            //// RV64I only ////
 
-            //
-            // C.LI 010
-            // C.LUI 011
-            // C.ADDI 000
-            // C.ADDIW 001
-            // C.ADDI16SP 011
-            var isCiType = (f3 == 0x02) || (f3 == 0x03) || (f3 == 0x01) || (f3 == 0x00);
-            if (isCiType)
-            {
-                payload = DecodeCI(rvcCoding);
-            }
+
+            //// RV128I only ////
+            // Not supported...
 
             return payload;
         }
 
         private RvcPayload DecodeGroup10(IEnumerable<byte> rvcCoding, int opcode, int f3)
         {
-            var payload = new RvcPayload();
+            RvcPayload payload = null;
 
-            //
-            // Decode the CI Type opcodes
-            //
-            // C.SLLI 000
-            // C.SLLI64 0000
-            // C.LWSP = 010
-            // C.LQSP = 001 
-            // C.FLDSP = 001
-            // C.FLWSP = 011
-            // C.LDSP = 011
-            bool isCiType = (f3 == 0x02) || (f3 == 0x01) || (f3 == 0x03) || (f3 == 0x00);
-            if (isCiType)
+            //// RV32I / RV64I ////
+
+            // C.LWSP (010)
+            var isLwSp = f3 == 0x02;
+            if (isLwSp)
             {
                 payload = DecodeCI(rvcCoding);
             }
 
-            // C.SWSP
-            // C.SDSP
-            // C.SQSP
-            // C.FSWPSP
-            // C.FSDSP
-            bool isCssType = (f3 == 0x06) || (f3 == 0x07) || (f3 == 0x05);
-            if (isCssType)
+            
+
+
+            //// RV32I only ////
+            if (is32)
             {
-                payload = DecodeCSS(rvcCoding);
+                // C.FLWSP (011)
+                // Not supported
+
             }
 
-            // C.JR 100
-            // C.JALR 
-            // C.MV 100
-            // C.ADD 100
-            bool isCrType = f3 == 0x04;
-            if (isCrType)
+            //// RV64I only ////
+            if (is64)
             {
-                payload = DecodeCR(rvcCoding);
+                // C.LDSP (011)
+                var isLdSp = f3 == 0x03;
+                if (isLdSp)
+                {
+                    payload = DecodeCI(rvcCoding);
+                }
+
+                // C.FLDSP (011)
+                // Not supported
             }
+
+            //// RV128I only ////
+            
+            // C.LQSP (001)
+            // Not supported...
 
             return payload;
         }
@@ -377,8 +333,33 @@ namespace RiscVSim.Environment.Decoder
         {
             var payload = new RvcPayload();
 
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
 
+            var opCode = buffer & 0x03;
 
+            // RS2'
+            buffer >>= 2;
+            var rs2c = buffer & 0x07;
+
+            // Funct2
+            buffer >>= 3;
+            var f2 = buffer & 0x03;
+
+            // RD' / RS'
+            buffer >>= 2;
+            var rdcrs1c = buffer & 0x07;
+
+            // Funct 6
+            buffer >>= 3;
+            var f6 = buffer & 0x3F;
+
+            // Funct 3
+            buffer >>= 3;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCA(opCode, rs2c, f2, rdcrs1c, f6, f3);
             return payload;
         }
 
