@@ -57,9 +57,57 @@ namespace RiscVSim.Environment.Test.RVC
         }
 
         [Test]
-        public void IntegerComputationalTest()
+        public void IntegerConstantGenerationTest()
         {
+            // C.LI
+            var pairLi = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x50),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 2)
+            };
 
+            te.Test(pairLi);
+
+            // C.LUI
+            var pairLui = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x70),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 3)
+            };
+
+            te.Test(pairLui);
+        }
+
+        [Test]
+        public void IntegerRegisterImmediateTest()
+        {
+            //C.ADDI
+            var pairAddi = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x10),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 0)
+            };
+
+            te.Test(pairAddi);
+
+            //C.ADDIW
+            // Not testable on RV32I
+            //var pairAddiw = new RvcTestPair(architecture,false)
+            //{
+            //    Coding = te.ToBytes(0xFD, 0x30),
+            //    ExpectedPayload = te.LoadCI(1, 0x3F, 1, 1)
+            //};
+
+            //te.Test(pairAddiw);
+
+            //C.ADDI16SP
+            var pairAddi16sp = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0x7D, 0x71),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 2, 3)
+            };
+
+            te.Test(pairAddi16sp);
         }
     }
 }

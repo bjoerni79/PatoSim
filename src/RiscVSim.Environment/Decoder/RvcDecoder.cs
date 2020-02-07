@@ -195,6 +195,28 @@ namespace RiscVSim.Environment.Decoder
                 payload = DecodeCB_Branch(rvcCoding);
             }
 
+            // C.LI
+            var isLi = f3 == 0x02;
+            if (isLi)
+            {
+                payload = DecodeCI(rvcCoding);
+            }
+
+            // C.ADDI16SP
+            // C.LUI
+            var isLui = f3 == 0x03;
+            if (isLui)
+            {
+                payload = DecodeCI(rvcCoding);
+            }
+
+            // C.ADDI
+            var isAddi = f3 == 0x00;
+            if (isAddi)
+            {
+                payload = DecodeCI(rvcCoding);
+            }
+
             //// RV32I only ////
             if (is32)
             {
@@ -211,7 +233,12 @@ namespace RiscVSim.Environment.Decoder
             //// RV64I only ////
             if (is64)
             {
-
+                // C.ADDIW
+                var isAddiw = f3 == 0x01;
+                if (isAddiw)
+                {
+                    payload = DecodeCI(rvcCoding);
+                }
             }
 
             //// RV128I only ////
