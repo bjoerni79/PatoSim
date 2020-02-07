@@ -37,32 +37,36 @@ namespace RiscVSim.Environment.Test.RVC
             te.Test(pairLdsp);
 
             // C.LQSP
-
-
-
             // C.FLWSP
-
-
-
             // C.FLDSP
         }
 
+        [Test]
         public void StoreSpTest()
         {
-            TestHelper.NotImplementedYet();
             // C.SWSP
+            var pairSwSp = new RvcTestPair(architecture)
+            {
+                ExpectedPayload = te.LoadCSS(2, 0x3F, 01, 6),
+                Coding = te.ToBytes(0x86, 0xDF)
+            };
 
+            te.Test(pairSwSp);
 
             // C.SDSP
+            var pairSdSp = new RvcTestPair(architecture,false)
+            {
+                //ExpectedPayload = te.LoadCSS(2, 0x3F, 01, 7)
+                Coding = te.ToBytes(0x86, 0xFF)
+            };
 
+            te.Test(pairSdSp);
 
             // C.SQSP
-
-
             // C.FSWSP
-
-
             // C.FSDSP
         }
+
+
     }
 }

@@ -34,6 +34,22 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
+        public RvcPayload LoadCL(int op, int rdc, int imm, int rs1c, int funct3)
+        {
+            var payload = new RvcPayload();
+            payload.LoadCL(op, rdc, imm, rs1c, funct3);
+
+            return payload;
+        }
+
+        public RvcPayload LoadCS(int op, int rs2c, int imm, int rs1c, int funct3)
+        {
+            var payload = new RvcPayload();
+            payload.LoadCS(op, rs2c, imm, rs1c, funct3);
+
+            return payload;
+        }
+
         public void Test(RvcTestPair pair)
         {
             RvcDecoder decoderUT = null;
@@ -69,10 +85,22 @@ namespace RiscVSim.Environment.Test.RVC
                 {
                     excpeptionCaught = true;
                 }
+                catch (System.Exception ex)
+                {
+                    Assert.Fail("Invalid exception caught!");
+                }
 
                 Assert.IsTrue(excpeptionCaught,"Invalid opcode for this architecture!");
 
             }
+        }
+
+        public IEnumerable<byte> ToBytes(byte b0,byte b1)
+        {
+            var coding = new List<byte>();
+            coding.Add(b0);
+            coding.Add(b1);
+            return coding;
         }
     }
 }

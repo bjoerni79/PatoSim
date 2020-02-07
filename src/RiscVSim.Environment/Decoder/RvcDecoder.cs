@@ -115,15 +115,55 @@ namespace RiscVSim.Environment.Decoder
 
             //// RV32I / RV64I ////
 
+            // C.LW (010)
+            var isLw = f3 == 0x02;
+            if (isLw)
+            {
+                payload = DecodeCL(rvcCoding);
+            }
+
+            // C.SW (110)
+            var isSw = f3 == 0x06;
+            if (isSw)
+            {
+                payload = DecodeCS(rvcCoding);
+            }
 
             //// RV32I only ////
+            if (is32)
+            {
+                // C.FLW (011)
 
+                // C.FSW (111)
+            }
 
             //// RV64I only ////
+            if (is64)
+            {
+                // C.LD (011)
+                var isLd = f3 == 0x03;
+                if (isLd)
+                {
+                    payload = DecodeCL(rvcCoding);
+                }
 
+                var isSd = f3 == 0x07;
+                if (isSd)
+                {
+                    payload = DecodeCS(rvcCoding);
+                }
+
+                // C.FLD (001)
+                // C.FSD (101)
+
+                
+            }
 
             //// RV128I only ////
             // Not supported...
+
+            // C.LQ (001)
+            // C.SQ (101)
 
             return payload;
         }
@@ -160,13 +200,21 @@ namespace RiscVSim.Environment.Decoder
                 payload = DecodeCI(rvcCoding);
             }
 
-            
+            // C.SWSP (110)
+            var isSwSp = f3 == 0x06;
+            if (isSwSp)
+            {
+                payload = DecodeCSS(rvcCoding);
+            }
 
+            // C.FSDSP (101)  (according to the table RV32 and RVC64..)
+            // not supported
 
             //// RV32I only ////
             if (is32)
             {
                 // C.FLWSP (011)
+                // C.FSWSP (111)
                 // Not supported
 
             }
@@ -181,6 +229,13 @@ namespace RiscVSim.Environment.Decoder
                     payload = DecodeCI(rvcCoding);
                 }
 
+                // C.SDSP (111)
+                var isSdSp = f3 == 0x07;
+                if (isSdSp)
+                {
+                    payload = DecodeCSS(rvcCoding);
+                }
+
                 // C.FLDSP (011)
                 // Not supported
             }
@@ -188,6 +243,7 @@ namespace RiscVSim.Environment.Decoder
             //// RV128I only ////
             
             // C.LQSP (001)
+            // C.SQSP / RV128I (101)
             // Not supported...
 
             return payload;
@@ -283,7 +339,7 @@ namespace RiscVSim.Environment.Decoder
             // Imme
             buffer >>= 3;
             var imm2 = buffer & 0x07;
-            immediate = immediate | (imm2 >> 2);
+            immediate = immediate | (imm2 << 2);
 
             // f3
             buffer >>= 3;
@@ -306,20 +362,20 @@ namespace RiscVSim.Environment.Decoder
 
             // rs2'
             buffer >>= 2;
-            var rs2c = opCode & 0x07;
+            var rs2c = buffer & 0x07;
 
             // imm
             buffer >>= 3;
             immediate = buffer & 0x03;
 
             // rs1'
-            buffer >>= 3;
+            buffer >>= 2;
             var rs1c = buffer & 0x07;
 
             // immm 2
             buffer >>= 3;
             var imm2 = buffer & 0x07;
-            immediate = immediate | (imm2 >> 2);
+            immediate = immediate | (imm2 << 2);
 
             // f3
             buffer >>= 3;
