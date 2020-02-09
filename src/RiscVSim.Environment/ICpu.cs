@@ -18,6 +18,8 @@ namespace RiscVSim.Environment
         /// <param name="payload">the payload</param>
         void Execute(Instruction instruction, InstructionPayload payload);
 
+        void ExecuteRvc(RvcPayload payload);
+
         /// <summary>
         /// Assigns the memory
         /// </summary>

@@ -64,6 +64,13 @@ namespace RiscVSim.Environment.Hart
             cpu.Execute(instruction, payload);
         }
 
+        protected override void ExecuteRvcOpcode(RvcPayload payload)
+        {
+            Console.WriteLine("Rvc: OpCode = {0:X}, F3 = {1:X}, Type = {2}", payload.Op, payload.Funct3, payload.Type);
+
+            throw new NotImplementedException();
+        }
+
         protected override void InitDetails(ulong programCounter)
         {
             // Set the initial program counter

@@ -47,6 +47,11 @@ namespace RiscVSim.Environment.Rv64I
             this.register = register;
         }
 
+        public void ExecuteRvc(RvcPayload payload)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Execute(Instruction instruction, InstructionPayload payload)
         {
             if (!opCodeRegistry.IsInitialized)

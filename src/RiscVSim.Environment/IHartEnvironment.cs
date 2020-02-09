@@ -1,4 +1,5 @@
 ﻿using RiscVSim.Environment.Decoder;
+using RiscVSim.Environment.Hart;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,10 +18,6 @@ namespace RiscVSim.Environment
         string GetMemoryState();
 
         void RvConsoleAction(InstructionPayload payload);
-
-        /// <summary>
-        /// Increases the No-Op counter
-        /// </summary>
         
 
         /// <summary>
@@ -34,6 +31,8 @@ namespace RiscVSim.Environment
         /// <param name="payload">the opcode bytes and already extracted values</param>
         void NotifyBeforeExec(InstructionPayload payload);
 
-        
+        State GetCurrentState();
+
+        string GetStateDescription();
     }
 }

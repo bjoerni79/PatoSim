@@ -45,6 +45,11 @@ namespace RiscVSim.Environment.Rv32I
             this.rasStack = rasStack;
         }
 
+        public void ExecuteRvc(RvcPayload payload)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Execute(Instruction instruction, InstructionPayload payload)
         {
             if (!opCodeRegistry.IsInitialized)

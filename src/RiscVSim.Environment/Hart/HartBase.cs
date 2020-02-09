@@ -32,7 +32,8 @@ namespace RiscVSim.Environment.Hart
         protected InstructionDecoder instructionDecoder;
         // the type decoder
         protected TypeDecoder typeDecoder;
-
+        // RVC Decoder
+        protected RvcDecoder rvcDecoder;
 
         public HartBase(Architecture architecture)
         {
@@ -63,6 +64,8 @@ namespace RiscVSim.Environment.Hart
 
         protected abstract void ExecuteOpcode(Instruction instruction, InstructionPayload payload);
 
+        protected abstract void ExecuteRvcOpcode(RvcPayload payload);
+
         protected abstract void InitDetails(ulong programCounter);
 
         public void Init(ulong programCounter)
@@ -70,6 +73,7 @@ namespace RiscVSim.Environment.Hart
             // Set the instruction decoder and type decoder
             instructionDecoder = new InstructionDecoder(EndianType.Little);
             typeDecoder = new TypeDecoder();
+            rvcDecoder = new RvcDecoder(architecture);
 
             InitDetails(programCounter);
             environment.ApplyOutputParameter(configuration.Debug, configuration.VerboseMode);
@@ -87,6 +91,7 @@ namespace RiscVSim.Environment.Hart
 
             try
             {
+                environment.NotfyStarted();
                 BootCpu();
 
                 // All set up and start the loop
@@ -137,8 +142,6 @@ namespace RiscVSim.Environment.Hart
 
                         var payload = typeDecoder.DecodeCustom(instruction, customCoding);
 
-                        environment.NotifyBeforeExec(payload);
-
                         var rvOpcode = new RvOpcode(memory, register, environment);
                         var inc = rvOpcode.Execute(instruction, payload);
 
@@ -167,6 +170,14 @@ namespace RiscVSim.Environment.Hart
                 instructionCoding = memory.GetHalfWord(pc);
                 Logger.Info("Instruction {ins:X} fetched", BitConverter.ToString(instructionCoding.ToArray()));
             }
+
+            // TODO: Check Environment State???
+            if (environment.GetCurrentState() == State.FatalError)
+            {
+                Console.Error.WriteLine("# FATAL ERROR occured : " + environment.GetStateDescription());
+            }
+
+            environment.NotifyStopped();
         }
 
         /// <summary>
@@ -194,9 +205,16 @@ namespace RiscVSim.Environment.Hart
             if (instruction.InstructionLength == 2)
             {
                 // RVC, Compressed Opcode detected
-
                 Logger.Info("RVC Compressed Opcode detected");
-                throw new RiscVSimException("RVC extension is not supported");
+
+                var payload = rvcDecoder.Decode(instructionCoding);
+                if (payload == null || payload.Type == InstructionType.RVC_Unknown)
+                {
+                    Logger.Error("Rvc: No Payload detected");
+                    throw new RiscVSimException("Rvc : No Payload detected!");
+                }
+
+                ExecuteRvcOpcode(payload);
             }
 
             if (instruction.InstructionLength == 4)
@@ -209,8 +227,8 @@ namespace RiscVSim.Environment.Hart
 
                 if (payload == null)
                 {
-                    Logger.Error("No Payload available");
-                    throw new RiscVSimException("No Payload available!");
+                    Logger.Error("No Payload detected");
+                    throw new RiscVSimException("No Payload detected!");
                 }
 
                 // Execute the command
@@ -228,23 +246,21 @@ namespace RiscVSim.Environment.Hart
         /// <returns></returns>
         private bool ContinueIfValid(IEnumerable<byte> instruction)
         {
-            var insByte = instruction.First();
-            var isValid = insByte != 0x00;
-
             if (rvMode)
             {
-                // RV extension enabled
-                Logger.Info("RV extension enabled and 00 detected. Continue...");
-                isValid = true;
+                return true;
             }
-            else
+
+            // 00 00 is not a valid codign!
+            bool isValid = !((instruction.First() == 0x00) && (instruction.ElementAt(1) == 0x00));
+
+            //TODO:  Raise a fatal error in the environment!
+
+
+            // RISC-V conform way
+            if (!isValid)
             {
-                // RISC-V conform way
-                if (!isValid)
-                {
-                    Logger.Error("Invalid instruction byte detected : {ins:X2}", insByte);
-                    throw new RiscVSimException("Invalid instruction coding detected. Please enable RV support if you want to use the custom extensions");
-                }
+                environment.NotifyFatalTrap("Invalid coding detected (RVCMode missing?)  : " + BitConverter.ToString(instruction.ToArray()) );
             }
 
             return isValid;

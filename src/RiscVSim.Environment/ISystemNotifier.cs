@@ -9,5 +9,11 @@ namespace RiscVSim.Environment
         void NotifySystemCall(uint f12);
 
         void IncreaseNopCounter();
+
+        void NotifyFatalTrap(string description);
+
+        void NotfyStarted();
+
+        void NotifyStopped();
     }
 }
