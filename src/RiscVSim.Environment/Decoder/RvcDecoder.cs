@@ -223,6 +223,29 @@ namespace RiscVSim.Environment.Decoder
                 payload = DecodeCI(rvcCoding);
             }
 
+            // Group of different commands started with F3 = 100
+            var isf3Eq100 = f3 == 0x04;
+            if (isf3Eq100)
+            {
+                // Bit 11 10 Command
+                //      0  0 CB CSRLI
+                //      0  1 CB C.SRAI
+                //      1  0 CB C.ANDI
+                //      1  1 CA Coding C.AND, C.OR ... C.SUBW
+
+                var secondByte = rvcCoding.ElementAt(1);
+                var b11b10 = secondByte & 0x0C;
+
+                if (b11b10 == 0x03)
+                {
+                    payload = DecodeCA(rvcCoding);
+                }
+                else
+                {
+                    payload = DecodeCB_IntegerRegister(rvcCoding);
+                }
+            }
+
             //// RV32I only ////
             if (is32)
             {
@@ -551,7 +574,11 @@ namespace RiscVSim.Environment.Decoder
             buffer >>= 5;
             var f4 = buffer & 0x0F;
 
-            payload.LoadCR(opCode, rs1, rs2, f4);
+            // f3
+            buffer >>= 1;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCR(opCode, rs1, rs2, f4,f3);
             return payload;
         }
 
@@ -583,7 +610,44 @@ namespace RiscVSim.Environment.Decoder
             buffer >>= 3;
             var f3 = buffer & 0x07;
 
-            payload.LoadCB(opCode, immediate, rs1c, f3);
+            payload.LoadCB_Branch(opCode, immediate, rs1c, f3);
+            return payload;
+        }
+
+        private RvcPayload DecodeCB_IntegerRegister(IEnumerable<byte> rvcCoding)
+        {
+            var payload = new RvcPayload();
+            int immediate;
+
+            int buffer = rvcCoding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= rvcCoding.First();
+
+            // Op
+            var opCode = buffer & 0x03;
+
+            // Imm
+            buffer >>= 2;
+            immediate = buffer & 0x1F;
+
+            // Rd', RS1'
+            buffer >>= 5;
+            var rdcrs1c = buffer & 0x07;
+
+            // F2
+            buffer >>= 2;
+            var f2 = buffer & 0x03;
+
+            // Imm2
+            buffer >>= 3;
+            var imm2 = (buffer & 0x01) << 5;
+            immediate = immediate | imm2;
+
+            // F3
+            buffer >>= 1;
+            var f3 = buffer & 0x07;
+
+            payload.LoadCB_Integer(opCode, immediate, rdcrs1c, f2, f3);
             return payload;
         }
 

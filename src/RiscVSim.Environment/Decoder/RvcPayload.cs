@@ -58,16 +58,17 @@ namespace RiscVSim.Environment.Decoder
             Type = InstructionType.RVC_CJ;
         }
 
-        public void LoadCR(int op, int rs1, int rs2, int funct4)
+        public void LoadCR(int op, int rs1, int rs2, int funct4, int f3)
         {
             Op = op;
             Rs1 = rs1;
             Rs2 = rs2;
             Funct4 = funct4;
+            Funct3 = f3;
             Type = InstructionType.RVC_CR;
         }
 
-        public void LoadCB(int op, int imm, int rs1c, int f3)
+        public void LoadCB_Branch(int op, int imm, int rs1c, int f3)
         {
             Op = op;
             Immediate = imm;
@@ -75,6 +76,19 @@ namespace RiscVSim.Environment.Decoder
             Funct3 = f3;
             Type = InstructionType.RVC_CB;
         }
+
+        public void LoadCB_Integer(int op, int imm, int rs1crdc, int f2, int f3)
+        {
+            Op = op;
+            Rs1 = ToRegisterIndex(rs1crdc);
+            Rd = ToRegisterIndex(rs1crdc);
+            Immediate = imm;
+            Funct2 = f2;
+            Funct3 = f3;
+            Type = InstructionType.RVC_CB;
+        }
+
+        
 
         public void LoadCIW(int op, int rdc, int imm, int f3)
         {

@@ -110,9 +110,42 @@ namespace RiscVSim.Environment.Test.RVC
             te.Test(pairAddi16sp);
 
             // C.SRLI
+            var pairSrli = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x90),
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 00, 4)
+            };
 
+            te.Test(pairSrli);
 
             // C.SRAI
+            var pairSrai = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x94),
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 01, 4)
+            };
+
+            te.Test(pairSrai);
+
+            // C.ANDI
+            var pairAndi = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x98),
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 02, 4)
+            };
+
+            te.Test(pairAndi);
+
+
+
+            // C.AND with 11 (Reserved, but good for testing and skip
+            var pairCA11 = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x9C),
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 03, 4)
+            };
+
+            te.Test(pairCA11);
         }
 
 

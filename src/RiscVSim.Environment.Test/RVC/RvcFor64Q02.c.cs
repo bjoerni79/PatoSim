@@ -81,7 +81,7 @@ namespace RiscVSim.Environment.Test.RVC
             // C.JR
             var pairCjr = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadJCR(2, 2, 1, 8),
+                ExpectedPayload = te.LoadJCR(2, 2, 1, 8, 4),
                 Coding = te.ToBytes(0x06, 0x81)
             };
 
@@ -90,7 +90,7 @@ namespace RiscVSim.Environment.Test.RVC
             // C.JALR
             var pairCjalr = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadJCR(2, 2, 1, 9),
+                ExpectedPayload = te.LoadJCR(2, 2, 1, 9, 4),
                 Coding = te.ToBytes(0x06, 0x91)
             };
 

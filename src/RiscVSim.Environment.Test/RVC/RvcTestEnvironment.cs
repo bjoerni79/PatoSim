@@ -58,10 +58,10 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
-        public RvcPayload LoadJCR(int op, int rs1, int rs2, int funct4)
+        public RvcPayload LoadJCR(int op, int rs1, int rs2, int funct4, int f3)
         {
             var payload = new RvcPayload();
-            payload.LoadCR(op, rs1, rs2, funct4);
+            payload.LoadCR(op, rs1, rs2, funct4, f3);
 
             return payload;
         }
@@ -70,10 +70,17 @@ namespace RiscVSim.Environment.Test.RVC
         {
             var payload = new RvcPayload();
 
-            payload.LoadCB(1, imm, rs1c, funct3);
+            payload.LoadCB_Branch(1, imm, rs1c, funct3);
             return payload;
         }
 
+        public RvcPayload LoadCB_Integer (int op, int rs1crdc, int imm, int f2, int f3)
+        {
+            var payload = new RvcPayload();
+
+            payload.LoadCB_Integer(op, imm, rs1crdc, f2, f3);
+            return payload;
+        }
 
         public RvcPayload LoadCIW(int op, int rdc, int imm, int f3)
         {
