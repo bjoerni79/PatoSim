@@ -10,15 +10,12 @@ namespace RiscVSim.Environment.Decoder
         {
             Type = type;
             OpCode = opCode;
-            //RegisterDestination = rd;
             InstructionLength = instLength;
         }
 
         public InstructionType Type { get; }
 
         public int OpCode { get; }
-
-        //public int RegisterDestination { get; }
 
 
         public int InstructionLength { get; }

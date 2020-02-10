@@ -12,6 +12,8 @@ namespace RiscVSim.Environment.Decoder
 
         }
 
+        #region Loader Methods
+
         public void LoadCI(int op, int immm, int rd, int f3)
         {
             Op = op;
@@ -111,6 +113,13 @@ namespace RiscVSim.Environment.Decoder
             Type = InstructionType.RVC_CA;
         }
 
+        private int ToRegisterIndex(int compressed)
+        {
+            return compressed + 8;
+        }
+
+        #endregion
+
         public InstructionType Type { get; private set; }
 
         public int Op { get; private set; }
@@ -131,10 +140,5 @@ namespace RiscVSim.Environment.Decoder
 
         public int Immediate { get; private set; }
 
-
-        private int ToRegisterIndex(int compressed)
-        {
-            return compressed + 8;
-        }
     }
 }
