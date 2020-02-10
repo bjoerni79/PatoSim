@@ -37,7 +37,6 @@ namespace RiscVSim.Environment.Test.BootStrapCore
 
             var instruction1 = instructions.First();
             Assert.AreEqual(instruction1.OpCode, 0x0C);
-            Assert.AreEqual(instruction1.RegisterDestination, 3);
             Assert.AreEqual(instruction1.Type, InstructionType.R_Type);
             Assert.AreEqual(instruction1.InstructionLength, 4);
 
@@ -83,12 +82,10 @@ namespace RiscVSim.Environment.Test.BootStrapCore
 
             var instruction1 = instructions.ElementAt(0);
             Assert.AreEqual(instruction1.OpCode, 0x04);
-            Assert.AreEqual(instruction1.RegisterDestination, 1);
             Assert.AreEqual(instruction1.Type, InstructionType.I_Type);
 
             var instruction2 = instructions.ElementAt(1);
             Assert.AreEqual(instruction2.OpCode, 0x0C);
-            Assert.AreEqual(instruction2.RegisterDestination, 3);
             Assert.AreEqual(instruction2.Type, InstructionType.R_Type);
 
 
@@ -141,7 +138,6 @@ namespace RiscVSim.Environment.Test.BootStrapCore
             var ins1 = instructions.First();
             Assert.AreEqual(ins1.OpCode, 0x0D);
             Assert.AreEqual(ins1.Type, InstructionType.U_Type);
-            Assert.AreEqual(ins1.RegisterDestination, 1);
         }
 
         /// <summary>

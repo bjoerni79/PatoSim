@@ -119,14 +119,14 @@ namespace RiscVSim.Environment.Decoder
                     type = opCodeDict[opCode];
                 }
 
-                var instruction = new Instruction(type, opCode, rd, instLength);
+                var instruction = new Instruction(type, opCode, instLength);
                 return instruction;
             }
             else
             {
                 // Code for 2 Bytes RVC
 
-                var instruction = new Instruction(InstructionType.RVC_Unknown, 0, 0, 2);
+                var instruction = new Instruction(InstructionType.RVC_Unknown, 0, 2);
                 return instruction;
             }
         }

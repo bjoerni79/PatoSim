@@ -29,7 +29,7 @@ namespace RiscVSim.Environment.Rv64I
 
         public override bool Execute(Instruction instruction, InstructionPayload payload)
         {
-            if (instruction.RegisterDestination == 0)
+            if (payload.Rd == 0)
             {
                 // Test for a NOP operation
                 var isNop = (payload.Rs1 == 0) && (payload.SignedImmediate == 0) && (payload.Funct3 == 0);

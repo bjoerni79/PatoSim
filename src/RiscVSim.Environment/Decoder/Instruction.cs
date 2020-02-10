@@ -6,59 +6,22 @@ namespace RiscVSim.Environment.Decoder
 {
     public sealed class Instruction
     {
-        private InstructionType type;
-        private int opCode;
-        private int rd;
-        private int instLength;
-        private IEnumerable<byte> coding;
-
-        internal Instruction(InstructionType type, int opCode, int rd,int instLength)
+        internal Instruction(InstructionType type, int opCode, int instLength)
         {
-            this.type = type;
-            this.opCode = opCode;
-            this.rd = rd;
-            this.instLength = instLength;
+            Type = type;
+            OpCode = opCode;
+            //RegisterDestination = rd;
+            InstructionLength = instLength;
         }
 
-        public InstructionType Type 
-        { 
-            get
-            {
-                return type;
-            }
-        }
+        public InstructionType Type { get; }
 
-        public int OpCode 
-        { 
-            get
-            {
-                return opCode;
-            }
-        }
+        public int OpCode { get; }
 
-        public int RegisterDestination 
-        { 
-            get
-            {
-                return rd;
-            }
-        }
+        //public int RegisterDestination { get; }
 
-        public bool IsHint
-        {
-            get
-            {
-                return rd == 0;
-            }
-        }
 
-        public int InstructionLength
-        {
-            get
-            {
-                return instLength;
-            }
-        }
+        public int InstructionLength { get; }
 
 
     }

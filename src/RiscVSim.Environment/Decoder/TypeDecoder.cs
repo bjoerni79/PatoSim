@@ -60,6 +60,21 @@ namespace RiscVSim.Environment.Decoder
             return payload;
         }
 
+        private int GetRd(IEnumerable<byte> ins32Coding)
+        {
+            int buffer;
+
+            //  b2 b1
+            buffer = ins32Coding.ElementAt(1);
+            buffer <<= 8;
+            buffer |= ins32Coding.First();
+
+            // ignore opcode (5) and inst32 id (2)
+            buffer >>= 7;
+            var rd = buffer & 0x1F;
+            return rd;
+        }
+
         private InstructionPayload DecodeTypeJ (Instruction instruction, IEnumerable<byte> inst32Coding)
         {
             if (instruction == null)
@@ -94,6 +109,8 @@ namespace RiscVSim.Environment.Decoder
             // Right shift and remove the rd bytes
             workingBuffer >>= 4;
 
+            var rd = GetRd(inst32Coding);
+            
             // Ready. Now extract the pieces of the immediate
 
             var block3 = workingBuffer & 0xFF; // Imm[19:12]
@@ -127,7 +144,7 @@ namespace RiscVSim.Environment.Decoder
             immediate <<= 1;
 
 
-
+            payload.Rd = rd;
             payload.SignedImmediate = MathHelper.GetSignedInteger(immediate, instruction.Type);
             return payload;
         }
@@ -189,7 +206,7 @@ namespace RiscVSim.Environment.Decoder
 
             var immediate = upperPart;
             immediate <<= 5;
-            immediate |= Convert.ToUInt32(payload.Rd);
+            immediate |= Convert.ToUInt32(GetRd(inst32Coding));
 
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
@@ -253,6 +270,9 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer &= 0x7F;
             int funct7 = Convert.ToInt32(workingBuffer);
 
+            var rd = GetRd(inst32Coding);
+
+            payload.Rd = rd;
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.Rs2 = rs2;
@@ -408,6 +428,9 @@ namespace RiscVSim.Environment.Decoder
 
             int immediate = MathHelper.GetSignedInteger(workingBuffer, instruction.Type);
 
+            var rd = GetRd(inst32Coding);
+
+            payload.Rd = rd;
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.SignedImmediate = immediate;
@@ -453,6 +476,11 @@ namespace RiscVSim.Environment.Decoder
             // shift to the right and that's it. Signed bit ??
             workingBuffer >>= 4;
             uint immediate = workingBuffer;
+
+
+            var rd = GetRd(inst32Coding);
+
+            payload.Rd = rd;
             payload.UnsignedImmediate = immediate;
             return payload;
         }

@@ -21,13 +21,12 @@ namespace RiscVSim.Environment.Decoder
 
             Type = instruction.Type;
             OpCode = instruction.OpCode;
-            Rd = instruction.RegisterDestination;
             Coding = coding;
         }
 
         public IEnumerable<byte> Coding { get; private set; }
 
-        public int Rd { get; private set; }
+        public int Rd { get; internal set; }
 
         public int OpCode { get; private set; }
 

@@ -92,8 +92,7 @@ namespace RiscVSim.Environment.Bootstrap
                     {
                         Coding = instructionCoding,
                         Type = instruction.Type,
-                        OpCode = instruction.OpCode,
-                        RegisterDestination = instruction.RegisterDestination
+                        OpCode = instruction.OpCode
                     };
                 }
 
@@ -102,7 +101,6 @@ namespace RiscVSim.Environment.Bootstrap
                 if (instruction.InstructionLength == 4)
                 {
                     // Read the complete 32 Bit instruction set for the decoding
-
                     var inst32Coding = Memory.GetWord(pc);
                     var payload = typeDecoder.DecodeType(instruction, inst32Coding);
 

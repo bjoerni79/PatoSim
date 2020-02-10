@@ -158,11 +158,17 @@ namespace RiscVSim.Environment.Hart
                         HandleCompliantMode(pc, instructionCoding, instruction);
                     }
 
-
                 }
                 else
                 {
                     HandleCompliantMode(pc, instructionCoding, instruction);
+                }
+
+                // Stop the instruction fetch if an error occured or the state is stopped
+                var currentState = environment.GetCurrentState();
+                if (currentState == State.FatalError || currentState == State.Stopped)
+                {
+                    break;
                 }
 
                 // Done. Next run.
@@ -171,10 +177,14 @@ namespace RiscVSim.Environment.Hart
                 Logger.Info("Instruction {ins:X} fetched", BitConverter.ToString(instructionCoding.ToArray()));
             }
 
-            // TODO: Check Environment State???
             if (environment.GetCurrentState() == State.FatalError)
             {
                 Console.Error.WriteLine("# FATAL ERROR occured : " + environment.GetStateDescription());
+            }
+
+            if (environment.GetCurrentState() == State.Stopped)
+            {
+                Console.Out.WriteLine("# Hart Stopped");
             }
 
             environment.NotifyStopped();
@@ -197,8 +207,7 @@ namespace RiscVSim.Environment.Hart
                 {
                     Coding = instructionCoding,
                     Type = instruction.Type,
-                    OpCode = instruction.OpCode,
-                    RegisterDestination = instruction.RegisterDestination
+                    OpCode = instruction.OpCode
                 };
             }
 

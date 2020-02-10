@@ -87,8 +87,7 @@ namespace RiscVSim.Environment.Bootstrap
                     {
                         Coding = instructionCoding,
                         Type = instruction.Type,
-                        OpCode = instruction.OpCode,
-                        RegisterDestination = instruction.RegisterDestination
+                        OpCode = instruction.OpCode
                     };
                 }
 
