@@ -10,13 +10,23 @@ namespace RiscVSim.Environment.Rv32I
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private Rvc32Factory factory;
+        private Rvc32Parser parser;
+
+        private const int System = 0x1C;
+        private const int Load = 0x00;
+        private const int Immediate = 0x04;
+        private const int Store = 0x08;
+        private const int CondBrach = 0x018;
+        private const int JumpAndLink = 0x1B;
+        private const int JumpAndLinkRegister = 0x19;
+        private const int Register = 0x0C;
+
 
         private const int CLWSP = 2;
 
         public RvcComposer()
         {
-            factory = new Rvc32Factory();
+            parser = new Rvc32Parser();
         }
 
         public Instruction ComposeInstruction(RvcPayload payload)
@@ -38,17 +48,17 @@ namespace RiscVSim.Environment.Rv32I
                 {
                     // C.ADDI4SPN
                     case 0:
-                        opCode = 04;
+                        opCode = Immediate;
                         break;
 
                     // C.LW
                     case 2:
-                        opCode = 00;
+                        opCode = Load;
                         break;
 
                     // C.SW
                     case 6:
-                        opCode = 08;
+                        opCode = Store;
                         break;
 
                     default:
@@ -77,43 +87,43 @@ namespace RiscVSim.Environment.Rv32I
                 {
                     // C.NOP / C.ADDI
                     case 0:
-                        opCode = 00;
+                        opCode = Immediate;
                         break;
 
                     // C.JAL
                     case 1:
-                        opCode = 0x1B;
+                        opCode = JumpAndLink;
                         break;
 
                     // C.LI
                     case 2:
-                        opCode = 0x04;
+                        opCode = Immediate;
                         break;
 
                     // C.LUI
                     // C.ADDI16SP
                     case 3:
-                        opCode = 0x04;
+                        opCode = Immediate;
                         break;
 
                     // C.SRLI, C.SRAI, ...
                     case 4:
-                        opCode = 0x04;
+                        opCode = Immediate;
                         break;
 
                     // C.J
                     case 5:
-                        opCode = 0x1B;
+                        opCode = JumpAndLink;
                         break;
 
                     // C.BEQZ
                     case 6:
-                        opCode = 0x18;
+                        opCode = CondBrach;
                         break;
 
                     // C.BNEZ
                     case 7:
-                        opCode = 0x18;
+                        opCode = CondBrach;
                         break;
 
                     default:
@@ -139,12 +149,12 @@ namespace RiscVSim.Environment.Rv32I
                 {
                     // C.SLLI
                     case 0:
-                        opCode = 0x04;
+                        opCode = Immediate;
                         break;
 
                     // C.LWSP
                     case CLWSP:
-                        opCode = 0x00;
+                        opCode = Load;
                         break;
 
                     // C.JR (Jalr)
@@ -161,27 +171,27 @@ namespace RiscVSim.Environment.Rv32I
 
                         if (isJr)
                         {
-                            opCode = 0x19;
+                            opCode = JumpAndLinkRegister;
                         }
 
                         if (isMv)
                         {
-                            opCode = 0x0C;
+                            opCode = Register;
                         }
 
                         if (isEBreak)
                         {
-                            opCode = 0x1C;
+                            opCode = System;
                         }
 
                         if (isJalr)
                         {
-                            opCode = 0x19;
+                            opCode = JumpAndLinkRegister;
                         }
 
                         if (isAdd)
                         {
-                            opCode = 0x0C;
+                            opCode = Register;
                         }
 
 
@@ -193,7 +203,7 @@ namespace RiscVSim.Environment.Rv32I
 
                     // C.SWSP
                     case 6:
-                        opCode = 0x08;
+                        opCode = Store;
                         break;
 
                     default:
@@ -218,7 +228,28 @@ namespace RiscVSim.Environment.Rv32I
 
             // Use the Rvc32 Factory for decoding
 
+            // First code with the goal getting some ideas..  
+            if (ins.OpCode == Store)
+            {
+                instructionPayload = ComposePayloadStore(ins, payload);
+            }
+            
+
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposePayloadStore(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            // Now do the rest according to the F3 type
+            if (payload.Funct3 == CLWSP)
+            {
+                parser.ReadLwSp(payload, p);
+            }
+
+            return p;
         }
     }
 }

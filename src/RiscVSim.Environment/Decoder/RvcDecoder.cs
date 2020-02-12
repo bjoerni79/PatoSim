@@ -364,7 +364,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCI(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             var immediate = 0;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -397,7 +397,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCSS(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             var immediate = 0;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -424,7 +424,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCL(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -460,7 +460,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCS(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -496,7 +496,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCA(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
 
             int buffer = rvcCoding.ElementAt(1);
             buffer <<= 8;
@@ -530,7 +530,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCJ(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -553,7 +553,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCR(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -584,7 +584,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCB_Branch(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -616,7 +616,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCB_IntegerRegister(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);
@@ -653,7 +653,7 @@ namespace RiscVSim.Environment.Decoder
 
         private RvcPayload DecodeCIW(IEnumerable<byte> rvcCoding)
         {
-            var payload = new RvcPayload();
+            var payload = new RvcPayload(rvcCoding);
             int immediate;
 
             int buffer = rvcCoding.ElementAt(1);

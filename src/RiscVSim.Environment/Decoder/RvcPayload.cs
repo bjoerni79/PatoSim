@@ -9,7 +9,12 @@ namespace RiscVSim.Environment.Decoder
     {
         public RvcPayload()
         {
+            Coding = new Byte[0];
+        }
 
+        public RvcPayload(IEnumerable<byte> coding)
+        {
+            Coding = coding;
         }
 
         #region Loader Methods
@@ -119,6 +124,8 @@ namespace RiscVSim.Environment.Decoder
         }
 
         #endregion
+
+        public IEnumerable<byte> Coding { get; set; }
 
         public InstructionType Type { get; private set; }
 
