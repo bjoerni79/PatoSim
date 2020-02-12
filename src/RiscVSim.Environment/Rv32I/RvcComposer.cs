@@ -8,12 +8,20 @@ namespace RiscVSim.Environment.Rv32I
 {
     public class RvcComposer : IRvcComposer
     {
+        protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+        private Rvc32Factory factory;
+
+        private const int CLWSP = 2;
+
         public RvcComposer()
         {
-
+            factory = new Rvc32Factory();
         }
+
         public Instruction ComposeInstruction(RvcPayload payload)
         {
+            Logger.Debug("Compose Instruction for payload : Op = {op:X}, F3 = {f3:X}", payload.Op, payload.Funct3);
             int? opCode = null;
 
             // Q00
@@ -125,7 +133,7 @@ namespace RiscVSim.Environment.Rv32I
             // 110 C.SWSP
             // 111 C.FSWSP
 
-            if (payload.Op == 3 )
+            if (payload.Op == 2 )
             {
                 switch (payload.Funct3)
                 {
@@ -135,7 +143,7 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.LWSP
-                    case 2:
+                    case CLWSP:
                         opCode = 0x00;
                         break;
 
@@ -206,13 +214,11 @@ namespace RiscVSim.Environment.Rv32I
 
         public InstructionPayload ComposePayload(Instruction ins, RvcPayload payload)
         {
-            //InstructionPayload p = new InstructionPayload(ins, null);
+            InstructionPayload instructionPayload = null;
 
-            //return p;
+            // Use the Rvc32 Factory for decoding
 
-
-
-            return null;
+            return instructionPayload;
         }
     }
 }

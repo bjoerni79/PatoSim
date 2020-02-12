@@ -41,5 +41,7 @@ namespace RiscVSim.Environment.Test.RVC
         public IEnumerable<byte> Coding { get; set; }
 
         public RvcPayload ExpectedPayload { get; set; }
+
+        public InstructionPayload ExpectedPayload32 { get; set; }
     }
 }

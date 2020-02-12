@@ -36,5 +36,11 @@ namespace RiscVSim.Environment.Test.Hart
             var data = hart.GetRegisterStates();
             Assert.IsNotNull(data);
         }
+
+        //[Test]
+        //public void RunRvcTest()
+        //{
+
+        //}
     }
 }

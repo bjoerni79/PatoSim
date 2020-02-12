@@ -12,10 +12,17 @@ namespace RiscVSim.Environment.Test.RVC
         private RvcDecoder decoder32;
         private RvcDecoder decoder64;
 
+        private IRvcComposer composer32;
+        private IRvcComposer composer64;
+
         public RvcTestEnvironment()
         {
             decoder32 = new RvcDecoder(Architecture.Rv32I);
             decoder64 = new RvcDecoder(Architecture.Rv64I);
+
+            composer32 = new Rv32I.RvcComposer();
+            composer64 = new Rv64I.RvcComposer();
+
         }
 
         public RvcPayload LoadCI(int op, int imm, int rd, int f3)
@@ -93,14 +100,18 @@ namespace RiscVSim.Environment.Test.RVC
         public void Test(RvcTestPair pair)
         {
             RvcDecoder decoderUT = null;
+            IRvcComposer compuserUT = null;
+
             if (pair.TargetArchitecture == Architecture.Rv32I)
             {
                 decoderUT = decoder32;
+                compuserUT = composer32;
             }
 
             if (pair.TargetArchitecture == Architecture.Rv64I)
             {
                 decoderUT = decoder64;
+                compuserUT = composer64;
             }
 
             if (pair.IsValid)
@@ -133,6 +144,26 @@ namespace RiscVSim.Environment.Test.RVC
                 Assert.IsTrue(excpeptionCaught,"Invalid opcode for this architecture!");
 
             }
+
+            // If InstructionPayload is available generate and compare it via the composer
+            if (pair.ExpectedPayload32 != null)
+            {
+                var payloadUT = decoderUT.Decode(pair.Coding);
+                var instruction = compuserUT.ComposeInstruction(payloadUT);
+                var instructionPayload = compuserUT.ComposePayload(instruction, payloadUT);
+
+                Assert.AreEqual(pair.ExpectedPayload32.OpCode, instructionPayload.OpCode);
+                Assert.AreEqual(pair.ExpectedPayload32.Rd, instructionPayload.Rd);
+                Assert.AreEqual(pair.ExpectedPayload32.Rs1, instructionPayload.Rs1);
+                Assert.AreEqual(pair.ExpectedPayload32.Rs2, instructionPayload.Rs2);
+                Assert.AreEqual(pair.ExpectedPayload32.Funct3, instructionPayload.Funct3);
+                Assert.AreEqual(pair.ExpectedPayload32.Funct7, instructionPayload.Funct7);
+                Assert.AreEqual(pair.ExpectedPayload32.SignedImmediate, instructionPayload.SignedImmediate);
+                Assert.AreEqual(pair.ExpectedPayload32.UnsignedImmediate, instructionPayload.UnsignedImmediate);
+                Assert.AreEqual(pair.ExpectedPayload32.SignedImmediateComplete, instructionPayload.SignedImmediateComplete);
+
+            }
+
         }
 
         public IEnumerable<byte> ToBytes(byte b0,byte b1)
