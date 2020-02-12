@@ -17,6 +17,8 @@ namespace RiscVSim.Environment.Hart
         // the "Return Address Stack" for the jumps
         private Stack<uint> ras;
 
+        private RvcComposer composer;
+
         internal HartCore32(Architecture architecture) : base(architecture)
         {
             var is32 = (architecture == Architecture.Rv32I) || (architecture == Architecture.Rv32E);
@@ -68,7 +70,11 @@ namespace RiscVSim.Environment.Hart
         {
             Console.WriteLine("Rvc: OpCode = {0:X}, F3 = {1:X}, Type = {2}", payload.Op, payload.Funct3, payload.Type);
 
-            throw new NotImplementedException();
+            var instruction = composer.ComposeInstruction(payload);
+            var instructionPayload = composer.ComposePayload(instruction, payload);
+
+            ExecuteOpcode(instruction, instructionPayload);
+
         }
 
         protected override void InitDetails(ulong programCounter)
@@ -85,7 +91,9 @@ namespace RiscVSim.Environment.Hart
             memory = Factory.CreateDynamicMemory(architecture);
             csrRegister = Factory.CreateCsrRegister();
             environment = new HartEnvironment(architecture,register, memory,csrRegister);
-            
+
+            composer = new RvcComposer();
+
             ras = new Stack<uint>();
 
             if (configuration.RvMode)
