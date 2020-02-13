@@ -6,7 +6,7 @@ namespace RiscVSim.Environment.Decoder
 {
     public sealed class Instruction
     {
-        internal Instruction(InstructionType type, int opCode, int instLength)
+        public Instruction(InstructionType type, int opCode, int instLength)
         {
             Type = type;
             OpCode = opCode;

@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Decoder
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        internal InstructionPayload(Instruction instruction, IEnumerable<byte> coding)
+        public InstructionPayload(Instruction instruction, IEnumerable<byte> coding)
         {
             if (instruction == null)
             {
@@ -26,32 +26,32 @@ namespace RiscVSim.Environment.Decoder
 
         public IEnumerable<byte> Coding { get; private set; }
 
-        public int Rd { get; internal set; }
+        public int Rd { get;  set; }
 
-        public int OpCode { get; private set; }
+        public int OpCode { get;  set; }
 
-        public InstructionType Type { get; private set; }
-
-
-
-        public int Rs1 { get; internal set; }
-
-        public int Rs2 { get; internal set; }
+        public InstructionType Type { get;  set; }
 
 
 
-        public int Funct3 { get; internal set; }
+        public int Rs1 { get;  set; }
 
-        public int Funct7 { get; internal set; }
+        public int Rs2 { get;  set; }
 
-        public int SignedImmediate { get; internal set; }
 
-        public uint UnsignedImmediate { get; internal set; }
+
+        public int Funct3 { get;  set; }
+
+        public int Funct7 { get;  set; }
+
+        public int SignedImmediate { get;  set; }
+
+        public uint UnsignedImmediate { get;  set; }
 
         /// <summary>
         /// All bits are treated as values bits 
         /// </summary>
-        public int SignedImmediateComplete { get; internal set; }
+        public int SignedImmediateComplete { get;  set; }
 
         public string GetHumanReadbleContent()
         {

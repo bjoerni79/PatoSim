@@ -23,6 +23,7 @@ namespace RiscVSim.Environment.Rv32I
 
 
         private const int CLWSP = 2;
+        private const int CSWSP = 6;
 
         public RvcComposer()
         {
@@ -202,7 +203,7 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.SWSP
-                    case 6:
+                    case CSWSP:
                         opCode = Store;
                         break;
 
@@ -228,14 +229,39 @@ namespace RiscVSim.Environment.Rv32I
 
             // Use the Rvc32 Factory for decoding
 
-            // First code with the goal getting some ideas..  
             if (ins.OpCode == Store)
             {
                 instructionPayload = ComposePayloadStore(ins, payload);
             }
+
+            // First code with the goal getting some ideas..  
+            if (ins.OpCode == Load)
+            {
+                instructionPayload = ComposePayloadLoad(ins, payload);
+            }
             
+            if (ins.OpCode == JumpAndLinkRegister)
+            {
+                instructionPayload = ComposePayloadJalr(ins, payload);
+            }
 
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposePayloadJalr(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Funct3 == 4)
+            {
+                // C.JR    (f4 = 8)
+                // C.JALR  (f4 = 9)
+
+                parser.ParseJrAndJalr(payload, p);
+            }
+
+            return p;
         }
 
         private InstructionPayload ComposePayloadStore(Instruction ins, RvcPayload payload)
@@ -243,10 +269,23 @@ namespace RiscVSim.Environment.Rv32I
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
 
+            if (payload.Funct3 == CSWSP)
+            {
+                parser.ParseSwSp(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposePayloadLoad(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
             // Now do the rest according to the F3 type
             if (payload.Funct3 == CLWSP)
             {
-                parser.ReadLwSp(payload, p);
+                parser.ParseLwSp(payload, p);
             }
 
             return p;

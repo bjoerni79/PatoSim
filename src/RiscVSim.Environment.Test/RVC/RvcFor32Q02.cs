@@ -22,8 +22,9 @@ namespace RiscVSim.Environment.Test.RVC
             // C.LWSP
             var pairLwsp = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadCI(2, 0x3F,1, 2),
-                Coding = new byte[] { 0xFE, 0x50 }
+                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 2),
+                Coding = new byte[] { 0xFE, 0x50 },
+                ExpectedPayload32 = te.BuildIType(0, 1, 2, 2, 0xFC)
             };
 
             te.Test(pairLwsp);
@@ -48,7 +49,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairSwSp = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCSS(2, 0x3F, 01, 6),
-                Coding = te.ToBytes(0x86, 0xDF)
+                Coding = te.ToBytes(0x86, 0xDF),
+                ExpectedPayload32 = te.BuildSType(8, 2, 2, 1, 0xFC)
             };
 
             te.Test(pairSwSp);
