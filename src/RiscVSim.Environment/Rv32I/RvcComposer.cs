@@ -24,6 +24,7 @@ namespace RiscVSim.Environment.Rv32I
 
         private const int CLWSP = 2;
         private const int CSWSP = 6;
+        private const int CSLLI = 0;
 
         public RvcComposer()
         {
@@ -149,7 +150,7 @@ namespace RiscVSim.Environment.Rv32I
                 switch (payload.Funct3)
                 {
                     // C.SLLI
-                    case 0:
+                    case CSLLI:
                         opCode = Immediate;
                         break;
 
@@ -245,7 +246,25 @@ namespace RiscVSim.Environment.Rv32I
                 instructionPayload = ComposePayloadJalr(ins, payload);
             }
 
+            if (ins.OpCode == Immediate)
+            {
+                instructionPayload = ComposePayloadImmediate(ins, payload);
+            }
+
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposePayloadImmediate(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Funct3 == CSLLI)
+            {
+                parser.ParseSlli(payload, p);
+            }
+
+            return p;
         }
 
         private InstructionPayload ComposePayloadJalr(Instruction ins, RvcPayload payload)

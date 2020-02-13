@@ -76,8 +76,9 @@ namespace RiscVSim.Environment.Test.RVC
             // C.JR
             var pairCjr = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadJCR(2, 2, 1, 8, 4),
-                Coding = te.ToBytes(0x06, 0x81)
+                ExpectedPayload = te.LoadJCR(2, 2, 0, 8, 4),
+                Coding = te.ToBytes(0x02, 0x81),
+                ExpectedPayload32 = te.BuildIType(0x19, 0, 0, 2, 0)
             };
 
             te.Test(pairCjr);
@@ -85,8 +86,9 @@ namespace RiscVSim.Environment.Test.RVC
             // C.JALR
             var pairCjalr = new RvcTestPair(architecture)
             {
-                ExpectedPayload = te.LoadJCR(2, 2, 1, 9, 4),
-                Coding = te.ToBytes(0x06, 0x91)
+                ExpectedPayload = te.LoadJCR(2, 2, 0, 9, 4),
+                Coding = te.ToBytes(0x02, 0x91),
+                ExpectedPayload32 = te.BuildIType(0x19, 1, 0, 2, 0)
             };
 
             te.Test(pairCjalr);
@@ -101,7 +103,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairSlli = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFE, 0x10),
-                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 0)
+                ExpectedPayload = te.LoadCI(2, 0x3F, 1, 0),
+                ExpectedPayload32 = te.BuildIType(0x04,1,1,1,0x3F)
             };
 
             te.Test(pairSlli);

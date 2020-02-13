@@ -23,6 +23,7 @@ namespace RiscVSim.Environment.Decoder
         {
             Op = op;
             Rd = rd;
+            Rs1 = rd;
             Funct3 = f3;
             Immediate = immm;
             Type = InstructionType.RVC_CI;
