@@ -71,7 +71,7 @@ namespace RiscVSim.Environment.Hart
             Console.WriteLine("Rvc: OpCode = {0:X}, F3 = {1:X}, Type = {2}", payload.Op, payload.Funct3, payload.Type);
 
             var instruction = composer.ComposeInstruction(payload);
-            var instructionPayload = composer.ComposePayload(instruction, payload);
+            var instructionPayload = composer.Compose(instruction, payload);
 
             ExecuteOpcode(instruction, instructionPayload);
 

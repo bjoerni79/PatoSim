@@ -12,7 +12,7 @@ namespace RiscVSim.Environment.Rv64I
             throw new NotImplementedException();
         }
 
-        public InstructionPayload ComposePayload(Instruction instruction, RvcPayload payload)
+        public InstructionPayload Compose(Instruction instruction, RvcPayload payload)
         {
             throw new NotImplementedException();
         }

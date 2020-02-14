@@ -195,7 +195,80 @@ namespace RiscVSim.Environment.Decoder
             instructionPayload.SignedImmediate = immediate;
         }
 
+        public void ParseJ (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            instructionPayload.Rd = 0;
+            instructionPayload.SignedImmediate = DecodeJalOffset(payload.Immediate);
+        }
+
+        public void ParseJal (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            instructionPayload.Rd = 1;
+            instructionPayload.SignedImmediate = DecodeJalOffset(payload.Immediate);
+        }
+
         #region Helper
+
+        private int DecodeJalOffset(int immediateCoding)
+        {
+            // 11 4 9 8 10 6 7 3 2 1 5
+            // There is no 0 index this time!
+
+            uint current;
+            uint buffer = Convert.ToUInt32(immediateCoding);
+            
+            // 5
+            uint immediate = buffer & 0x01;
+            immediate <<= 4;
+
+            // 3 2 1
+            buffer >>= 1;
+            current = buffer & 0x07;
+            immediate |= current;
+
+            // 7
+            buffer >>= 3;
+            current = buffer & 0x01;
+            current <<= 6;
+            immediate |= current;
+
+            // 6
+            buffer >>= 1;
+            current = buffer & 0x01;
+            current <<= 5;
+            immediate |= current;
+
+            // 10
+            buffer >>= 1;
+            current = buffer & 0x01;
+            current <<= 9;
+            immediate |= current;
+
+            // 9 8
+            buffer >>= 1;
+            current = buffer & 0x03;
+            current <<= 7;
+            immediate |= current;
+
+            // 4
+            buffer >>= 2;
+            current = buffer & 0x03;
+            current <<= 3;
+            immediate |= current;
+
+            // 11
+            buffer >>= 1;
+            current = buffer & 0x01;
+            current <<= 10;
+            immediate |= current;
+
+
+            immediate <<= 1;
+            var result = MathHelper.GetSignedInteger(immediate, InstructionType.J_Type);
+
+            // Signed? -> Mathhelper
+            return result;
+        }
 
         private int DecodeLoadStoreW(int immediateCoding)
         {

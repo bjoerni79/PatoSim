@@ -27,6 +27,8 @@ namespace RiscVSim.Environment.Rv32I
         private const int CSWSP = 6;
         private const int CSW = 6;
         private const int CSLLI = 0;
+        private const int CJAL = 1;
+        private const int CJ = 5;
 
         public RvcComposer()
         {
@@ -95,7 +97,7 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.JAL
-                    case 1:
+                    case CJAL:
                         opCode = JumpAndLink;
                         break;
 
@@ -116,7 +118,7 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.J
-                    case 5:
+                    case CJ:
                         opCode = JumpAndLink;
                         break;
 
@@ -146,7 +148,6 @@ namespace RiscVSim.Environment.Rv32I
             // 101 C.FSDSP
             // 110 C.SWSP
             // 111 C.FSWSP
-
             if (payload.Op == 2 )
             {
                 switch (payload.Funct3)
@@ -226,7 +227,7 @@ namespace RiscVSim.Environment.Rv32I
             return instruction;
         }
 
-        public InstructionPayload ComposePayload(Instruction ins, RvcPayload payload)
+        public InstructionPayload Compose(Instruction ins, RvcPayload payload)
         {
             InstructionPayload instructionPayload = null;
 
@@ -234,29 +235,34 @@ namespace RiscVSim.Environment.Rv32I
 
             if (ins.OpCode == Store)
             {
-                instructionPayload = ComposePayloadStore(ins, payload);
+                instructionPayload = ComposeStore(ins, payload);
             }
 
             // First code with the goal getting some ideas..  
             if (ins.OpCode == Load)
             {
-                instructionPayload = ComposePayloadLoad(ins, payload);
+                instructionPayload = ComposeLoad(ins, payload);
             }
             
             if (ins.OpCode == JumpAndLinkRegister)
             {
-                instructionPayload = ComposePayloadJalr(ins, payload);
+                instructionPayload = ComposeJalr(ins, payload);
+            }
+
+            if (ins.OpCode == JumpAndLink)
+            {
+                instructionPayload = ComposeJal(ins, payload);
             }
 
             if (ins.OpCode == Immediate)
             {
-                instructionPayload = ComposePayloadImmediate(ins, payload);
+                instructionPayload = ComposeImmediate(ins, payload);
             }
 
             return instructionPayload;
         }
 
-        private InstructionPayload ComposePayloadImmediate(Instruction ins, RvcPayload payload)
+        private InstructionPayload ComposeImmediate(Instruction ins, RvcPayload payload)
         {
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
@@ -274,7 +280,7 @@ namespace RiscVSim.Environment.Rv32I
             return p;
         }
 
-        private InstructionPayload ComposePayloadJalr(Instruction ins, RvcPayload payload)
+        private InstructionPayload ComposeJalr(Instruction ins, RvcPayload payload)
         {
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
@@ -290,7 +296,7 @@ namespace RiscVSim.Environment.Rv32I
             return p;
         }
 
-        private InstructionPayload ComposePayloadStore(Instruction ins, RvcPayload payload)
+        private InstructionPayload ComposeStore(Instruction ins, RvcPayload payload)
         {
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
@@ -308,11 +314,10 @@ namespace RiscVSim.Environment.Rv32I
             return p;
         }
 
-        private InstructionPayload ComposePayloadLoad(Instruction ins, RvcPayload payload)
+        private InstructionPayload ComposeLoad(Instruction ins, RvcPayload payload)
         {
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
-
 
 
             if (payload.Op == 0 && payload.Funct3 == CLW)
@@ -324,6 +329,26 @@ namespace RiscVSim.Environment.Rv32I
             if (payload.Op == 2 && payload.Funct3 == CLWSP)
             {
                 parser.ParseLwSp(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeJal(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            // C.J
+            if (payload.Op == 1 && payload.Funct3 == CJ)
+            {
+                parser.ParseJ(payload, p);
+            }
+
+            // C.JAL
+            if (payload.Op == 1 && payload.Funct3 == CJAL)
+            {
+                parser.ParseJal(payload, p);
             }
 
             return p;

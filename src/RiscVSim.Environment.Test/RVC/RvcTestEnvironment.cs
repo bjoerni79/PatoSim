@@ -121,6 +121,16 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
+        public InstructionPayload BuildJType(int opcode, int rd, int imm)
+        {
+            var instruction = new Instruction(InstructionType.J_Type, opcode, 2);
+            var payload = new InstructionPayload(instruction, null);
+            payload.Rd = rd;
+            payload.SignedImmediate = imm;
+
+            return payload;
+        }
+
         public void Test(RvcTestPair pair)
         {
             RvcDecoder decoderUT = null;
@@ -174,7 +184,7 @@ namespace RiscVSim.Environment.Test.RVC
             {
                 var payloadUT = decoderUT.Decode(pair.Coding);
                 var instruction = compuserUT.ComposeInstruction(payloadUT);
-                var instructionPayload = compuserUT.ComposePayload(instruction, payloadUT);
+                var instructionPayload = compuserUT.Compose(instruction, payloadUT);
 
                 Assert.AreEqual(pair.ExpectedPayload32.OpCode, instructionPayload.OpCode);
                 Assert.AreEqual(pair.ExpectedPayload32.Rd, instructionPayload.Rd);

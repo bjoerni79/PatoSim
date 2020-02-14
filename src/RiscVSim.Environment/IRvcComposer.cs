@@ -9,6 +9,6 @@ namespace RiscVSim.Environment
     {
         Instruction ComposeInstruction(RvcPayload payload);
 
-        InstructionPayload ComposePayload(Instruction instruction, RvcPayload payload);
+        InstructionPayload Compose(Instruction instruction, RvcPayload payload);
     }
 }
