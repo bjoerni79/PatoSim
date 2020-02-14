@@ -21,9 +21,11 @@ namespace RiscVSim.Environment.Rv32I
         private const int JumpAndLinkRegister = 0x19;
         private const int Register = 0x0C;
 
-
+        private const int ADDI4SPN = 0;
         private const int CLWSP = 2;
+        private const int CLW = 2;
         private const int CSWSP = 6;
+        private const int CSW = 6;
         private const int CSLLI = 0;
 
         public RvcComposer()
@@ -49,17 +51,17 @@ namespace RiscVSim.Environment.Rv32I
                 switch (payload.Funct3)
                 {
                     // C.ADDI4SPN
-                    case 0:
+                    case ADDI4SPN:
                         opCode = Immediate;
                         break;
 
                     // C.LW
-                    case 2:
+                    case CLW:
                         opCode = Load;
                         break;
 
                     // C.SW
-                    case 6:
+                    case CSW:
                         opCode = Store;
                         break;
 
@@ -259,7 +261,12 @@ namespace RiscVSim.Environment.Rv32I
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
 
-            if (payload.Funct3 == CSLLI)
+            if (payload.Op == 0 && payload.Funct3 == ADDI4SPN)
+            {
+                parser.ParseAddi4Spn(payload, p);
+            }
+
+            if (payload.Op == 2 && payload.Funct3 == CSLLI)
             {
                 parser.ParseSlli(payload, p);
             }
@@ -288,7 +295,12 @@ namespace RiscVSim.Environment.Rv32I
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
 
-            if (payload.Funct3 == CSWSP)
+            if (payload.Op == 0 && payload.Funct3 == CSW)
+            {
+                parser.ParseSw(payload, p);
+            }
+
+            if (payload.Op == 2 && payload.Funct3 == CSWSP)
             {
                 parser.ParseSwSp(payload, p);
             }
@@ -301,8 +313,15 @@ namespace RiscVSim.Environment.Rv32I
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
 
+
+
+            if (payload.Op == 0 && payload.Funct3 == CLW)
+            {
+                parser.ParseLw(payload, p);
+            }
+
             // Now do the rest according to the F3 type
-            if (payload.Funct3 == CLWSP)
+            if (payload.Op == 2 && payload.Funct3 == CLWSP)
             {
                 parser.ParseLwSp(payload, p);
             }
