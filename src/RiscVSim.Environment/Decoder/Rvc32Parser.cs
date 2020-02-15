@@ -245,6 +245,102 @@ namespace RiscVSim.Environment.Decoder
 
         }
 
+        public void ParseAddi (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.ADDI adds the non-zero sign-extended 6-bit immediate to the value in register rd then writes
+            // the result to rd. C.ADDI expands into addi rd, rd, nzimm[5:0].C.ADDI is only valid when
+            // rd̸ = x0 and nzimm̸ = 0.The code points with rd = x0 encode the C.NOP instruction; the remaining
+            // code points with nzimm = 0 encode HINTs.
+            //
+        }
+
+        public void ParseAddiW (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.ADDIW is an RV64C/RV128C-only instruction that performs the same computation but produces
+            // a 32 - bit result, then sign-extends result to 64 bits.C.ADDIW expands into addiw rd,
+            // rd, imm[5:0].The immediate can be zero for C.ADDIW, where this corresponds to sext.w rd.
+            // C.ADDIW is only valid when rd̸ = x0; the code points with rd = x0 are reserved.
+            //
+        }
+
+        public void ParseAddi16Sp (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.ADDI16SP shares the opcode with C.LUI, but has a destination field of x2. C.ADDI16SP adds
+            // the non-zero sign - extended 6 - bit immediate to the value in the stack pointer(sp = x2), where the
+            // immediate is scaled to represent multiples of 16 in the range(-512,496). C.ADDI16SP is used
+            // to adjust the stack pointer in procedure prologues and epilogues. It expands into addi x2, x2,
+            // nzimm[9:4].C.ADDI16SP is only valid when nzimm̸ = 0; the code point with nzimm = 0 is reserved.
+            //
+        }
+
+        public void ParseSrli (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.SRLI is a CB-format instruction that performs a logical right shift of the value in register rd ′
+            // then writes the result to rd ′. The shift amount is encoded in the shamt field.For RV128C, a shift
+            // amount of zero is used to encode a shift of 64.Furthermore, the shift amount is sign - extended for
+            // RV128C, and so the legal shift amounts are 1–31, 64, and 96–127.C.SRLI expands into srli rd ′,
+            // rd ′, shamt[5:0], except for RV128C with shamt = 0, which expands to srli rd ′, rd ′, 64.
+            //
+            // For RV32C, shamt[5] must be zero; the code points with shamt[5]=1 are reserved for custom
+            // extensions.For RV32C and RV64C, the shift amount must be non - zero; the code points with
+            // shamt = 0 are HINTs.
+
+        }
+
+        public void ParseSrai (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.SRAI is defined analogously to C.SRLI, but instead performs an arithmetic right shift. C.SRAI
+            // expands to srai rd ′, rd ′, shamt[5:0].
+            //
+        }
+
+        public void ParseAndi (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.ANDI is a CB-format instruction that computes the bitwise AND of the value in register rd ′ and
+            // the sign-extended 6 - bit immediate, then writes the result to rd ′. C.ANDI expands to andi rd ′,
+            // rd ′, imm[5:0].
+            //
+        }
+
+        public void ParseCaGeneric(RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // These instructions use the CA format.
+            //
+            // C.AND computes the bitwise AND of the values in registers rd ′ and rs2 ′, then writes the result to
+            // register rd ′. C.AND expands into and rd ′, rd ′, rs2 ′.
+            //
+            // C.OR computes the bitwise OR of the values in registers rd ′ and rs2 ′, then writes the result to
+            // register rd ′. C.OR expands into or rd ′, rd ′, rs2 ′.
+            //
+            // C.XOR computes the bitwise XOR of the values in registers rd ′ and rs2 ′, then writes the result to
+            // register rd ′. C.XOR expands into xor rd ′, rd ′, rs2 ′.
+            //
+            // C.SUB subtracts the value in register rs2 ′ from the value in register rd ′, then writes the result to
+            // register rd ′. C.SUB expands into sub rd ′, rd ′, rs2 ′.
+            //
+            // C.ADDW is an RV64C / RV128C - only instruction that adds the values in registers rd ′ and rs2 ′,
+            // then sign - extends the lower 32 bits of the sum before writing the result to register rd ′. C.ADDW
+            //
+            // expands into addw rd ′, rd ′, rs2 ′.
+            // C.SUBW is an RV64C / RV128C - only instruction that subtracts the value in register rs2 ′ from the
+            // value in register rd ′, then sign-extends the lower 32 bits of the difference before writing the result
+            // to register rd ′. C.SUBW expands into subw rd ′, rd ′, rs2 ′.
+        }
+
+        public void ParseNop(RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            // C.NOP is a CI-format instruction that does not change any user-visible state, except for advancing
+            // the pc and incrementing any applicable performance counters. C.NOP expands to nop. C.NOP is
+            // only valid when imm = 0; the code points with imm̸ = 0 encode HINTs.
+        }
+
         #region Helper
 
         private int DecodeCbOffset (int immediateCoding)
