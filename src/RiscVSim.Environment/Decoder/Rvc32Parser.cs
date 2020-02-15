@@ -207,7 +207,82 @@ namespace RiscVSim.Environment.Decoder
             instructionPayload.SignedImmediate = DecodeJalOffset(payload.Immediate);
         }
 
+        public void ParseBeqzAndBnez (RvcPayload payload, InstructionPayload instructionPayload, bool forEqual)
+        {
+            if (forEqual)
+            {
+                instructionPayload.Funct3 = 0;
+            }
+            else
+            {
+                instructionPayload.Funct3 = 1;
+            }
+
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.SignedImmediate = DecodeCbOffset(payload.Immediate);
+        }
+
+        public void ParseLi (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.LI loads the sign-extended 6-bit immediate, imm, into register rd. C.LI expands into addi rd,
+            // x0, imm[5:0].C.LI is only valid when rd̸ = x0; the code points with rd = x0 encode HINTs.
+            //
+
+
+        }
+
+        public void ParseLui (RvcPayload payload, InstructionPayload instructionPayload)
+        {
+            //
+            // C.LUI loads the non-zero 6-bit immediate field into bits 17–12 of the destination register, clears the
+            // bottom 12 bits, and sign-extends bit 17 into all higher bits of the destination.C.LUI expands into
+            // lui rd, nzimm[17:12].C.LUI is only valid when rd̸ = { x0, x2 }, and when the immediate is not
+            // equal to zero. The code points with nzimm = 0 are reserved; the remaining code points with rd = x0
+            // are HINTs; and the remaining code points with rd = x2 correspond to the C.ADDI16SP instruction.
+            //
+
+
+        }
+
         #region Helper
+
+        private int DecodeCbOffset (int immediateCoding)
+        {
+            // 8 4 3 7 6 2 1 5 ..beginning with Index 1!
+            uint buffer = Convert.ToUInt32(immediateCoding);
+            uint current;
+
+            // 5
+            uint immediate = buffer & 0x01;
+            immediate <<= 4;
+
+            // 2 1
+            buffer >>= 1;
+            immediate |= buffer & 0x03;
+
+            // 7 6
+            buffer >>= 2;
+            current = buffer & 0x03;
+            current <<= 5;
+            immediate |= current;
+
+            // 4 3
+            buffer >>= 2;
+            current = buffer & 0x03;
+            current <<= 2;
+            immediate |= current;
+
+            // 8
+            buffer >>= 2;
+            current = buffer & 0x01;
+            current <<= 7;
+            immediate |= current;
+
+            immediate <<= 1;
+
+            return MathHelper.GetSignedInteger(immediate, InstructionType.B_Type);
+        }
 
         private int DecodeJalOffset(int immediateCoding)
         {

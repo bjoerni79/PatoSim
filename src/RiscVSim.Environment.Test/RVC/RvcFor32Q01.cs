@@ -44,7 +44,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairBeqz = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCB(1,1, 0xFF,6),
-                Coding = te.ToBytes(0xFD, 0xDC)
+                Coding = te.ToBytes(0xFD, 0xDC),
+                ExpectedPayload32 = te.BuildBType(0x18,9,0,0,0x1FE)
             };
 
             te.Test(pairBeqz);
@@ -53,7 +54,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairBnez = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCB(1, 1, 0xFF, 7),
-                Coding = te.ToBytes(0xFD, 0xFC)
+                Coding = te.ToBytes(0xFD, 0xFC),
+                ExpectedPayload32 = te.BuildBType(0x18,9,0,1,0x1FE)
             };
 
             te.Test(pairBnez);

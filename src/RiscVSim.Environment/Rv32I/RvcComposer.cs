@@ -29,6 +29,8 @@ namespace RiscVSim.Environment.Rv32I
         private const int CSLLI = 0;
         private const int CJAL = 1;
         private const int CJ = 5;
+        private const int BEQZ = 6;
+        private const int BNEZ = 7;
 
         public RvcComposer()
         {
@@ -123,12 +125,12 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.BEQZ
-                    case 6:
+                    case BEQZ:
                         opCode = CondBrach;
                         break;
 
                     // C.BNEZ
-                    case 7:
+                    case BNEZ:
                         opCode = CondBrach;
                         break;
 
@@ -259,7 +261,30 @@ namespace RiscVSim.Environment.Rv32I
                 instructionPayload = ComposeImmediate(ins, payload);
             }
 
+            if (ins.OpCode == CondBrach)
+            {
+                instructionPayload = ComposeBranch(ins, payload);
+            }
+
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposeBranch(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Funct3 == BEQZ)
+            {
+                parser.ParseBeqzAndBnez(payload, p, true);
+            }
+
+            if (payload.Funct3 == BNEZ)
+            {
+                parser.ParseBeqzAndBnez(payload, p, false);
+            }
+
+            return p;
         }
 
         private InstructionPayload ComposeImmediate(Instruction ins, RvcPayload payload)
@@ -275,6 +300,17 @@ namespace RiscVSim.Environment.Rv32I
             if (payload.Op == 2 && payload.Funct3 == CSLLI)
             {
                 parser.ParseSlli(payload, p);
+            }
+
+            if (payload.Op == 1 && payload.Funct3 == 2)
+            {
+                // C.LI
+
+            }
+
+            if (payload.Op == 1 && payload.Funct3 == 3)
+            {
+                // C.LUI
             }
 
             return p;
