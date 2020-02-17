@@ -229,6 +229,31 @@ namespace RiscVSim.Environment.Decoder
             // x0, imm[5:0].C.LI is only valid when rd̸ = x0; the code points with rd = x0 encode HINTs.
             //
 
+            // rd = Signed Bit/5  4 3 2 1 0
+            
+            // TODO: rd == 0 -> Hint... how?
+            // for now:  throw an error with an indicatatio that the C.LI hint mode is not supported
+
+            // ---> MathHelper...
+
+            if (payload.Rd == 0)
+            {
+                throw new RvcFormatException("C.LI using hint mode (rd=0) is currently not supported");
+            }
+
+            instructionPayload.Rd = payload.Rd;
+
+            // bit 4 3 2 1 0
+            int buffer = payload.Immediate;
+            int signedImmediate = buffer & 0x1F;
+
+            // signed bit 5
+            buffer >>= 5; 
+            var b5 = buffer & 0x01;
+            b5 <<= 5;
+
+            signedImmediate |= b5;
+            instructionPayload.SignedImmediate = MathHelper.GetSignedInteger(signedImmediate, 5);
 
         }
 
@@ -346,11 +371,11 @@ namespace RiscVSim.Environment.Decoder
         private int DecodeCbOffset (int immediateCoding)
         {
             // 8 4 3 7 6 2 1 5 ..beginning with Index 1!
-            uint buffer = Convert.ToUInt32(immediateCoding);
-            uint current;
+            int buffer = immediateCoding;
+            int current;
 
             // 5
-            uint immediate = buffer & 0x01;
+            int immediate = buffer & 0x01;
             immediate <<= 4;
 
             // 2 1
@@ -385,11 +410,11 @@ namespace RiscVSim.Environment.Decoder
             // 11 4 9 8 10 6 7 3 2 1 5
             // There is no 0 index this time!
 
-            uint current;
-            uint buffer = Convert.ToUInt32(immediateCoding);
+            int current;
+            int buffer = immediateCoding;
             
             // 5
-            uint immediate = buffer & 0x01;
+            int immediate = buffer & 0x01;
             immediate <<= 4;
 
             // 3 2 1

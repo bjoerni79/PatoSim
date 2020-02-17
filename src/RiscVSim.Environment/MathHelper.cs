@@ -41,76 +41,43 @@ namespace RiscVSim.Environment
             return result;
         }
 
-        /// <summary>
-        /// Helper method for dealing with 12 Bit Signed Integer values and converting them to .NET C# Int32 values
-        /// </summary>
-        /// <param name="coding">the uint coding (i.e a I-Type 12 Bit signed int)</param>
-        /// <param name="bitLength">the bit length (12 for an I-Type)</param>
-        /// <returns>a Int32 .NET representation of the coding</returns>
-        internal static int GetSignedInteger (uint coding, InstructionType type)
+        internal static int GetSignedInteger(int coding,int bitLength)
         {
             // We get a coding from an instruction and this one has a signed bit. 
             // 1.  Scan for it
             // 2. Remove it
             // 3. Sign extend to FF and let the Bitconverter do the work
 
-            uint scanBitMask = 1;
-            int bitLength = GetBitLength(type);
+            int scanBitMask = 1;
             scanBitMask <<= bitLength;
 
             int result;
             if ((coding & scanBitMask) == scanBitMask)
             {
-                // Create a new buffer and set the default value to 0xFF
-                var bytes = BitConverter.GetBytes(coding);
-                var newBuffer = new byte[4];
+                int bitmask = ~scanBitMask;
+                int posNumber = coding & bitmask;
+                int negNumber = posNumber * -1;
 
-                for (int i = 0; i < 4; i++)
-                {
-                    newBuffer[i] = 0xFF;
-                }
-
-                var bitmask = GetBitMask(type);
-                var la = Convert.ToByte(bytes[1] | bitmask);
-                newBuffer[0] = bytes[0];
-                newBuffer[1] = la;
-
-                result = BitConverter.ToInt32(newBuffer, 0);
+                return negNumber;
             }
             else
             {
-                result = Convert.ToInt32(coding);
+                result = coding;
             }
 
             return result;
         }
 
-        private static byte GetBitMask(InstructionType type)
+        /// <summary>
+        /// Helper method for dealing with 12 Bit Signed Integer values and converting them to .NET C# Int32 values
+        /// </summary>
+        /// <param name="coding">the uint coding (i.e a I-Type 12 Bit signed int)</param>
+        /// <param name="bitLength">the bit length (12 for an I-Type)</param>
+        /// <returns>a Int32 .NET representation of the coding</returns>
+        internal static int GetSignedInteger (int coding, InstructionType type)
         {
-            byte bitmask;
-            switch (type)
-            {
-                case InstructionType.J_Type:
-                    bitmask = 0xF0;
-                    break;
-
-                case InstructionType.I_Type:
-                    bitmask = 0xF0;
-                    break;
-
-                case InstructionType.B_Type:
-                    bitmask = 0xE0;
-                    break;
-
-                case InstructionType.S_Type:
-                    bitmask = 0xF0;
-                    break;
-
-                default:
-                    throw new RiscVSimException("Could not decode immediate! Bitmask unknown.");
-            }
-
-            return bitmask;
+            var bitLength = GetBitLength(type);
+            return GetSignedInteger(coding, bitLength);
         }
 
         private static int GetBitLength(InstructionType type)

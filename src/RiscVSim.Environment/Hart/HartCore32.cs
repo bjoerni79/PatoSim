@@ -74,7 +74,6 @@ namespace RiscVSim.Environment.Hart
             var instructionPayload = composer.Compose(instruction, payload);
 
             ExecuteOpcode(instruction, instructionPayload);
-
         }
 
         protected override void InitDetails(ulong programCounter)

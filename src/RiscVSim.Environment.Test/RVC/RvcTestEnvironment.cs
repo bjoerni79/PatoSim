@@ -143,6 +143,17 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
+        public InstructionPayload BuildUType(int opcode, int rd, int immediate)
+        {
+            var instruction = new Instruction(InstructionType.U_Type, opcode, 2);
+            var payload = new InstructionPayload(instruction, null);
+
+            payload.Rd = rd;
+            payload.SignedImmediate = immediate;
+
+            return payload;
+        }
+
         public void Test(RvcTestPair pair)
         {
             RvcDecoder decoderUT = null;

@@ -64,14 +64,27 @@ namespace RiscVSim.Environment.Test.RVC
         [Test]
         public void IntegerConstantGenerationTest()
         {
-            // C.LI
-            var pairLi = new RvcTestPair(architecture)
+            // Test for positive numbers
+            // C.LI Pos
+            var pairLiPos = new RvcTestPair(architecture)
             {
-                Coding = te.ToBytes(0xFD, 0x50),
-                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 2)
+                Coding = te.ToBytes(0xFD, 0x40),
+                ExpectedPayload = te.LoadCI(1, 0x1F, 1, 2),
+                ExpectedPayload32 = te.BuildIType(4, 1, 0, 0, 0x1F)
             };
 
-            te.Test(pairLi);
+            te.Test(pairLiPos);
+
+            // C.LI Neg
+            var pairLiNeg = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x50),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 2),
+                ExpectedPayload32 = te.BuildIType(4,1,0,0,-31)
+            };
+
+            te.Test(pairLiNeg);
+
 
             // C.LUI
             var pairLui = new RvcTestPair(architecture)
@@ -79,6 +92,8 @@ namespace RiscVSim.Environment.Test.RVC
                 Coding = te.ToBytes(0xFD, 0x70),
                 ExpectedPayload = te.LoadCI(1, 0x3F, 1, 3)
             };
+
+            
 
             te.Test(pairLui);
         }

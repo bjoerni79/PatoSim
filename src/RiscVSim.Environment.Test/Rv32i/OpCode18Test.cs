@@ -85,7 +85,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var register = core.Register;
 
             var pc = register.ReadUnsignedInt(register.ProgramCounter);
-            Assert.AreEqual(pc, 0x2fc2e);
+            Assert.AreEqual(pc, 0x2f3f2);
         }
 
         [Test]

@@ -305,12 +305,13 @@ namespace RiscVSim.Environment.Rv32I
             if (payload.Op == 1 && payload.Funct3 == 2)
             {
                 // C.LI
-
+                parser.ParseLi(payload, p);
             }
 
             if (payload.Op == 1 && payload.Funct3 == 3)
             {
                 // C.LUI
+                parser.ParseLui(payload, p);
             }
 
             return p;

@@ -84,7 +84,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
-            uint workingBuffer;
+            int workingBuffer;
 
             var b4 = bytes.ElementAt(3);
             var b3 = bytes.ElementAt(2);
@@ -129,7 +129,7 @@ namespace RiscVSim.Environment.Decoder
 
 
             // Step 1:  Block1
-            uint immediate = block1;
+            int immediate = block1;
 
             // Step 2:  Add the bit Imm[11] at the correct position
             immediate |= block2;
@@ -158,7 +158,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
-            uint workingBuffer;
+            int workingBuffer;
 
             // b4   (bit 0...7)
             // b3   (bit 8...15)
@@ -202,11 +202,11 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer = b4;
             workingBuffer >>= 1;
             workingBuffer &= 0x7F;
-            uint upperPart = workingBuffer;
+            int upperPart = workingBuffer;
 
             var immediate = upperPart;
             immediate <<= 5;
-            immediate |= Convert.ToUInt32(GetRd(inst32Coding));
+            immediate |= GetRd(inst32Coding);
 
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
@@ -289,7 +289,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
-            uint workingBuffer;
+            int workingBuffer;
 
             // b4   (bit 0...7)
             // b3   (bit 8...15)
@@ -331,7 +331,7 @@ namespace RiscVSim.Environment.Decoder
             int rs2 = Convert.ToInt32(workingBuffer);
 
             // compute the 12 bit signed integer
-            uint immediate;
+            int immediate;
 
 
             //
@@ -388,7 +388,7 @@ namespace RiscVSim.Environment.Decoder
 
             var payload = new InstructionPayload(instruction, inst32Coding);
             var bytes = inst32Coding;
-            uint workingBuffer;
+            int workingBuffer;
 
             // b4   (bit 0...7)
             // b3   (bit 8...15)
@@ -434,7 +434,7 @@ namespace RiscVSim.Environment.Decoder
             payload.Funct3 = funct3;
             payload.Rs1 = rs1;
             payload.SignedImmediate = immediate;
-            payload.UnsignedImmediate = workingBuffer;
+            payload.UnsignedImmediate = Convert.ToUInt32(workingBuffer);
             payload.SignedImmediateComplete = Convert.ToInt32(workingBuffer);
             return payload;
         }
