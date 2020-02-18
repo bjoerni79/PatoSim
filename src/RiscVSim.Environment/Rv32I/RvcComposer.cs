@@ -116,6 +116,11 @@ namespace RiscVSim.Environment.Rv32I
                         {
                             opCode = Lui;
                         }
+
+                        if (payload.Rd == 2)
+                        {
+                            opCode = Immediate;
+                        }
                         
                         // C.ADDI16SP....
 
@@ -320,7 +325,28 @@ namespace RiscVSim.Environment.Rv32I
                 parser.ParseLi(payload, p);
             }
 
+            if (payload.Op == 1 && payload.Funct3 == 0)
+            {
+                parser.ParseAddi(payload, p);
+            }
 
+            if (payload.Op == 1 && payload.Funct3 == 3)
+            {
+                parser.ParseAddi16Sp(payload, p);
+            }
+
+            if (payload.Op == 1 && payload.Funct3 == 4)
+            {
+                if (payload.Funct2 == 0)
+                {
+                    parser.ParseSrli(payload, p);
+                }
+
+                if (payload.Funct2 == 1)
+                {
+                    parser.ParseSrai(payload, p);
+                }
+            }
 
             return p;
         }

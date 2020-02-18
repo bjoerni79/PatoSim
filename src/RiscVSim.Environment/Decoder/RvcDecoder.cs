@@ -235,6 +235,7 @@ namespace RiscVSim.Environment.Decoder
 
                 var secondByte = rvcCoding.ElementAt(1);
                 var b11b10 = secondByte & 0x0C;
+                b11b10 >>= 2;
 
                 if (b11b10 == 0x03)
                 {
@@ -635,11 +636,11 @@ namespace RiscVSim.Environment.Decoder
             var rdcrs1c = buffer & 0x07;
 
             // F2
-            buffer >>= 2;
+            buffer >>= 3;
             var f2 = buffer & 0x03;
 
             // Imm2
-            buffer >>= 3;
+            buffer >>= 2;
             var imm2 = (buffer & 0x01) << 5;
             immediate = immediate | imm2;
 

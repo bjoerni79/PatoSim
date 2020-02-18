@@ -197,18 +197,24 @@ namespace RiscVSim.Environment.Decoder
 
         public void ParseJ (RvcPayload payload, InstructionPayload instructionPayload)
         {
+            Logger.Info("Parsing C.J");
+
             instructionPayload.Rd = 0;
             instructionPayload.SignedImmediate = DecodeJalOffset(payload.Immediate);
         }
 
         public void ParseJal (RvcPayload payload, InstructionPayload instructionPayload)
         {
+            Logger.Info("Parsing C.JAL");
+
             instructionPayload.Rd = 1;
             instructionPayload.SignedImmediate = DecodeJalOffset(payload.Immediate);
         }
 
         public void ParseBeqzAndBnez (RvcPayload payload, InstructionPayload instructionPayload, bool forEqual)
         {
+            Logger.Info("Parsing C.BEQZ / C.BNEZ");
+
             if (forEqual)
             {
                 instructionPayload.Funct3 = 0;
@@ -230,11 +236,13 @@ namespace RiscVSim.Environment.Decoder
             //
 
             // rd = Signed Bit/5  4 3 2 1 0
-            
+
             // TODO: rd == 0 -> Hint... how?
             // for now:  throw an error with an indicatatio that the C.LI hint mode is not supported
 
             // ---> MathHelper...
+
+            Logger.Info("Parsing C.LI");
 
             if (payload.Rd == 0)
             {
@@ -267,6 +275,8 @@ namespace RiscVSim.Environment.Decoder
             // are HINTs; and the remaining code points with rd = x2 correspond to the C.ADDI16SP instruction.
             //
 
+            Logger.Info("Parsing C.LUI");
+
             // nzimm[17...12] = payload.immediate
 
             if (payload.Rd == 0 || payload.Rd == 2)
@@ -297,17 +307,14 @@ namespace RiscVSim.Environment.Decoder
             // rd̸ = x0 and nzimm̸ = 0.The code points with rd = x0 encode the C.NOP instruction; the remaining
             // code points with nzimm = 0 encode HINTs.
             //
+
+            Logger.Info("Parsing C.ADDI");
+
+            instructionPayload.Rd = payload.Rd;
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.SignedImmediate = payload.Immediate; // non-zero immediate.
         }
 
-        public void ParseAddiW (RvcPayload payload, InstructionPayload instructionPayload)
-        {
-            //
-            // C.ADDIW is an RV64C/RV128C-only instruction that performs the same computation but produces
-            // a 32 - bit result, then sign-extends result to 64 bits.C.ADDIW expands into addiw rd,
-            // rd, imm[5:0].The immediate can be zero for C.ADDIW, where this corresponds to sext.w rd.
-            // C.ADDIW is only valid when rd̸ = x0; the code points with rd = x0 are reserved.
-            //
-        }
 
         public void ParseAddi16Sp (RvcPayload payload, InstructionPayload instructionPayload)
         {
@@ -318,6 +325,44 @@ namespace RiscVSim.Environment.Decoder
             // to adjust the stack pointer in procedure prologues and epilogues. It expands into addi x2, x2,
             // nzimm[9:4].C.ADDI16SP is only valid when nzimm̸ = 0; the code point with nzimm = 0 is reserved.
             //
+
+            Logger.Info("Parsing C.ADDI16SP");
+
+            instructionPayload.Rd = 2;
+            instructionPayload.Rs1 = 2;
+
+            // b5
+            int buffer = payload.Immediate;
+            int immediate = buffer & 0x01;
+            immediate <<= 5;
+
+            // 8 7
+            buffer >>= 1;
+            int b87 = buffer & 0x03;
+            b87 <<= 7;
+            immediate |= b87;
+
+            // 6
+            buffer >>= 2;
+            int b6 = buffer & 0x01;
+            b6 <<= 6;
+            immediate |= b6;
+
+            // 4
+            buffer >>= 1;
+            int b4 = buffer & 0x01;
+            b4 <<= 4;
+            immediate |= b4;
+
+            // 9
+            buffer >>= 1;
+            int b9 = buffer & 0x01;
+            b9 <<= 9;
+            immediate |= b9;
+
+            instructionPayload.SignedImmediate = immediate;
+            
+
         }
 
         public void ParseSrli (RvcPayload payload, InstructionPayload instructionPayload)
@@ -333,6 +378,23 @@ namespace RiscVSim.Environment.Decoder
             // extensions.For RV32C and RV64C, the shift amount must be non - zero; the code points with
             // shamt = 0 are HINTs.
 
+            Logger.Info("Parsing C.SRLI");
+
+            if ((payload.Immediate & 0x20) == 0x20)
+            {
+                throw new RvcFormatException("Bit 5 for the RV32C C.SRLI must be zero");
+            }
+
+            // SRLI rd`,rd`,shamt[5:0]
+            // srli    rd rs1 31..26=0  shamt 14..12=5 6..2=0x04 1..0=3
+
+
+            instructionPayload.Funct3 = 5;
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.Rd = payload.Rd;
+            instructionPayload.SignedImmediate = payload.Immediate;
+
+
         }
 
         public void ParseSrai (RvcPayload payload, InstructionPayload instructionPayload)
@@ -341,6 +403,20 @@ namespace RiscVSim.Environment.Decoder
             // C.SRAI is defined analogously to C.SRLI, but instead performs an arithmetic right shift. C.SRAI
             // expands to srai rd ′, rd ′, shamt[5:0].
             //
+
+            // srai rd rs1 31..26 = 16 shamt 14..12 = 5 6..2 = 0x04 1..0 = 3
+            Logger.Info("Parsing C.SRAI");
+
+            if ((payload.Immediate & 0x20) == 0x20)
+            {
+                throw new RvcFormatException("Bit 5 for the RV32C C.SRAI must be zero");
+            }
+
+            instructionPayload.Funct3 = 5;
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.Rd = payload.Rd;
+            instructionPayload.SignedImmediate = payload.Immediate | 0x400;
+
         }
 
         public void ParseAndi (RvcPayload payload, InstructionPayload instructionPayload)
