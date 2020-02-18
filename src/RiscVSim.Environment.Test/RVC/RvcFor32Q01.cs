@@ -87,15 +87,24 @@ namespace RiscVSim.Environment.Test.RVC
 
 
             // C.LUI
-            var pairLui = new RvcTestPair(architecture)
+            // Inst32 Opcode 0x0D
+            var pairLui1 = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFD, 0x70),
-                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 3)
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 3),
+                ExpectedPayload32 = te.BuildUType(0x0D,1,0xFFFFF000)
             };
 
-            
+            te.Test(pairLui1);
 
-            te.Test(pairLui);
+            var pairLui2 = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x60),
+                ExpectedPayload = te.LoadCI(1, 0x1F, 1, 3),
+                ExpectedPayload32 = te.BuildUType(0x0D, 1, 0x1F000)
+            };
+
+            te.Test(pairLui2);
         }
 
         [Test]

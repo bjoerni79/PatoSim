@@ -267,7 +267,26 @@ namespace RiscVSim.Environment.Decoder
             // are HINTs; and the remaining code points with rd = x2 correspond to the C.ADDI16SP instruction.
             //
 
+            // nzimm[17...12] = payload.immediate
 
+            if (payload.Rd == 0 || payload.Rd == 2)
+            {
+                throw new RvcFormatException("C.LUI does not accept RD=0 or RD=2");
+            }
+
+            instructionPayload.Rd = payload.Rd;
+            uint uimmediate = Convert.ToUInt32(payload.Immediate << 12);
+
+            // Expand Bit 17 to the higher ones (31....17)
+            uint bitmask = 0xFFFFC000;
+            uint b17 = 0x020000;
+
+            if ((uimmediate & b17) == b17)
+            {
+                uimmediate |= bitmask;
+            }
+
+            instructionPayload.UnsignedImmediate = uimmediate;
         }
 
         public void ParseAddi (RvcPayload payload, InstructionPayload instructionPayload)

@@ -20,6 +20,7 @@ namespace RiscVSim.Environment.Rv32I
         private const int JumpAndLink = 0x1B;
         private const int JumpAndLinkRegister = 0x19;
         private const int Register = 0x0C;
+        private const int Lui = 0x0D;
 
         private const int ADDI4SPN = 0;
         private const int CLWSP = 2;
@@ -111,7 +112,13 @@ namespace RiscVSim.Environment.Rv32I
                     // C.LUI
                     // C.ADDI16SP
                     case 3:
-                        opCode = Immediate;
+                        if (payload.Rd != 0 && payload.Rd != 2)
+                        {
+                            opCode = Lui;
+                        }
+                        
+                        // C.ADDI16SP....
+
                         break;
 
                     // C.SRLI, C.SRAI, ...
@@ -266,6 +273,11 @@ namespace RiscVSim.Environment.Rv32I
                 instructionPayload = ComposeBranch(ins, payload);
             }
 
+            if (ins.OpCode == Lui)
+            {
+                instructionPayload = ComposeLui(ins, payload);
+            }
+
             return instructionPayload;
         }
 
@@ -307,6 +319,16 @@ namespace RiscVSim.Environment.Rv32I
                 // C.LI
                 parser.ParseLi(payload, p);
             }
+
+
+
+            return p;
+        }
+
+        private InstructionPayload ComposeLui(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
 
             if (payload.Op == 1 && payload.Funct3 == 3)
             {
