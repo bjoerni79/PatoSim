@@ -90,7 +90,7 @@ namespace RiscVSim.Environment.Test.Rv64i
             var x1Content = core.Register.ReadUnsignedLong(1);
             var x3Content = core.Register.ReadUnsignedLong(3);
             Assert.AreEqual(x1Content, 0x7FF);
-            Assert.AreEqual(x3Content, 0x7FE);
+            Assert.AreEqual(x3Content, 0);
         }
 
         [Test]
