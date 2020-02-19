@@ -70,6 +70,7 @@ namespace RiscVSim.Environment.Decoder
         {
             Op = op;
             Rs1 = rs1;
+            Rd = rs1;
             Rs2 = rs2;
             Funct4 = funct4;
             Funct3 = f3;
@@ -107,11 +108,12 @@ namespace RiscVSim.Environment.Decoder
             Type = InstructionType.RVC_CIW;
         }
 
-        public void LoadCA(int op, int rs2c, int f2, int rdcrs1c, int f6, int f3)
+        public void LoadCA(int op, int rs2c, int f2,int ca, int rdcrs1c, int f6, int f3)
         {
             Op = op;
             Rs2 = ToRegisterIndex(rs2c);
             Funct2 = f2;
+            CAMode = ca;
             Rd = ToRegisterIndex(rdcrs1c);
             Rs1 = ToRegisterIndex(rdcrs1c);
             Funct6 = f6;
@@ -145,6 +147,8 @@ namespace RiscVSim.Environment.Decoder
         public int Funct6 { get; private set; }
 
         public int Funct2 { get; private set; }
+
+        public int CAMode { get; private set; }
 
         public int Immediate { get; private set; }
 

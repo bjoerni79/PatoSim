@@ -305,6 +305,7 @@ namespace RiscVSim.Environment.Decoder
             var isF3100 = f3 == 0x04;
             if (isF3100)
             {
+
                 payload = DecodeCR(rvcCoding);
             }
 
@@ -503,15 +504,39 @@ namespace RiscVSim.Environment.Decoder
             buffer <<= 8;
             buffer |= rvcCoding.First();
 
+            //var opCode = buffer & 0x03;
+
+            //// RS2'
+            //buffer >>= 2;
+            //var rs2c = buffer & 0x07;
+
+            //// Funct2
+            //buffer >>= 3;
+            //var f2 = buffer & 0x03;
+
+            //// RD' / RS'
+            //buffer >>= 2;
+            //var rdcrs1c = buffer & 0x07;
+
+            //// Funct 6
+            //buffer >>= 3;
+            //var f6 = buffer & 0x3F;
+
+            //// Funct 3
+            //buffer >>= 3;
+            //var f3 = buffer & 0x07;
+
+            //payload.LoadCA(opCode, rs2c, f2, rdcrs1c, f6, f3);
+
             var opCode = buffer & 0x03;
 
             // RS2'
             buffer >>= 2;
             var rs2c = buffer & 0x07;
 
-            // Funct2
+            // CA Mode
             buffer >>= 3;
-            var f2 = buffer & 0x03;
+            var caMode = buffer & 0x03;
 
             // RD' / RS'
             buffer >>= 2;
@@ -525,7 +550,10 @@ namespace RiscVSim.Environment.Decoder
             buffer >>= 3;
             var f3 = buffer & 0x07;
 
-            payload.LoadCA(opCode, rs2c, f2, rdcrs1c, f6, f3);
+            // F2
+            var f2 = f6 & 0x03;
+
+            payload.LoadCA(opCode, rs2c, f2,caMode, rdcrs1c, f6, f3);
             return payload;
         }
 

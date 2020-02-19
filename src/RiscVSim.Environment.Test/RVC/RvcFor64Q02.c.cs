@@ -111,5 +111,46 @@ namespace RiscVSim.Environment.Test.RVC
 
             te.Test(pairSlli);
         }
+
+        [Test]
+        public void IntegerRegisterRegisterTest()
+        {
+            // C.MV
+            var pairMv = new RvcTestPair(architecture)
+            {
+                // RS2 = 10, RD = 11
+                Coding = te.ToBytes(0xAA, 0x85),
+                ExpectedPayload = te.LoadJCR(2, 11, 10, 8, 4)
+                //ExpectedPayload32 = te.BuildRType(0x0C, 0, 10, 11, 0, 0)
+            };
+
+            te.Test(pairMv);
+
+            // C.ADD
+            var pairAdd = new RvcTestPair(architecture)
+            {
+                // RS2 = 10, RD = 11
+                Coding = te.ToBytes(0xAA, 0x95),
+                ExpectedPayload = te.LoadJCR(2, 11, 10, 9, 4)
+                //ExpectedPayload32 = te.BuildRType(0x0C, 11, 10, 11, 0, 0)
+
+            };
+
+            te.Test(pairAdd);
+        }
+
+        [Test]
+        public void BreakpointIntrusionTest()
+        {
+            // C.EBREAK
+            var pairBreak = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0x02, 0x90),
+                ExpectedPayload = te.LoadJCR(2, 0, 0, 9, 4)
+                //ExpectedPayload32 = te.BuildIType_Unsigned(0x1C, 0, 0, 0, 1)
+            };
+
+            te.Test(pairBreak);
+        }
     }
 }

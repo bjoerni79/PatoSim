@@ -127,8 +127,19 @@ namespace RiscVSim.Environment.Rv32I
                         break;
 
                     // C.SRLI, C.SRAI, ...
+                    // 100 x 00 C.SRLI
+                    // 100 x 01 C.SRAI
+                    // 100 x 10 C.ANDI
+                    // 100 x 11 C.SUB, C.XOR, C.OR, C.AND
                     case 4:
-                        opCode = Immediate;
+                        if (payload.Funct2 == 0x03)
+                        {
+                            opCode = Register;
+                        }
+                        else
+                        {
+                            opCode = Immediate;
+                        }
                         break;
 
                     // C.J
@@ -273,6 +284,11 @@ namespace RiscVSim.Environment.Rv32I
                 instructionPayload = ComposeImmediate(ins, payload);
             }
 
+            if (ins.OpCode == Register)
+            {
+                instructionPayload = ComposeRegister(ins, payload);
+            }
+
             if (ins.OpCode == CondBrach)
             {
                 instructionPayload = ComposeBranch(ins, payload);
@@ -283,7 +299,43 @@ namespace RiscVSim.Environment.Rv32I
                 instructionPayload = ComposeLui(ins, payload);
             }
 
+            if (ins.OpCode == System)
+            {
+                instructionPayload = ComposeSystem(ins, payload);
+            }
+
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposeSystem(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 2 && payload.Funct3 == 4)
+            {
+                parser.ParseEbreak(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeRegister (Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 1 && payload.Funct3 == 4 && payload.Funct2 == 3)
+            {
+                parser.ParseCaGeneric(payload, p);
+            }
+
+            if (payload.Op == 2 && payload.Funct3 == 4)
+            {
+                parser.ParseAddAndMv(payload, p);
+            }
+
+            return p;
         }
 
         private InstructionPayload ComposeBranch(Instruction ins, RvcPayload payload)
@@ -345,6 +397,11 @@ namespace RiscVSim.Environment.Rv32I
                 if (payload.Funct2 == 1)
                 {
                     parser.ParseSrai(payload, p);
+                }
+
+                if (payload.Funct3 == 4 && payload.Funct2 == 2)
+                {
+                    parser.ParseAndi(payload, p);
                 }
             }
 

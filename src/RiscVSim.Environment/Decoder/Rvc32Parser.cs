@@ -426,6 +426,15 @@ namespace RiscVSim.Environment.Decoder
             // the sign-extended 6 - bit immediate, then writes the result to rd ′. C.ANDI expands to andi rd ′,
             // rd ′, imm[5:0].
             //
+
+            Logger.Info("Parsing C.ANDI");
+
+            instructionPayload.Funct3 = 7;
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.Rd = payload.Rd;
+
+            // Signed 6 Bit imm
+            instructionPayload.SignedImmediate = MathHelper.GetSignedInteger(payload.Immediate, 5);
         }
 
         public void ParseCaGeneric(RvcPayload payload, InstructionPayload instructionPayload)
@@ -444,21 +453,73 @@ namespace RiscVSim.Environment.Decoder
             //
             // C.SUB subtracts the value in register rs2 ′ from the value in register rd ′, then writes the result to
             // register rd ′. C.SUB expands into sub rd ′, rd ′, rs2 ′.
-            //
-            // C.ADDW is an RV64C / RV128C - only instruction that adds the values in registers rd ′ and rs2 ′,
-            // then sign - extends the lower 32 bits of the sum before writing the result to register rd ′. C.ADDW
-            //
-            // expands into addw rd ′, rd ′, rs2 ′.
-            // C.SUBW is an RV64C / RV128C - only instruction that subtracts the value in register rs2 ′ from the
-            // value in register rd ′, then sign-extends the lower 32 bits of the difference before writing the result
-            // to register rd ′. C.SUBW expands into subw rd ′, rd ′, rs2 ′.
+
+            // add rd rs1 rs2 31..25 = 0  14..12 = 0 6..2 = 0x0C 1..0 = 3
+            // sub rd rs1 rs2 31..25 = 32 14..12 = 0 6..2 = 0x0C 1..0 = 3
+            // sll rd rs1 rs2 31..25 = 0  14..12 = 1 6..2 = 0x0C 1..0 = 3
+            // slt rd rs1 rs2 31..25 = 0  14..12 = 2 6..2 = 0x0C 1..0 = 3
+            // sltu rd rs1 rs2 31..25 = 0  14..12 = 3 6..2 = 0x0C 1..0 = 3
+            // xor rd rs1 rs2 31..25 = 0  14..12 = 4 6..2 = 0x0C 1..0 = 3
+            // srl rd rs1 rs2 31..25 = 0  14..12 = 5 6..2 = 0x0C 1..0 = 3
+            // sra rd rs1 rs2 31..25 = 32 14..12 = 5 6..2 = 0x0C 1..0 = 3
+            // or rd rs1 rs2 31..25 = 0  14..12 = 6 6..2 = 0x0C 1..0 = 3
+            // and rd rs1 rs2 31..25 = 0  14..12 = 7 6..2 = 0x0C 1..0 = 3
+
+            Logger.Info("Parsing C.SUB / C.XOR / C.OR / C.AND");
+
+            instructionPayload.Rs1 = payload.Rs1;
+            instructionPayload.Rs2 = payload.Rs2;
+            instructionPayload.Rd = payload.Rd;
+
+            if (payload.CAMode == 0)
+            {
+                // C.SUB
+                // f3 = 0
+                instructionPayload.Funct7 = 0x32;
+            }
+
+            if (payload.CAMode == 1)
+            {
+                // C.XOR
+                instructionPayload.Funct3 = 4;
+            }
+
+            if (payload.CAMode == 2)
+            {
+                // C.OR
+                instructionPayload.Funct3 = 6;
+            }
+
+            if (payload.CAMode == 3)
+            {
+                // C.AND
+                instructionPayload.Funct3 = 7;
+            }
+
         }
 
-        public void ParseNop(RvcPayload payload, InstructionPayload instructionPayload)
+        public void ParseAddAndMv(RvcPayload payload, InstructionPayload instructionPayload)
         {
-            // C.NOP is a CI-format instruction that does not change any user-visible state, except for advancing
-            // the pc and incrementing any applicable performance counters. C.NOP expands to nop. C.NOP is
-            // only valid when imm = 0; the code points with imm̸ = 0 encode HINTs.
+            Logger.Info("Parsing C.MV / C.ADD");
+
+            instructionPayload.Rd = payload.Rd;
+            instructionPayload.Rs2 = payload.Rs2;
+
+            // F4 == 9 => C.ADD
+            // F4 == 8 => C.MV und RS1 = x0
+            if (payload.Funct4 == 9)
+            {
+                instructionPayload.Rs1 = payload.Rd;
+            }
+            
+        }
+
+        public void ParseEbreak(RvcPayload payload, InstructionPayload p)
+        {
+            Logger.Info("Parsing C.EBREAK");
+
+            p.UnsignedImmediate = 1;           
+            
         }
 
         #region Helper

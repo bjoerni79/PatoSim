@@ -89,6 +89,16 @@ namespace RiscVSim.Environment.Test.RVC
             return payload;
         }
 
+        public RvcPayload LoadCA(int op, int rs1crdc, int rs2c,int f2, int ca, int funct6)
+        {
+            var payload = new RvcPayload();
+
+            var f3 = funct6 >>= 3;
+            payload.LoadCA(op, rs2c, f2, ca, rs1crdc, funct6, f3);
+
+            return payload;
+        }
+
         public RvcPayload LoadCIW(int op, int rdc, int imm, int f3)
         {
             var payload = new RvcPayload();
@@ -116,6 +126,19 @@ namespace RiscVSim.Environment.Test.RVC
             payload.Funct3 = f3;
             payload.Rs1 = rs1;
             payload.SignedImmediate = imm;
+
+
+            return payload;
+        }
+
+        public InstructionPayload BuildIType_Unsigned(int opcode, int rd, int f3, int rs1, uint imm)
+        {
+            var instruction = new Instruction(InstructionType.I_Type, opcode, 2);
+            var payload = new InstructionPayload(instruction, null);
+            payload.Rd = rd;
+            payload.Funct3 = f3;
+            payload.Rs1 = rs1;
+            payload.UnsignedImmediate = imm;
 
 
             return payload;
@@ -150,6 +173,20 @@ namespace RiscVSim.Environment.Test.RVC
 
             payload.Rd = rd;
             payload.UnsignedImmediate = uimmediate;
+
+            return payload;
+        }
+
+        public InstructionPayload BuildRType(int opcode, int rs1, int rs2, int rd, int f3, int f7)
+        {
+            var instruction = new Instruction(InstructionType.R_Type, opcode, 2);
+            var payload = new InstructionPayload(instruction, null);
+
+            payload.Rs1 = rs1;
+            payload.Rs2 = rs2;
+            payload.Rd = rd;
+            payload.Funct3 = f3;
+            payload.Funct7 = f7;
 
             return payload;
         }
