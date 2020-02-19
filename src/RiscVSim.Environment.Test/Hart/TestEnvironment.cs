@@ -61,6 +61,11 @@ namespace RiscVSim.Environment.Test.Hart
 
         }
 
+        public void LoadRvc32Test1(IHart hart)
+        {
+
+        }
+
 
     }
 }

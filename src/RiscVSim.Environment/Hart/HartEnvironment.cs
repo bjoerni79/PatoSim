@@ -1,4 +1,5 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment.DebugSupport;
+using RiscVSim.Environment.Decoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -333,11 +334,13 @@ namespace RiscVSim.Environment.Hart
 
         public void NotifySystemCall(uint f12)
         {
-            /*
-             *  What to do now? 
-             *  
-             *  
-             */
+            // EBreak command
+            if (f12==1)
+            {
+                var console = new DebugConsole(this);
+                console.OpenDebugConsole(null);
+            }
+
         }
 
         public void NotifyFatalTrap(string description)

@@ -32,7 +32,10 @@ namespace RiscVSim.Environment.DebugSupport
 
             while (continueDebug)
             {
-                Console.WriteLine(">> Next " + payload.GetHumanReadbleContent() + "\n");
+                if (payload != null)
+                {
+                    Console.WriteLine(">> Next " + payload.GetHumanReadbleContent() + "\n");
+                }
 
                 Console.Write(">>");
                 var input = Console.ReadLine();
@@ -59,16 +62,20 @@ namespace RiscVSim.Environment.DebugSupport
         public void ShowDebugHelp()
         {
             Console.WriteLine("\nCommands:");
+            Console.WriteLine("\nRegister:");
             //Console.WriteLine("rr [register]");
             //Console.WriteLine("rw [register]");
-            Console.WriteLine("rd");
+            Console.WriteLine("rd : Register Dump");
             //Console.WriteLine();
+            Console.WriteLine("\nMemory:");
+            Console.WriteLine("md : Memory Dump");
             //Console.WriteLine("mr [address] [offset]");
             //Console.WriteLine("mw [address] [content]");
             Console.WriteLine();
-            Console.WriteLine("c");
-            Console.WriteLine("n");
-            Console.WriteLine("q");
+            Console.WriteLine("\nFlow:");
+            Console.WriteLine("c : Continues the execution");
+            Console.WriteLine("n : Next instruction (and stop)");
+            Console.WriteLine("q : Quit");
         }
     }
 }
