@@ -86,28 +86,28 @@ namespace RiscVSim.Environment.Test.RVC
             var pairAddi = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFD, 0x10),
-                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 0)
-                //ExpectedPayload32 = te.BuildIType(0x04, 1, 0, 1, 0x3F)
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 0),
+                ExpectedPayload32 = te.BuildIType(0x04, 1, 0, 1, 0x3F)
             };
 
             te.Test(pairAddi);
 
             //C.ADDIW
-            // Not testable on RV32I
-            //var pairAddiw = new RvcTestPair(architecture,false)
-            //{
-            //    Coding = te.ToBytes(0xFD, 0x30),
-            //    ExpectedPayload = te.LoadCI(1, 0x3F, 1, 1)
-            //};
+            var pairAddiw = new RvcTestPair(architecture)
+            {
+                Coding = te.ToBytes(0xFD, 0x30),
+                ExpectedPayload = te.LoadCI(1, 0x3F, 1, 1),
+                ExpectedPayload32 = te.BuildIType(0x06,1,0,1,(0x1F * -1))
+            };
 
-            //te.Test(pairAddiw);
+            te.Test(pairAddiw);
 
             //C.ADDI16SP
             var pairAddi16sp = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0x7D, 0x71),
-                ExpectedPayload = te.LoadCI(1, 0x3F, 2, 3)
-                //ExpectedPayload32 = te.BuildIType(0x04, 2, 0, 2, 0x03F0)
+                ExpectedPayload = te.LoadCI(1, 0x3F, 2, 3),
+                ExpectedPayload32 = te.BuildIType(0x04, 2, 0, 2, 0x03F0)
             };
 
             te.Test(pairAddi16sp);
@@ -116,8 +116,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairSrli = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFD, 0x80),
-                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x1F, 00, 4)
-                //ExpectedPayload32 = te.BuildIType(0x04, 9, 5, 9, 0x1F)
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x1F, 00, 4),
+                ExpectedPayload32 = te.BuildIType(0x04, 9, 5, 9, 0x1F)
             };
 
             te.Test(pairSrli);
@@ -126,18 +126,19 @@ namespace RiscVSim.Environment.Test.RVC
             var pairSrai = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFD, 0x84),
-                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x1F, 01, 4)
-                //ExpectedPayload32 = te.BuildIType(0x04, 9, 5, 9, 0x41F)
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x1F, 01, 4),
+                ExpectedPayload32 = te.BuildIType(0x04, 9, 5, 9, 0x41F)
             };
 
             te.Test(pairSrai);
+
 
             // C.ANDI
             var pairAndi = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xFD, 0x98),
-                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 02, 4)
-                //ExpectedPayload32 = te.BuildIType(0x04, 9, 7, 9, (0x1F * -1))
+                ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 02, 4),
+                ExpectedPayload32 = te.BuildIType(0x04, 9, 7, 9, (0x1F * -1))
             };
 
             te.Test(pairAndi);
@@ -158,8 +159,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairCASub = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0x89, 0x8C),
-                ExpectedPayload = te.LoadCA(1, 1, 2, 0, 0, 0x23)
-                //ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 0, 0x32)
+                ExpectedPayload = te.LoadCA(1, 1, 2, 0, 0, 0x23),
+                ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 0, 0x32)
             };
 
             te.Test(pairCASub);
@@ -168,8 +169,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairCAXor = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xA9, 0x8C),
-                ExpectedPayload = te.LoadCA(1, 1, 2, 1, 1, 0x23)
-                //ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 4, 0)
+                ExpectedPayload = te.LoadCA(1, 1, 2, 1, 1, 0x23),
+                ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 4, 0)
             };
 
             te.Test(pairCAXor);
@@ -178,8 +179,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairCAor = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xC9, 0x8C),
-                ExpectedPayload = te.LoadCA(1, 1, 2, 2, 2, 0x23)
-                //ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 6, 0)
+                ExpectedPayload = te.LoadCA(1, 1, 2, 2, 2, 0x23),
+                ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 6, 0)
             };
 
             te.Test(pairCAor);
@@ -188,11 +189,21 @@ namespace RiscVSim.Environment.Test.RVC
             var pairCAand = new RvcTestPair(architecture)
             {
                 Coding = te.ToBytes(0xE9, 0x8C),
-                ExpectedPayload = te.LoadCA(1, 1, 2, 3, 3, 0x23)
-                //ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 7, 0)
+                ExpectedPayload = te.LoadCA(1, 1, 2, 3, 3, 0x23),
+                ExpectedPayload32 = te.BuildRType(0x0C, 9, 10, 9, 7, 0)
             };
 
             te.Test(pairCAand);
+
+            // C.SUBW
+            //var pairSubW = new RvcTestPair(architecture)
+            //{
+            //    Coding = te.ToBytes()
+            //}
+
+            TestHelper.NotImplementedYet();
+
+            // C.ADDW
         }
 
         [Test]

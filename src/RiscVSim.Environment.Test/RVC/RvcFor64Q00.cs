@@ -23,7 +23,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairLw = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCL(00, 1, 0x1F, 2, 2),
-                Coding = te.ToBytes(0x64, 0x5D)
+                Coding = te.ToBytes(0x64, 0x5D),
+                ExpectedPayload32 = te.BuildIType(00, 9, 2, 10, 0x7C)
             };
 
             te.Test(pairLw);
@@ -32,7 +33,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairLd = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCL(00, 1, 0x1F, 2, 3),
-                Coding = te.ToBytes(0x64, 0x7D)
+                Coding = te.ToBytes(0x64, 0x7D),
+                ExpectedPayload32 = te.BuildIType(00, 9, 3, 10, 0xF8)
             };
 
             te.Test(pairLd);
@@ -46,7 +48,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairLw = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCS(00, 1, 0x1F, 2, 6),
-                Coding = te.ToBytes(0x64, 0xDD)
+                Coding = te.ToBytes(0x64, 0xDD),
+                ExpectedPayload32 = te.BuildSType(8, 2, 10, 9, 0x7C)
             };
 
             te.Test(pairLw);
@@ -55,7 +58,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairLd = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCS(00, 1, 0x1F, 2, 7),
-                Coding = te.ToBytes(0x64, 0xFD)
+                Coding = te.ToBytes(0x64, 0xFD),
+                ExpectedPayload32 = te.BuildSType(8, 3, 10, 9, 0xF8)
             };
 
             te.Test(pairLd);
@@ -67,7 +71,8 @@ namespace RiscVSim.Environment.Test.RVC
             var pairAddi4Spn = new RvcTestPair(architecture)
             {
                 ExpectedPayload = te.LoadCIW(0, 1, 0xFFFF, 0),
-                Coding = te.ToBytes(0xE4, 0x1F)
+                Coding = te.ToBytes(0xE4, 0x1F),
+                ExpectedPayload32 = te.BuildIType(4, 9, 0, 2, 0x3FC)
             };
 
             te.Test(pairAddi4Spn);
