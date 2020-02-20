@@ -20,8 +20,8 @@ namespace RiscVSim.Environment.Test.RVC
             decoder32 = new RvcDecoder(Architecture.Rv32I);
             decoder64 = new RvcDecoder(Architecture.Rv64I);
 
-            composer32 = new Rv32I.RvcComposer();
-            composer64 = new Rv64I.RvcComposer();
+            composer32 = new Rv32I.RvcComposer32();
+            composer64 = new Rv64I.RvcComposer64();
 
         }
 

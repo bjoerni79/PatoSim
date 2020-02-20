@@ -6,11 +6,11 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    public class RvcComposer : IRvcComposer
+    public class RvcComposer32 : IRvcComposer
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private Rvc32Parser parser;
+        private Rvc32Parser parser32;
 
         private const int System = 0x1C;
         private const int Load = 0x00;
@@ -33,9 +33,9 @@ namespace RiscVSim.Environment.Rv32I
         private const int BEQZ = 6;
         private const int BNEZ = 7;
 
-        public RvcComposer()
+        public RvcComposer32()
         {
-            parser = new Rvc32Parser();
+            parser32 = new Rvc32Parser();
         }
 
         public Instruction ComposeInstruction(RvcPayload payload)
@@ -314,7 +314,7 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Op == 2 && payload.Funct3 == 4)
             {
-                parser.ParseEbreak(payload, p);
+                parser32.ParseEbreak(payload, p);
             }
 
             return p;
@@ -327,12 +327,12 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Op == 1 && payload.Funct3 == 4 && payload.Funct2 == 3)
             {
-                parser.ParseCaGeneric(payload, p);
+                parser32.ParseCaGeneric(payload, p);
             }
 
             if (payload.Op == 2 && payload.Funct3 == 4)
             {
-                parser.ParseAddAndMv(payload, p);
+                parser32.ParseAddAndMv(payload, p);
             }
 
             return p;
@@ -345,12 +345,12 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Funct3 == BEQZ)
             {
-                parser.ParseBeqzAndBnez(payload, p, true);
+                parser32.ParseBeqzAndBnez(payload, p, true);
             }
 
             if (payload.Funct3 == BNEZ)
             {
-                parser.ParseBeqzAndBnez(payload, p, false);
+                parser32.ParseBeqzAndBnez(payload, p, false);
             }
 
             return p;
@@ -363,45 +363,45 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Op == 0 && payload.Funct3 == ADDI4SPN)
             {
-                parser.ParseAddi4Spn(payload, p);
+                parser32.ParseAddi4Spn(payload, p);
             }
 
             if (payload.Op == 2 && payload.Funct3 == CSLLI)
             {
-                parser.ParseSlli(payload, p);
+                parser32.ParseSlli(payload, p);
             }
 
             if (payload.Op == 1 && payload.Funct3 == 2)
             {
                 // C.LI
-                parser.ParseLi(payload, p);
+                parser32.ParseLi(payload, p);
             }
 
             if (payload.Op == 1 && payload.Funct3 == 0)
             {
-                parser.ParseAddi(payload, p);
+                parser32.ParseAddi(payload, p);
             }
 
             if (payload.Op == 1 && payload.Funct3 == 3)
             {
-                parser.ParseAddi16Sp(payload, p);
+                parser32.ParseAddi16Sp(payload, p);
             }
 
             if (payload.Op == 1 && payload.Funct3 == 4)
             {
                 if (payload.Funct2 == 0)
                 {
-                    parser.ParseSrli(payload, p);
+                    parser32.ParseSrli(payload, p);
                 }
 
                 if (payload.Funct2 == 1)
                 {
-                    parser.ParseSrai(payload, p);
+                    parser32.ParseSrai(payload, p);
                 }
 
                 if (payload.Funct3 == 4 && payload.Funct2 == 2)
                 {
-                    parser.ParseAndi(payload, p);
+                    parser32.ParseAndi(payload, p);
                 }
             }
 
@@ -416,7 +416,7 @@ namespace RiscVSim.Environment.Rv32I
             if (payload.Op == 1 && payload.Funct3 == 3)
             {
                 // C.LUI
-                parser.ParseLui(payload, p);
+                parser32.ParseLui(payload, p);
             }
 
             return p;
@@ -432,7 +432,7 @@ namespace RiscVSim.Environment.Rv32I
                 // C.JR    (f4 = 8)
                 // C.JALR  (f4 = 9)
 
-                parser.ParseJrAndJalr(payload, p);
+                parser32.ParseJrAndJalr(payload, p);
             }
 
             return p;
@@ -445,12 +445,12 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Op == 0 && payload.Funct3 == CSW)
             {
-                parser.ParseSw(payload, p);
+                parser32.ParseSw(payload, p);
             }
 
             if (payload.Op == 2 && payload.Funct3 == CSWSP)
             {
-                parser.ParseSwSp(payload, p);
+                parser32.ParseSwSp(payload, p);
             }
 
             return p;
@@ -464,13 +464,13 @@ namespace RiscVSim.Environment.Rv32I
 
             if (payload.Op == 0 && payload.Funct3 == CLW)
             {
-                parser.ParseLw(payload, p);
+                parser32.ParseLw(payload, p);
             }
 
             // Now do the rest according to the F3 type
             if (payload.Op == 2 && payload.Funct3 == CLWSP)
             {
-                parser.ParseLwSp(payload, p);
+                parser32.ParseLwSp(payload, p);
             }
 
             return p;
@@ -484,13 +484,13 @@ namespace RiscVSim.Environment.Rv32I
             // C.J
             if (payload.Op == 1 && payload.Funct3 == CJ)
             {
-                parser.ParseJ(payload, p);
+                parser32.ParseJ(payload, p);
             }
 
             // C.JAL
             if (payload.Op == 1 && payload.Funct3 == CJAL)
             {
-                parser.ParseJal(payload, p);
+                parser32.ParseJal(payload, p);
             }
 
             return p;
