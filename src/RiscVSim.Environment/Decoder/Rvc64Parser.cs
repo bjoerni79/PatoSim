@@ -103,6 +103,7 @@ namespace RiscVSim.Environment.Decoder
 
             instructionPayload.Rd = rvcPayload.Rd;
             instructionPayload.Rs1 = 2;
+            instructionPayload.Rs2 = rvcPayload.Rs2;
             instructionPayload.Funct3 = 3;
             instructionPayload.SignedImmediate = DecodeLoadStoreSpOffset(rvcPayload.Immediate);
         }
@@ -139,10 +140,10 @@ namespace RiscVSim.Environment.Decoder
             int immediate = buffer & 0x07;
             immediate <<= 6;
 
-            // 5 4
+            // 5 4 3
             buffer >>= 3;
-            int b54 = buffer & 0x03;
-            b54 <<= 4;
+            int b54 = buffer & 0x07;
+            b54 <<= 3;
 
             immediate |= b54;
             return immediate;

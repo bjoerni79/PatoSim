@@ -29,13 +29,6 @@ namespace RiscVSim.Environment.Test.RVC
 
             te.Test(pairLwsp);
 
-            // C.LDSP (RV64 / 128) 
-            var pairLdsp = new RvcTestPair(architecture, false)
-            {
-                Coding = new byte[] { 0xFE, 0x70 }
-            };
-
-            te.Test(pairLdsp);
 
             // C.LQSP
             // C.FLWSP

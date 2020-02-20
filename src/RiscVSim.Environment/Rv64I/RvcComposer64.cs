@@ -22,15 +22,18 @@ namespace RiscVSim.Environment.Rv64I
         private const int JumpAndLink = 0x1B;
         private const int JumpAndLinkRegister = 0x19;
         private const int Register = 0x0C;
+        private const int Register32 = 0x0E;
         private const int Lui = 0x0D;
 
         private const int ADDI4SPN = 0;
         private const int CLWSP = 2;
         private const int CLW = 2;
+        private const int CLDSP = 3;
         private const int CLD = 3;
         private const int CSWSP = 6;
         private const int CSW = 6;
         private const int CSD = 7;
+        private const int CSDSP = 7;
         private const int CSLLI = 0;
         private const int ADDIW = 1;
         private const int CJ = 5;
@@ -71,7 +74,7 @@ namespace RiscVSim.Environment.Rv64I
                         break;
 
                     // [64] C.LD
-                    case CLD:
+                    case CLDSP:
                         opCode = Load;
                         break;
 
@@ -148,7 +151,15 @@ namespace RiscVSim.Environment.Rv64I
                     case 4:
                         if (payload.Funct2 == 0x03)
                         {
-                            opCode = Register;
+                            // Register or Register32 ?
+                            if ((payload.Funct6 & 0x04) == 0x04)
+                            {
+                                opCode = Register32;
+                            }
+                            else
+                            {
+                                opCode = Register;
+                            }
                         }
                         else
                         {
@@ -169,6 +180,95 @@ namespace RiscVSim.Environment.Rv64I
                     // C.BNEZ
                     case BNEZ:
                         opCode = CondBrach;
+                        break;
+
+
+
+                    default:
+                        string message = string.Format("RVC Opcode {0:X} and F3 {1:X} is not supported", payload.Op, payload.Funct3);
+                        throw new OpCodeNotSupportedException(message);
+                }
+            }
+
+            // Q02
+            // 000 C.SLLI
+            // 001 C.FLDSP
+            // 010 C.LWSP
+            // 011 C.FLWSP
+            // 100 0 C.JR / C.MV
+            // 100 1 C.EBREAK / C.JALR / C.ADD
+            // 101 C.FSDSP
+            // 110 C.SWSP
+            // 111 C.FSWSP
+            if (payload.Op == 2)
+            {
+                switch (payload.Funct3)
+                {
+                    // C.SLLI
+                    case CSLLI:
+                        opCode = Immediate;
+                        break;
+
+                    // C.LWSP
+                    case CLWSP:
+                        opCode = Load;
+                        break;
+
+                    case CLDSP:
+                        opCode = Load;
+                        break;
+
+                    // C.JR (Jalr)
+                    // C.MV (ADD rd,x0,rs2)
+                    // C.EBREAK 
+                    // C.JALR (Jalr)
+                    // C.ADD
+                    case 4:
+                        var isJr = (payload.Funct4 == 0x08) && (payload.Rs2 == 0);
+                        var isMv = (payload.Funct4 == 0x08) && (payload.Rd != 0) && (payload.Rs2 != 0);
+                        var isEBreak = (payload.Funct4 == 0x09) && (payload.Rd == 0) && (payload.Rs2 == 0);
+                        var isJalr = (payload.Funct4 == 0x09) && (payload.Rs1 != 0) && (payload.Rs2 == 0);
+                        var isAdd = (payload.Funct4 == 0x09) && (payload.Rs1 != 0) && (payload.Rs2 != 0);
+
+                        if (isJr)
+                        {
+                            opCode = JumpAndLinkRegister;
+                        }
+
+                        if (isMv)
+                        {
+                            opCode = Register;
+                        }
+
+                        if (isEBreak)
+                        {
+                            opCode = System;
+                        }
+
+                        if (isJalr)
+                        {
+                            opCode = JumpAndLinkRegister;
+                        }
+
+                        if (isAdd)
+                        {
+                            opCode = Register;
+                        }
+
+
+                        if (!opCode.HasValue)
+                        {
+                            throw new RvcFormatException("Invalid coding detected for Q02, F3 100");
+                        }
+                        break;
+
+                    // C.SWSP
+                    case CSWSP:
+                        opCode = Store;
+                        break;
+
+                    case CSDSP:
+                        opCode = Store;
                         break;
 
                     default:
@@ -197,6 +297,11 @@ namespace RiscVSim.Environment.Rv64I
                 instructionPayload = ComposeStore(ins, payload);
             }
 
+            if (ins.OpCode == System)
+            {
+                instructionPayload = ComposeSystem(ins, payload);
+            }
+
             if (ins.OpCode == Load)
             {
                 instructionPayload = ComposeLoad(ins, payload);
@@ -217,7 +322,107 @@ namespace RiscVSim.Environment.Rv64I
                 instructionPayload = ComposeRegister(ins, payload);
             }
 
+            if (ins.OpCode == Register32)
+            {
+                instructionPayload = ComposeRegister32(ins, payload);
+            }
+
+            if (ins.OpCode == JumpAndLink)
+            {
+                instructionPayload = ComposeJal(ins, payload);
+            }
+
+            if (ins.OpCode == JumpAndLinkRegister)
+            {
+                instructionPayload = ComposeJalr(ins, payload);
+            }
+
+            if (ins.OpCode == CondBrach)
+            {
+                instructionPayload = ComposeBranch(ins, payload);
+            }
+
+            if (ins.OpCode == Lui)
+            {
+                instructionPayload = ComposeLui(ins, payload);
+            }
+
             return instructionPayload;
+        }
+
+        private InstructionPayload ComposeSystem(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 2 && payload.Funct3 == 4)
+            {
+                parser32.ParseEbreak(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeLui(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 1 && payload.Funct3 == 3)
+            {
+                // C.LUI
+                parser32.ParseLui(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeBranch(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Funct3 == BEQZ)
+            {
+                parser32.ParseBeqzAndBnez(payload, p, true);
+            }
+
+            if (payload.Funct3 == BNEZ)
+            {
+                parser32.ParseBeqzAndBnez(payload, p, false);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeJalr(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Funct3 == 4)
+            {
+                // C.JR    (f4 = 8)
+                // C.JALR  (f4 = 9)
+
+                parser32.ParseJrAndJalr(payload, p);
+            }
+
+            return p;
+        }
+
+        private InstructionPayload ComposeJal(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            // C.J
+            if (payload.Op == 1 && payload.Funct3 == CJ)
+            {
+                parser32.ParseJ(payload, p);
+            }
+
+            return p;
         }
 
         private InstructionPayload ComposeImmediate32 (Instruction ins, RvcPayload payload)
@@ -243,9 +448,19 @@ namespace RiscVSim.Environment.Rv64I
                 parser32.ParseSw(payload, p);
             }
 
+            if (payload.Op == 2 && payload.Funct3 == CSWSP)
+            {
+                parser32.ParseSwSp(payload, p);
+            }
+
             if (payload.Op == 0 && payload.Funct3 == CSD)
             {
                 parser64.ParseSd(payload, p);
+            }
+
+            if (payload.Op == 2 && payload.Funct3 == CSDSP)
+            {
+                parser64.ParseSdSp(payload, p);
             }
 
             return p;
@@ -255,6 +470,16 @@ namespace RiscVSim.Environment.Rv64I
         {
             // Set the opcode, type and coding
             InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 2 && payload.Funct3 == CLWSP)
+            {
+                parser32.ParseLwSp(payload, p);
+            }
+
+            if (payload.Op == 2 && payload.Funct3 == CLDSP)
+            {
+                parser64.ParseLdSp(payload, p);
+            }
 
             if (payload.Op == 0 && payload.Funct3 == CLW)
             {
@@ -269,6 +494,25 @@ namespace RiscVSim.Environment.Rv64I
             return p;
         }
 
+        private InstructionPayload ComposeRegister32(Instruction ins, RvcPayload payload)
+        {
+            // Set the opcode, type and coding
+            InstructionPayload p = new InstructionPayload(ins, payload.Coding);
+
+            if (payload.Op == 1 && payload.Funct3 == 4 && payload.Funct2 == 3)
+            {
+                var mode = payload.Funct6 & 0x07;
+
+                if (mode == 0x07)
+                {
+                    // F4 = 9 => C.SUBW / C.ADDW
+                    parser64.ParseAddWSubW(payload, p);
+                }
+            }
+
+            return p;
+        }
+
         private InstructionPayload ComposeRegister(Instruction ins, RvcPayload payload)
         {
             // Set the opcode, type and coding
@@ -276,13 +520,15 @@ namespace RiscVSim.Environment.Rv64I
 
             if (payload.Op == 1 && payload.Funct3 == 4 && payload.Funct2 == 3)
             {
-                if (payload.Funct4 == 8)
+                var mode = payload.Funct6 & 0x07;
+
+                if (mode == 0x03)
                 {
                     // F4 = 8
                     parser32.ParseCaGeneric(payload, p);
                 }
 
-                if (payload.Funct4 == 9)
+                if (mode == 0x07)
                 {
                     // F4 = 9 => C.SUBW / C.ADDW
                     parser64.ParseAddWSubW(payload, p);
@@ -335,6 +581,20 @@ namespace RiscVSim.Environment.Rv64I
                     parser32.ParseAndi(payload, p);
                 }
             }
+
+            if (payload.Op == 1 && payload.Funct3 == 2)
+            {
+                // C.LI
+                parser32.ParseLi(payload, p);
+            }
+
+
+            if (payload.Op == 2 && payload.Funct3 == CSLLI)
+            {
+                parser32.ParseSlli(payload, p);
+            }
+
+
 
             return p;
         }
