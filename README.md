@@ -24,6 +24,8 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
 | GCC Toolchain Support (using ELF) | Future milestone  ||
 | LLVM Toolchain support (using ELF) | Future milestone ||
+| RV128I | Not started ||
+| F / D | Not started ||
 
 The simulator supports all opcodes as specified for RV32I and RV64I. It also supports the reduced RV32E mode as a subset of RV32I.
 All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet core using little endian coding.
