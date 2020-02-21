@@ -54,11 +54,17 @@ namespace RiscVSim.Environment
             int result;
             if ((coding & scanBitMask) == scanBitMask)
             {
-                int bitmask = ~scanBitMask;
-                int posNumber = coding & bitmask;
-                int negNumber = posNumber * -1;
+                //int bitmask = ~scanBitMask;
+                //int posNumber = coding & bitmask;
+                //int negNumber = posNumber * -1;
 
-                return negNumber;
+                //return negNumber;
+                uint pattern = 0xFFFFFFFF;
+                pattern <<= bitLength;
+
+                uint unsignedCoding = Convert.ToUInt32(coding) | pattern;
+                result = unchecked((int)unsignedCoding);
+
             }
             else
             {

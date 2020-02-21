@@ -2,7 +2,7 @@
   "profiles": {
     "RiscVSim": {
       "commandName": "Project",
-      "commandLineArgs": "/RvMode:off /Debug:On /Verbose:On C:\\patoSim\\source\\rvc32_test1.txt"
+      "commandLineArgs": "/RvMode:On /Debug:On /Verbose:On C:\\patoSim\\source\\fib.e"
     }
   }
 }

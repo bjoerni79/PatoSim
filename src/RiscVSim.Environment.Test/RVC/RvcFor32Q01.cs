@@ -80,7 +80,7 @@ namespace RiscVSim.Environment.Test.RVC
             {
                 Coding = te.ToBytes(0xFD, 0x50),
                 ExpectedPayload = te.LoadCI(1, 0x3F, 1, 2),
-                ExpectedPayload32 = te.BuildIType(4,1,0,0,-31)
+                ExpectedPayload32 = te.BuildIType(4,1,0,0,-1)
             };
 
             te.Test(pairLiNeg);
@@ -165,7 +165,7 @@ namespace RiscVSim.Environment.Test.RVC
             {
                 Coding = te.ToBytes(0xFD, 0x98),
                 ExpectedPayload = te.LoadCB_Integer(1, 1, 0x3F, 02, 4),
-                ExpectedPayload32 = te.BuildIType(0x04,9,7,9, (0x1F * -1))
+                ExpectedPayload32 = te.BuildIType(0x04,9,7,9, -1)
             };
 
             te.Test(pairAndi);
