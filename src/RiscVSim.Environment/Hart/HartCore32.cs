@@ -17,7 +17,7 @@ namespace RiscVSim.Environment.Hart
         // the "Return Address Stack" for the jumps
         private Stack<uint> ras;
 
-        private RvcComposer composer;
+        private RvcComposer32 composer;
 
         internal HartCore32(Architecture architecture) : base(architecture)
         {
@@ -91,7 +91,7 @@ namespace RiscVSim.Environment.Hart
             csrRegister = Factory.CreateCsrRegister();
             environment = new HartEnvironment(architecture,register, memory,csrRegister);
 
-            composer = new RvcComposer();
+            composer = new RvcComposer32();
 
             ras = new Stack<uint>();
 

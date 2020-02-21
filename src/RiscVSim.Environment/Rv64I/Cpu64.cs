@@ -17,9 +17,12 @@ namespace RiscVSim.Environment.Rv64I
         private ISystemNotifier environment;
         private Stack<ulong> rasStack;
 
+        private RvcComposer64 composer;
+
         internal Cpu64()
         {
             opCodeRegistry = new OpCodeRegistry();
+            composer = new RvcComposer64();
         }
 
         public void AssignCrs(ICsrRegister csrRegister)
@@ -49,7 +52,9 @@ namespace RiscVSim.Environment.Rv64I
 
         public void ExecuteRvc(RvcPayload payload)
         {
-            throw new NotImplementedException();
+            var instruction = composer.ComposeInstruction(payload);
+            var instructionPayload = composer.Compose(instruction, payload);
+            Execute(instruction, instructionPayload);
         }
 
         public void Execute(Instruction instruction, InstructionPayload payload)

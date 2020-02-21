@@ -18,11 +18,14 @@ namespace RiscVSim.Environment.Rv32I
         private ISystemNotifier environment;
         private ICsrRegister csrRegister;
 
+        private RvcComposer32 composer;
+
         private Stack<uint> rasStack;
 
         public Cpu32()
         {
             opCodeRegistry = new OpCodeRegistry();
+            composer = new RvcComposer32();
         }
 
         public void AssignEEI(ISystemNotifier environment)
@@ -47,7 +50,10 @@ namespace RiscVSim.Environment.Rv32I
 
         public void ExecuteRvc(RvcPayload payload)
         {
-            throw new NotImplementedException();
+
+            var instruction = composer.ComposeInstruction(payload);
+            var instructionPayload = composer.Compose(instruction, payload);
+            Execute(instruction, instructionPayload);
         }
 
         public void Execute(Instruction instruction, InstructionPayload payload)

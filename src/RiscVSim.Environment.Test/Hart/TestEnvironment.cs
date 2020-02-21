@@ -12,6 +12,19 @@ namespace RiscVSim.Environment.Test.Hart
 
         }
 
+        public void LoadRvcGenericTest(IHart hart)
+        {
+            // in Little Endian!
+            var block100 = new List<byte>()
+            {
+                0xFD, 0x08, // C.ADDI, nzimm = 0x1F, Rs1/Rd = 1 (9)
+                0x7D, 0x49, // C.LI, imm = 0x1F, Rd = 2 (10)
+                0x2A, 0x89  // C.MV RS1 = 10, RD = 11
+            };
+
+            hart.Load(0x100, block100);
+        }
+
         public void LoadTest1(IHart hart)
         {
             /*
