@@ -22,8 +22,6 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | Compressed Instruction | *Next milestone* / *Under Test* | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
-| GCC Toolchain Support (using ELF) | Future milestone  ||
-| LLVM Toolchain support (using ELF) | Future milestone ||
 | RV128I | Not started ||
 | F / D | Not started ||
 
