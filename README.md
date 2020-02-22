@@ -19,11 +19,13 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | RISC-V Assembly Language book support | *Under Test* | Supports the Opcode from the book written by Anthony J. Dos Reis |
 | A | *Under Test* | The memory model needs a revise first |
 | M | *Prepared* | Implementation done. More testing required |
-| Compressed Instruction | *Next milestone* | |
+| Compressed Instruction | *Next milestone* / *Under Test* | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
 | GCC Toolchain Support (using ELF) | Future milestone  ||
 | LLVM Toolchain support (using ELF) | Future milestone ||
+| RV128I | Not started ||
+| F / D | Not started ||
 
 The simulator supports all opcodes as specified for RV32I and RV64I. It also supports the reduced RV32E mode as a subset of RV32I.
 All opcodes are tested via Unit Tests on my Core I5 using Windows 10 and Dotnet core using little endian coding.
