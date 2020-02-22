@@ -89,7 +89,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x1Content = core.Register.ReadSignedInt(1);
             var x3Content = core.Register.ReadSignedInt(3);
             Assert.AreEqual(x1Content, 0x7FF);
-            Assert.AreEqual(x3Content, 0);  // 0x7FF + -0x7FF = 0
+            Assert.AreEqual(x3Content, 0x7FE);  // 0x7FF -1  = 0x7FE
         }
 
         [Test]

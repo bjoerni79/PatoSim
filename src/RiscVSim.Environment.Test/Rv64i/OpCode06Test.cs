@@ -44,7 +44,7 @@ namespace RiscVSim.Environment.Test.Rv64i
             core.Run(program);
 
             var x1Content = core.Register.ReadBlock(1);
-            Assert.AreEqual(x1Content, new byte[] { 0x02, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
+            Assert.AreEqual(x1Content, new byte[] { 0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF });
         }
 
         [Test]

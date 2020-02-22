@@ -87,10 +87,10 @@ namespace RiscVSim.Environment.Test.Rv32i
             var x4Value = core.Register.ReadSignedInt(4);
 
             // Check if X2 and X3 are correct
-            Assert.AreEqual(x2Value, -2047);
+            Assert.AreEqual(x2Value, -1);
             Assert.AreEqual(x3Value, 4);
             // Check if X4 is correct
-            Assert.AreEqual(x4Value, -2043);
+            Assert.AreEqual(x4Value, 3);
 
         }
 

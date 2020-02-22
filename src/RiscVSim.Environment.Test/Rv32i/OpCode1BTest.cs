@@ -81,7 +81,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             Assert.AreEqual(x1, pc_old + 4); // Make sure, that the x1 (link) register is set!
             Assert.AreNotEqual(pc_old, pc_new);
-            Assert.AreEqual(pc_new, pc_old + 0x200);
+            Assert.AreEqual(pc_new, 2304);
         }
 
         /// <summary>
@@ -108,14 +108,14 @@ namespace RiscVSim.Environment.Test.Rv32i
 
 
         /// <summary>
-        ///  BLock 4 Test (Imm [31])
+        ///  BLock 4 Test (Imm [20])
         /// </summary>
         [Test]
         public void JumpAddressCheckBlock4Test()
         {
             core.BaseAddres = 0x1000;
 
-            var jal = new byte[] { 0xEF, 0x00, 0xE0, 0xFF };
+            var jal = new byte[] { 0xEF, 0xF0, 0xFF, 0xFF };
             uint pc_old = core.BaseAddres;
 
             var register = core.Register;
@@ -131,7 +131,7 @@ namespace RiscVSim.Environment.Test.Rv32i
 
             Assert.AreEqual(x1, pc_old + 4); // Make sure, that the x1 (link) register is set!
             Assert.AreNotEqual(pc_old, pc_new);
-            Assert.AreEqual(pc_new, pc_old - 0x7FE);
+            Assert.AreEqual(pc_new, pc_old - 2);
         }
 
         [Test]

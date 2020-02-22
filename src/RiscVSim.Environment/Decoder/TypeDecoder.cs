@@ -110,38 +110,34 @@ namespace RiscVSim.Environment.Decoder
             workingBuffer >>= 4;
 
             var rd = GetRd(inst32Coding);
-            
+
             // Ready. Now extract the pieces of the immediate
 
-            var block3 = workingBuffer & 0xFF; // Imm[19:12]
+            // Immm[19...12]
+            int immediate = workingBuffer & 0xFF;
+            immediate <<= 12;
+
+            // Imm[11]
             workingBuffer >>= 8;
-            block3 <<= 9;
+            int b11 = workingBuffer & 0x01;
+            b11 <<= 11;
+            immediate |= b11;
 
-            var block2 = workingBuffer & 0x01; // Imm[11];
+            // Imm[10...1]
             workingBuffer >>= 1;
-            block2 <<= 8;
+            int b10to1 = workingBuffer & 0x3FF;
+            b10to1 <<= 1;
+            immediate |= b10to1;
 
-            var block1 = workingBuffer & 0x3FF; // Imm[1:20]
+            // Imm[20]
             workingBuffer >>= 10;
+            int b20 = workingBuffer & 0x01;
+            b20 <<= 20;
+            immediate |= b20;
 
-            var block4 = workingBuffer & 0x01; // Imm[20] / Signed Bit
-            block4 <<= 19;
+            //// shift by left for guaranteeing that we have 2 byte multiplier
+            //immediate <<= 1;
 
-
-            // Step 1:  Block1
-            int immediate = block1;
-
-            // Step 2:  Add the bit Imm[11] at the correct position
-            immediate |= block2;
-
-            // Step 3:
-            immediate |= block3;
-
-            // Step 4:
-            immediate |= block4;
-
-            // shift by left for guaranteeing that we have 2 byte multiplier
-            immediate <<= 1;
 
 
             payload.Rd = rd;
