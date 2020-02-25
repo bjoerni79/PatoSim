@@ -42,4 +42,4 @@ Please find the documentation at the Wiki
 The milestone 3 is in progress and the goal is to reach the next milestone. 
 
 ## Why?
-Maybe this is the most important question. I developed with .NET for a long time and in December 2019 the Version 3.1 has been released. The thing was that I never had a really interesting topic to play with and, thanks to an article at osnews.com, I found this an interesting approach to try out. Here I am... Life is full of surprises.
+Maybe this is the most important question. I developed with .NET for a long time and in December 2019 the Version 3.1 has been released. The thing was that I never had a really interesting topic to play with and, thanks to an article at osnews.com, I found this an interesting approach to try out. The specification is very well written and working with it turns out to be a surprisingly easy task.  Here I am... Life is full of surprises.
