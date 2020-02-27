@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace RiscVSim.Environment
@@ -9,7 +10,6 @@ namespace RiscVSim.Environment
     {
         private byte[] content;
         private int registerSize;
-        private Architecture architecture;
 
         public RegisterEntry(Architecture architecture)
         {
@@ -18,15 +18,18 @@ namespace RiscVSim.Environment
                 throw new ArgumentException("architecture");
             }
 
-            this.architecture = architecture;
             
-            if (architecture == Architecture.Rv64I)
+            switch (architecture)
             {
-                registerSize = 8;
-            }
-            else
-            {
-                registerSize = 4;
+                case Architecture.Rv128I:
+                    registerSize = 16;
+                    break;
+                case Architecture.Rv64I:
+                    registerSize = 8;
+                    break;
+                default:
+                    registerSize = 4;
+                    break;
             }
 
             Clear();
@@ -59,6 +62,12 @@ namespace RiscVSim.Environment
         public void WriteUnsignedLong (ulong value)
         {
             var bytes = BitConverter.GetBytes(value);
+            WriteBlock(bytes);
+        }
+
+        public void WriteBigInteger (BigInteger bigInt)
+        {
+            var bytes = bigInt.ToByteArray();
             WriteBlock(bytes);
         }
 
@@ -119,6 +128,12 @@ namespace RiscVSim.Environment
         {
             var value = BitConverter.ToUInt64(content, 0);
             return value;
+        }
+
+        public BigInteger ReadBigInteger()
+        {
+            var bigInt = new BigInteger(content);
+            return bigInt;
         }
 
     }
