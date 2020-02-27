@@ -141,7 +141,6 @@ namespace RiscVSim.Environment.Test.Rv32i
             uint pc_old = core.BaseAddres;
 
             var register = core.Register;
-            var rasStack = core.RasStack;
             core.Run(jal);
 
 
@@ -154,9 +153,7 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(x1, pc_old + 4);
             Assert.AreEqual(x5, 0);
 
-            Assert.AreEqual(rasStack.Count, 1);
-            var rasValue = rasStack.Pop();
-            Assert.AreEqual(rasValue, pc_old + 4);
+
         }
 
         [Test]
@@ -166,7 +163,6 @@ namespace RiscVSim.Environment.Test.Rv32i
             uint pc_old = core.BaseAddres;
 
             var register = core.Register;
-            var rasStack = core.RasStack;
             core.Run(jal);
 
 
@@ -179,9 +175,6 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(x5, pc_old + 4);
             Assert.AreEqual(x1, 0);
 
-            Assert.AreEqual(rasStack.Count, 1);
-            var rasValue = rasStack.Pop();
-            Assert.AreEqual(rasValue, pc_old + 4);
         }
 
         [Test]

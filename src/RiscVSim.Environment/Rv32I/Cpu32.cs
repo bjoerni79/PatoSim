@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
 {
-    internal class Cpu32 : ICpu32
+    internal class Cpu32 : ICpu
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -98,9 +98,9 @@ namespace RiscVSim.Environment.Rv32I
             // Jump Opcodes:
             //
             // opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
-            opCodeRegistry.Add(0x1B, new OpCode32Id1B(memory, register, rasStack));
-            opCodeRegistry.Add(0x19, new OpCode32Id19(memory, register, rasStack));
-            opCodeRegistry.Add(0x18, new OpCode32Id18(memory, register, rasStack));
+            opCodeRegistry.Add(0x1B, new OpCode32Id1B(memory, register));
+            opCodeRegistry.Add(0x19, new OpCode32Id19(memory, register));
+            opCodeRegistry.Add(0x18, new OpCode32Id18(memory, register));
 
             //
             // Load and Store

@@ -13,7 +13,7 @@ namespace RiscVSim.Environment.Hart
         // the initial PC 
         private ulong initialPc;
         // the CPU with the Opcode
-        private ICpu64 cpu;
+        private ICpu cpu;
         // the "Return Address Stack" for the jumps
         private Stack<ulong> ras;
 
@@ -72,7 +72,6 @@ namespace RiscVSim.Environment.Hart
             cpu.AssignMemory(memory);
             cpu.AssignRegister(register);
             cpu.AssignEEI(environment);
-            cpu.AssignRasStack(ras);
             cpu.AssignCrs(csrRegister);
             cpu.Init();
 

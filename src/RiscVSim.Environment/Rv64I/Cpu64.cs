@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Rv64I
 {
-    internal class Cpu64 : ICpu64
+    internal class Cpu64 : ICpu
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -15,7 +15,6 @@ namespace RiscVSim.Environment.Rv64I
         private OpCodeRegistry opCodeRegistry;
         private ICsrRegister csrRegister;
         private ISystemNotifier environment;
-        private Stack<ulong> rasStack;
 
         private RvcComposer64 composer;
 
@@ -40,10 +39,6 @@ namespace RiscVSim.Environment.Rv64I
             this.memory = memory;
         }
 
-        public void AssignRasStack(Stack<ulong> rasStack)
-        {
-            this.rasStack = rasStack;
-        }
 
         public void AssignRegister(IRegister register)
         {
@@ -101,9 +96,9 @@ namespace RiscVSim.Environment.Rv64I
             //// Jump Opcodes:
             ////
             //// opcode 1B (JAL), opcode 19 (JALR), opcode = 18 (BNE...)
-            opCodeRegistry.Add(0x1B, new OpCode64Id1B(memory, register, rasStack));
-            opCodeRegistry.Add(0x19, new OpCode64Id19(memory, register, rasStack));
-            opCodeRegistry.Add(0x18, new OpCode64Id18(memory, register, rasStack));
+            opCodeRegistry.Add(0x1B, new OpCode64Id1B(memory, register));
+            opCodeRegistry.Add(0x19, new OpCode64Id19(memory, register));
+            opCodeRegistry.Add(0x18, new OpCode64Id18(memory, register));
 
             ////
             //// Load and Store

@@ -64,7 +64,6 @@ namespace RiscVSim.Environment.Bootstrap
             cpu.AssignMemory(Memory);
             cpu.AssignRegister(Register);
             cpu.AssignEEI(Environment);
-            cpu.AssignRasStack(RasStack);
             cpu.AssignCrs(CsrRegister);
             cpu.Init();
 

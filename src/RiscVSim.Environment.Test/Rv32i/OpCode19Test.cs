@@ -143,16 +143,6 @@ namespace RiscVSim.Environment.Test.Rv32i
             Assert.AreEqual(x11, 1);
         }
 
-        //[Test]
-        //public void JalrRasPopPushWithRdRS1REqZeroTest()
-        //{
-        //    TestHelper.NotImplementedYet();
-        //}
 
-        //[Test]
-        //public void JalrPushWithRdRs1Eq1Test()
-        //{
-        //    TestHelper.NotImplementedYet();
-        //}
     }
 }

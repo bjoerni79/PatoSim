@@ -11,12 +11,10 @@ namespace RiscVSim.Environment.Rv32I
     /// </summary>
     public class OpCode32Id18 : OpCodeCommand
     {
-        private Stack<uint> ras;
 
-        public OpCode32Id18 (IMemory memory, IRegister register, Stack<uint> ras) : base (memory,register)
+        public OpCode32Id18 (IMemory memory, IRegister register) : base (memory,register)
         {
             // base (...)
-            this.ras = ras;
         }
 
         public override int Opcode => 0x18;
@@ -101,7 +99,6 @@ namespace RiscVSim.Environment.Rv32I
 
                 // Write it to X1 and the RAS
                 Register.WriteUnsignedInt(1, rasPc);
-                ras.Push(rasPc);
 
                 Register.WriteUnsignedInt(pcIndex, newPc);
             }

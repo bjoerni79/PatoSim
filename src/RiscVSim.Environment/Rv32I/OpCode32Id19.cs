@@ -11,12 +11,10 @@ namespace RiscVSim.Environment.Rv32I
     /// </summary>
     public class OpCode32Id19 : OpCodeCommand
     {
-        private Stack<uint> rasStack;
 
-        public OpCode32Id19 (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
+        public OpCode32Id19 (IMemory memory, IRegister register) : base(memory, register)
         {
-            this.rasStack = rasStack;
-        }
+         }
 
         public override int Opcode => 0x19;
 
@@ -34,7 +32,7 @@ namespace RiscVSim.Environment.Rv32I
             // A simple jump
             if (!rdLink && !rs1Link)
             {
-                SimpleJump(payload);
+                SimpleJump(instruction,payload);
             }
             else
             {
@@ -47,20 +45,16 @@ namespace RiscVSim.Environment.Rv32I
 
                         // Assumption: rd is a valid link register and I have to update it!
                         // TODO: Review this
-                        address = CalculateAddress(payload);
-                        Register.WriteUnsignedInt(rd, address);
-                        rasStack.Push(address);
-                        
+                        address = CalculateAddress(payload);                      
 
                     }
                     else
                     {
                         // pop then push
 
-                        address = rasStack.Pop();
+                        // pop then push
+                        address = CalculateAddress(payload);
                         Register.WriteUnsignedInt(rd, address);
-
-                        rasStack.Push(address);
                     }
                 }
                 else
@@ -68,7 +62,7 @@ namespace RiscVSim.Environment.Rv32I
                     // pop
                     if (!rdLink && rs1Link)
                     {
-                        address = rasStack.Pop();
+                        address = CalculateAddress(payload);
                         Register.WriteUnsignedInt(rs1, address);
                     }
 
@@ -79,10 +73,11 @@ namespace RiscVSim.Environment.Rv32I
                         // TODO: Review this!
                         address = CalculateAddress(payload);
 
+
                         var currentAddress = Register.ReadUnsignedInt(Register.ProgramCounter);
-                        var returnAddress = currentAddress + 4;
+                        var instructionLength = Convert.ToUInt32(instruction.InstructionLength);
+                        var returnAddress = currentAddress + instructionLength;
                         Register.WriteUnsignedInt(payload.Rd, returnAddress);
-                        rasStack.Push(returnAddress);
                     }
                 }
 
@@ -102,7 +97,7 @@ namespace RiscVSim.Environment.Rv32I
             return false;
         }
 
-        private void SimpleJump(InstructionPayload payload)
+        private void SimpleJump(Instruction instruction, InstructionPayload payload)
         {
             // The indirect jump instruction JALR (jump and link register) uses the I-type encoding. The target
             // address is obtained by adding the sign - extended 12 - bit I - immediate to the register rs1, then setting
@@ -115,7 +110,8 @@ namespace RiscVSim.Environment.Rv32I
             if (payload.Rd != 0)
             {
                 var currentAddress = Register.ReadUnsignedInt(pcIndex);
-                Register.WriteUnsignedInt(payload.Rd, currentAddress + 4);
+                var instructionLength = Convert.ToUInt32(instruction.InstructionLength);
+                Register.WriteUnsignedInt(payload.Rd, currentAddress + instructionLength);
             }
 
             // Jump!

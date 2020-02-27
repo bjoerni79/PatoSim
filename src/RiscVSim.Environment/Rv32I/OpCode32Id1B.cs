@@ -12,11 +12,9 @@ namespace RiscVSim.Environment.Rv32I
     /// </summary>
     public class OpCode32Id1B : OpCodeCommand
     {
-        private Stack<uint> rasStack;
 
-        public OpCode32Id1B (IMemory memory, IRegister register, Stack<uint> rasStack) : base(memory, register)
+        public OpCode32Id1B (IMemory memory, IRegister register) : base(memory, register)
         {
-            this.rasStack = rasStack;
         }
 
         public override int Opcode => 0x1B;
@@ -52,8 +50,9 @@ namespace RiscVSim.Environment.Rv32I
                 var currentPc = Register.ReadUnsignedInt(pcIndex);
 
                 // Write the next address the RAS (Return Address Stack) and the register
-                var nextPc = currentPc + 4;
-                rasStack.Push(nextPc);
+                var instructionLength = Convert.ToUInt32(instruction.InstructionLength);
+                var nextPc = currentPc + instructionLength;
+
                 Register.WriteUnsignedInt(rd, nextPc );
             }
 

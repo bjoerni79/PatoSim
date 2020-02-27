@@ -8,11 +8,11 @@ namespace RiscVSim.Environment.Rv64I
 {
     public class OpCode64Id18 : OpCodeCommand
     {
-        private Stack<ulong> ras;
 
-        public OpCode64Id18(IMemory memory, IRegister register, Stack<ulong> ras) : base(memory,register)
+
+        public OpCode64Id18(IMemory memory, IRegister register) : base(memory,register)
         {
-            this.ras = ras;
+
         }
 
         public override int Opcode => 0x18;
@@ -97,7 +97,6 @@ namespace RiscVSim.Environment.Rv64I
 
                 // Write it to X1 and the RAS
                 Register.WriteUnsignedLong(1, rasPc);
-                ras.Push(rasPc);
 
                 Register.WriteUnsignedLong(pcIndex, newPc);
             }
