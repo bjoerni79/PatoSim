@@ -68,7 +68,22 @@ namespace RiscVSim.Environment
         public void WriteBigInteger (BigInteger bigInt)
         {
             var bytes = bigInt.ToByteArray();
-            WriteBlock(bytes);
+
+            //TODO: If Sign = -1 then we have to fil up the byte arrays with FF first
+            if (bigInt < 0)
+            {
+                var negativeBuffer = BuildNegativeArray();
+                for (int i = 0; i<bytes.Length; i++)
+                {
+                    negativeBuffer[i] = bytes[i];
+                }
+
+                WriteBlock(negativeBuffer);
+            }
+            else
+            {
+                WriteBlock(bytes);
+            }
         }
 
         public void WriteBlock(IEnumerable<byte> blockValue)
@@ -95,6 +110,17 @@ namespace RiscVSim.Environment
         private void Clear()
         {
             content = new byte[registerSize];
+        }
+
+        private byte[] BuildNegativeArray()
+        {
+            var buffer = new byte[registerSize];
+            for (int i=0; i< registerSize; i++)
+            {
+                buffer[i] = 0xFF;
+            }
+
+            return buffer;
         }
 
 
