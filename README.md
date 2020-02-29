@@ -22,7 +22,7 @@ Simply clone the repository and build it via the DotNet tool or installing the V
 | Compressed Instruction | *Next milestone* / *Under Test* | |
 | Debugging | Future milestone | According to RISC-V debug spec |
 | Big Endian support | Future Milestone | The groundwork is done, but not enabled and requires testing |
-| RV128I | Not started ||
+| RV128I | *In Progress* ||
 | F / D | Not started ||
 
 
