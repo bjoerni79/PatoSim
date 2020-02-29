@@ -20,8 +20,6 @@ namespace RiscVSim.Environment.Rv32I
 
         private RvcComposer32 composer;
 
-        private Stack<uint> rasStack;
-
         public Cpu32()
         {
             opCodeRegistry = new OpCodeRegistry();
@@ -43,10 +41,6 @@ namespace RiscVSim.Environment.Rv32I
             this.register = register;
         }
 
-        public void AssignRasStack(Stack<uint> rasStack)
-        {
-            this.rasStack = rasStack;
-        }
 
         public void ExecuteRvc(RvcPayload payload)
         {

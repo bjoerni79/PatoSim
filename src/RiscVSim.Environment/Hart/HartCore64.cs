@@ -14,8 +14,7 @@ namespace RiscVSim.Environment.Hart
         private ulong initialPc;
         // the CPU with the Opcode
         private ICpu cpu;
-        // the "Return Address Stack" for the jumps
-        private Stack<ulong> ras;
+
 
         private RvcComposer64 composer;
 
@@ -39,9 +38,7 @@ namespace RiscVSim.Environment.Hart
             environment = new HartEnvironment(Architecture.Rv64I,register, memory,csrRegister);
 
             composer = new RvcComposer64();
-
-            ras = new Stack<ulong>();
-            
+           
 
             if (configuration.RvMode)
             {

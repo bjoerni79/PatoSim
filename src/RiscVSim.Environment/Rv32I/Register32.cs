@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace RiscVSim.Environment.Rv32I
@@ -173,6 +174,26 @@ namespace RiscVSim.Environment.Rv32I
         public void WriteUnsignedLong(int index, ulong value)
         {
             throw new ArchitectureNotSupportedException("RV32I does not support 64 Bit values");
+        }
+
+        public void WriteBigInteger(int index, BigInteger bigInteger)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 128 Bit values");
+        }
+
+        public void WriteBigInteger(RegisterName name, BigInteger bigInteger)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 128 Bit values");
+        }
+
+        public BigInteger ReadBigInteger(int index)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 128 Bit values");
+        }
+
+        public BigInteger ReadBigInteger(RegisterName name)
+        {
+            throw new ArchitectureNotSupportedException("RV32I does not support 128 Bit values");
         }
     }
 }
