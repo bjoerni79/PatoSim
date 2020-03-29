@@ -1,10 +1,11 @@
-﻿using RiscVSim.Environment.Exception;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Exception;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.Rv32I
 {
     /// <summary>
     /// Represents a register set based on Rv32I ISA 

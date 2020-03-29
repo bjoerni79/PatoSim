@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using RiscVSim.Environment.Bootstrap;
 using RiscVSim.Environment.Decoder;
-using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections;
 using System.Collections.Generic;

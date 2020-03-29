@@ -1,10 +1,11 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.Rv32I
 {
     public class RvcComposer32 : IRvcComposer
     {

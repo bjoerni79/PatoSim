@@ -1,13 +1,15 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
+using RiscVSim.Environment.Hart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Hart
+namespace RiscVSim.Rv32I
 {
-    internal class HartCore32 : HartBase
+    public class HartCore32 : HartBase
     {
         // the initial PC 
         private uint initialPc;

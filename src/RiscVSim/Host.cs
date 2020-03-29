@@ -37,39 +37,41 @@ namespace RiscVSim
                 Console.WriteLine("## STOP : File does not exists");
             }
 
-            var hart = HartFactory.CreateHart(config);
-            hart.Configure(config);
+            throw new NotImplementedException("To be fixed later!!");
 
-            if (config.RvMode)
-            {
-                // Read the RV files
-                ReadRv(config, hart);
-            }
-            else
-            {
-                // If the input format is not the "rv format" use the default opcode one
-                ReadOpcode(config, hart);
-            }
+            //var hart = HartFactory.CreateHart(config);
+            //hart.Configure(config);
 
-            //
-            //  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
-            //
+            //if (config.RvMode)
+            //{
+            //    // Read the RV files
+            //    ReadRv(config, hart);
+            //}
+            //else
+            //{
+            //    // If the input format is not the "rv format" use the default opcode one
+            //    ReadOpcode(config, hart);
+            //}
 
-            var task1 = Task.Run(() => hart.Start());
-            Task.WaitAll(new Task[] { task1 });
+            ////
+            ////  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
+            ////
 
-            // Wait for the end of the task or any debug stop
+            //var task1 = Task.Run(() => hart.Start());
+            //Task.WaitAll(new Task[] { task1 });
 
-            Console.WriteLine("## Simulation stopped : {0}", DateTime.Now.ToUniversalTime());
+            //// Wait for the end of the task or any debug stop
 
-            //
-            // Show the states of the register and memory (?)
-            //
-            var registerState = hart.GetRegisterStates();
-            Console.WriteLine(registerState);
+            //Console.WriteLine("## Simulation stopped : {0}", DateTime.Now.ToUniversalTime());
 
-            var memoryState = hart.GetMemoryState();
-            Console.WriteLine(memoryState);
+            ////
+            //// Show the states of the register and memory (?)
+            ////
+            //var registerState = hart.GetRegisterStates();
+            //Console.WriteLine(registerState);
+
+            //var memoryState = hart.GetMemoryState();
+            //Console.WriteLine(memoryState);
         }
 
         private void ReadRv(HartConfiguration config, IHart hart)
