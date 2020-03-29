@@ -1,9 +1,10 @@
-﻿using RiscVSim.Environment.Exception;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Exception;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv64I
+namespace RiscVSim.RV64I
 {
     public class Register64 : IRegister
     {

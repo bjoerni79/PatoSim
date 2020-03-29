@@ -1,7 +1,6 @@
 ﻿using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Hart;
-using RiscVSim.Environment.Rv64I;
 using System;
 using System.Collections.Generic;
 using System.Linq;

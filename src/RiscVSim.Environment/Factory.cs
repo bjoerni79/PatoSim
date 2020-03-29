@@ -20,11 +20,6 @@ namespace RiscVSim.Environment
             return memory;
         }
 
-        public static IRegister CreateRegisterRv64()
-        {
-            return new Rv64I.Register64();
-        }
-
         public static ICsrRegister CreateCsrRegister()
         {
             return new CsrRegister();

@@ -1,12 +1,13 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
-using RiscVSim.Environment.Rv64I;
+using RiscVSim.Environment.Hart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Hart
+namespace RiscVSim.RV64I
 {
     internal class HartCore64 : HartBase
     {
@@ -33,10 +34,10 @@ namespace RiscVSim.Environment.Hart
 
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu64();
-            register = Factory.CreateRegisterRv64();
+            register = new Register64();
             csrRegister = Factory.CreateCsrRegister();
             memory = Factory.CreateDynamicMemory(Architecture.Rv64I);
-            environment = new HartEnvironment(Architecture.Rv64I,register, memory,csrRegister);
+            environment = HartEnvironmentFactory.Build(Architecture.Rv64I,register, memory,csrRegister);
 
             composer = new RvcComposer64();
 

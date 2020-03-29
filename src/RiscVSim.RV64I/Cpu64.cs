@@ -1,10 +1,12 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
+using RiscVSim.OpCodes.RV64I;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv64I
+namespace RiscVSim.RV64I
 {
     internal class Cpu64 : ICpu64
     {
