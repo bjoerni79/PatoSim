@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using RiscVSim.Environment.Exception;
+using RiscVSim.Rv32I;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +14,7 @@ namespace RiscVSim.Environment.Test.Rv32i
         [SetUp]
         public void Setup()
         {
-            register = Factory.CreateRegisterRv32(Architecture.Rv32I);
+            register = new Register32(Architecture.Rv32I);
         }
 
         //TODO: Test SignedInt!

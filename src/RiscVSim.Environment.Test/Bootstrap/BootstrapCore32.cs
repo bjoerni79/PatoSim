@@ -1,6 +1,7 @@
 ﻿using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Hart;
+using RiscVSim.Rv32I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +35,11 @@ namespace RiscVSim.Environment.Bootstrap
         public BootstrapCore32(Architecture architecture)
         {
             Memory = Factory.CreateDynamicMemory(architecture);
-            Register = Factory.CreateRegisterRv32(architecture);
+            Register = new Register32(architecture);
             CsrRegister = Factory.CreateCsrRegister();
             
             RasStack = new Stack<uint>();
-            Environment = new HartEnvironment(architecture,Register, Memory,CsrRegister);
+            Environment = HartEnvironmentFactory.Build(architecture,Register, Memory,CsrRegister);
             BaseAddres = 0x100;
             EndianCoding = EndianType.Little;
 

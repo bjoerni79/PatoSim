@@ -2,7 +2,6 @@
 using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Extensions;
-using RiscVSim.Environment.Rv32I;
 using System;
 using System.Collections.Generic;
 using System.Text;

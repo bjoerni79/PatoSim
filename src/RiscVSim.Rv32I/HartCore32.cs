@@ -18,10 +18,13 @@ namespace RiscVSim.Rv32I
         // the "Return Address Stack" for the jumps
         private Stack<uint> ras;
 
+        private Architecture architecture;
+
         private RvcComposer32 composer;
 
         internal HartCore32(Architecture architecture) : base(architecture)
         {
+            this.architecture = architecture;
             var is32 = (architecture == Architecture.Rv32I) || (architecture == Architecture.Rv32E);
             if (!is32)
             {
@@ -87,10 +90,10 @@ namespace RiscVSim.Rv32I
 
             // Set the CPU, register, memory and Return Address Stack (ras) and hint
             cpu = new Cpu32();
-            register = Factory.CreateRegisterRv32(architecture);
+            register = new Register32(architecture);
             memory = Factory.CreateDynamicMemory(architecture);
             csrRegister = Factory.CreateCsrRegister();
-            environment = new HartEnvironment(architecture,register, memory,csrRegister);
+            environment = HartEnvironmentFactory.Build(architecture,register, memory,csrRegister);
 
             composer = new RvcComposer32();
 

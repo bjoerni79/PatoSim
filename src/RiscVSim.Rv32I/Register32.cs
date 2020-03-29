@@ -38,7 +38,7 @@ namespace RiscVSim.Rv32I
 
 
 
-        internal Register32(Architecture architecture)
+        public Register32(Architecture architecture)
         {
             register = new RegisterEntry[33];  // Register 0,1,2...32
 

@@ -16,5 +16,10 @@ namespace RiscVSim.Environment.Test
         {
             Assert.IsTrue(false, "Under Review");
         }
+
+        public static void Deactivated()
+        {
+            Assert.IsTrue(false, "Currently deactivated!");
+        }
     }
 }
