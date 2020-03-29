@@ -9,7 +9,7 @@ namespace RiscVSim.Environment.Extensions
     /// <summary>
     /// Implements the Multiplier Part of the RISC-V M Extension
     /// </summary>
-    internal class Multiplier
+    public class Multiplier
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -18,7 +18,7 @@ namespace RiscVSim.Environment.Extensions
         private int boundary;
         private int defaultBufferSize;
 
-        internal Multiplier(Architecture architecture, IRegister register)
+        public Multiplier(Architecture architecture, IRegister register)
         {
             this.architecture = architecture;
             this.register = register;
@@ -41,7 +41,7 @@ namespace RiscVSim.Environment.Extensions
         /// <param name="rd">the target register</param>
         /// <param name="rs1Coding">the little endian coding of the rs1</param>
         /// <param name="rs2Coding">the little endian coding of the rs2</param>
-        internal void ExecuteMulw(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
+        public void ExecuteMulw(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
         {
             // Compute the result using the BigInteger type
             var rs1 = new BigInteger(rs1Coding.ToArray());
@@ -58,7 +58,7 @@ namespace RiscVSim.Environment.Extensions
         /// <param name="rd">the target register</param>
         /// <param name="rs1Coding">the little endian coding of the rs1</param>
         /// <param name="rs2Coding">the little endian coding of the rs2</param>
-        internal void ExecuteMul(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
+        public void ExecuteMul(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
         {
             // Compute the result using the BigInteger type
             var rs1 = new BigInteger(rs1Coding.ToArray());
@@ -76,7 +76,7 @@ namespace RiscVSim.Environment.Extensions
         /// <param name="rd"></param>
         /// <param name="rs1Coding"></param>
         /// <param name="rs2Coding"></param>
-        internal void ExecuteMulh(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
+        public void ExecuteMulh(int rd, IEnumerable<byte> rs1Coding, IEnumerable<byte> rs2Coding)
         {
             // Compute the result using the BigInteger type
             var rs1 = new BigInteger(rs1Coding.ToArray());

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace RiscVSim.Environment
 {
-    internal class OpCodeRegistry
+    public sealed class OpCodeRegistry
     {
         private Dictionary<int, OpCodeCommand> opCodeDict;
 
-        internal OpCodeRegistry()
+        public OpCodeRegistry()
         {
             opCodeDict = new Dictionary<int, OpCodeCommand>();
         }

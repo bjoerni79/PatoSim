@@ -7,9 +7,9 @@ using System.Text;
 
 namespace RiscVSim.Environment
 {
-    internal static class MathHelper
+    public static class MathHelper
     {
-        internal static uint Add(uint baseAddress, int offset)
+        public static uint Add(uint baseAddress, int offset)
         {
             uint result;
             if (offset > 0)
@@ -25,7 +25,7 @@ namespace RiscVSim.Environment
             return result;
         }
 
-        internal static ulong Add(ulong baseAddress, int offset)
+        public static ulong Add(ulong baseAddress, int offset)
         {
             ulong result;
             if (offset > 0)
@@ -41,7 +41,7 @@ namespace RiscVSim.Environment
             return result;
         }
 
-        internal static int GetSignedInteger(int coding,int bitLength)
+        public static int GetSignedInteger(int coding,int bitLength)
         {
             // We get a coding from an instruction and this one has a signed bit. 
             // 1.  Scan for it
@@ -80,13 +80,13 @@ namespace RiscVSim.Environment
         /// <param name="coding">the uint coding (i.e a I-Type 12 Bit signed int)</param>
         /// <param name="bitLength">the bit length (12 for an I-Type)</param>
         /// <returns>a Int32 .NET representation of the coding</returns>
-        internal static int GetSignedInteger (int coding, InstructionType type)
+        public static int GetSignedInteger (int coding, InstructionType type)
         {
             var bitLength = GetBitLength(type);
             return GetSignedInteger(coding, bitLength);
         }
 
-        private static int GetBitLength(InstructionType type)
+        public static int GetBitLength(InstructionType type)
         {
             int length;
             switch (type)
@@ -110,7 +110,7 @@ namespace RiscVSim.Environment
             return length;
         }
 
-        internal static byte[] PrepareLoad(byte[] buffer, int bytesRequired, bool useSignExtension)
+        public static byte[] PrepareLoad(byte[] buffer, int bytesRequired, bool useSignExtension)
         {
             //TODO:  PrepareLoad and SignExtension are very similar.  Consider a refactoring and use only one method.
 
@@ -140,7 +140,7 @@ namespace RiscVSim.Environment
             return newBuffer;
         }
 
-        internal static byte[] SignExtensionToLong(uint value)
+        public static byte[] SignExtensionToLong(uint value)
         {
             // https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/sign-extension
 
@@ -177,7 +177,7 @@ namespace RiscVSim.Environment
 
         // ---
 
-        internal enum LogicalOp
+        public enum LogicalOp
         {
             Add,
             Or,
@@ -185,7 +185,7 @@ namespace RiscVSim.Environment
             BitwiseInversion
         }
 
-        internal static IEnumerable<byte> ExecuteLogicalOp(LogicalOp op, IEnumerable<byte> rs1, int immediate, Architecture architecture)
+        public static IEnumerable<byte> ExecuteLogicalOp(LogicalOp op, IEnumerable<byte> rs1, int immediate, Architecture architecture)
         {
             byte[] buffer;
             if (architecture == Architecture.Rv32I)

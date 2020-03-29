@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RiscVSim.Environment.Extensions
 {
-    internal class AtomicInstruction
+    public class AtomicInstruction
     {
         private IMemory memory;
         private IRegister register;
@@ -50,19 +50,19 @@ namespace RiscVSim.Environment.Extensions
         private int lrw = 0x02;
         private int scw = 0x03;
 
-        internal AtomicInstruction(IMemory memory, IRegister register)
+        public AtomicInstruction(IMemory memory, IRegister register)
         {
             this.memory = memory;
             this.register = register;
         }
 
-        internal void ExecuteW (int rd, int rs1, int rs2, int release, int acquire, int f5)
+        public void ExecuteW (int rd, int rs1, int rs2, int release, int acquire, int f5)
         {
             // RV32I, RV64I
 
         }
 
-        internal void ExecuteD(int rd, int rs1, int rs2, int release, int acquire, int f5)
+        public void ExecuteD(int rd, int rs1, int rs2, int release, int acquire, int f5)
         {
             // RV64I
 

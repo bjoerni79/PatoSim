@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Environment", "Ris
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Environment.Test", "RiscVSim.Environment.Test\RiscVSim.Environment.Test.csproj", "{18C971D7-FC88-4AB6-AEF9-B3BBFFAACB7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiscVSim.Input", "RiscVSim.Input\RiscVSim.Input.csproj", "{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Input", "RiscVSim.Input\RiscVSim.Input.csproj", "{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiscVSim.Rv32I", "RiscVSim.Rv32I\RiscVSim.Rv32I.csproj", "{B0C19678-D028-442E-8951-945881DA1960}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0C19678-D028-442E-8951-945881DA1960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0C19678-D028-442E-8951-945881DA1960}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0C19678-D028-442E-8951-945881DA1960}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0C19678-D028-442E-8951-945881DA1960}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

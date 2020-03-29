@@ -1,4 +1,5 @@
-﻿using RiscVSim.Environment.Decoder;
+﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Rv32I;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RiscVSim.Environment.Rv32I
+namespace RiscVSim.OpCodes.Rv32I
 {
     public sealed class OpCode32Id04 : OpCodeCommand
     {
