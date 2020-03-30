@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RiscVSim.Rv32I
 {
-    internal class Cpu32 : ICpu32
+    public class Cpu32 : ICpu32
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 

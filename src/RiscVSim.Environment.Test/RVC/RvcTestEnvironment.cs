@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
+using RiscVSim.Rv32I;
+using RiscVSim.RV64I;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,8 +22,8 @@ namespace RiscVSim.Environment.Test.RVC
             decoder32 = new RvcDecoder(Architecture.Rv32I);
             decoder64 = new RvcDecoder(Architecture.Rv64I);
 
-            composer32 = new Rv32I.RvcComposer32();
-            composer64 = new Rv64I.RvcComposer64();
+            composer32 = new RvcComposer32();
+            composer64 = new RvcComposer64();
 
         }
 

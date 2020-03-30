@@ -9,7 +9,7 @@ namespace RiscVSim.Environment.Decoder
     public sealed class TypeDecoder
     {
 
-        internal TypeDecoder()
+        public TypeDecoder()
         {
         }
 

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RiscVSim.RV64I
 {
-    internal class Cpu64 : ICpu64
+    public class Cpu64 : ICpu64
     {
         protected static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -21,7 +21,7 @@ namespace RiscVSim.RV64I
 
         private RvcComposer64 composer;
 
-        internal Cpu64()
+        public Cpu64()
         {
             opCodeRegistry = new OpCodeRegistry();
             composer = new RvcComposer64();

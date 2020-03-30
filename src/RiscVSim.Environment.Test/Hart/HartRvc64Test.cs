@@ -14,27 +14,29 @@ namespace RiscVSim.Environment.Test.Hart
         [SetUp]
         public void Setup()
         {
-            var configuration = new HartConfiguration();
-            configuration.Architecture = Architecture.Rv64I;
-            configuration.RvMode = false;
+            //var configuration = new HartConfiguration();
+            //configuration.Architecture = Architecture.Rv64I;
+            //configuration.RvMode = false;
 
-            hart = HartFactory.CreateHart(configuration);
-            hart.Configure(configuration);
+            //hart = HartFactory.CreateHart(configuration);
+            //hart.Configure(configuration);
 
-            te = new TestEnvironment();
+            //te = new TestEnvironment();
         }
 
         [Test]
         public void RunGenericTest()
         {
-            hart.Init(0x100);
-            te.LoadRvcGenericTest(hart);
-            hart.Start();
+            //hart.Init(0x100);
+            //te.LoadRvcGenericTest(hart);
+            //hart.Start();
 
-            // The test is passed if we are able to retrieve a dump of the register.
-            // The opcode are tests individually
-            var data = hart.GetRegisterStates();
-            Assert.IsNotNull(data);
+            //// The test is passed if we are able to retrieve a dump of the register.
+            //// The opcode are tests individually
+            //var data = hart.GetRegisterStates();
+            //Assert.IsNotNull(data);
+
+            TestHelper.Deactivated();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using RiscVSim.Environment.Decoder;
 using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Hart;
+using RiscVSim.RV64I;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace RiscVSim.Environment.Bootstrap
         public BootstrapCore64(Architecture architecture)
         {
             Memory = Factory.CreateDynamicMemory(architecture);
-            Register = Factory.CreateRegisterRv64();
+            Register = new Register64();
             CsrRegister = Factory.CreateCsrRegister();
             RasStack = new Stack<ulong>();
             Environment = HartEnvironmentFactory.Build(architecture,Register,Memory,CsrRegister);

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using RiscVSim.Environment.Exception;
+using RiscVSim.RV64I;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +14,7 @@ namespace RiscVSim.Environment.Test.Rv64i
         [SetUp]
         public void Setup()
         {
-            register = Factory.CreateRegisterRv64();
+            register = new Register64();
         }
 
         private RegisterName[] registerNames =  new RegisterName[]

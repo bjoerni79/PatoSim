@@ -15,7 +15,7 @@ namespace RiscVSim.RV64I
 
         public int ProgramCounter => 32; // x0 ....x31, x32 = PC
 
-        internal Register64()
+        public Register64()
         {
             register = new RegisterEntry[33];  // Register 0,1,2...32
             pcRegister = 32;
