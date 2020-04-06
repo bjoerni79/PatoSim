@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RiscVSim.RV64I
 {
-    internal class HartCore64 : HartBase
+    public class HartCore64 : HartBase
     {
         // the initial PC 
         private ulong initialPc;
@@ -20,7 +20,7 @@ namespace RiscVSim.RV64I
 
         private RvcComposer64 composer;
 
-        internal HartCore64() : base(Architecture.Rv64I)
+        public HartCore64() : base(Architecture.Rv64I)
         {
 
         }

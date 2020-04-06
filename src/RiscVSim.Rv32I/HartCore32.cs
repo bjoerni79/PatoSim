@@ -22,7 +22,7 @@ namespace RiscVSim.Rv32I
 
         private RvcComposer32 composer;
 
-        internal HartCore32(Architecture architecture) : base(architecture)
+        public HartCore32(Architecture architecture) : base(architecture)
         {
             this.architecture = architecture;
             var is32 = (architecture == Architecture.Rv32I) || (architecture == Architecture.Rv32E);
