@@ -13,6 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\RiscVSim.Environment\RiscVSim.Environment.csproj" />
     <ProjectReference Include="..\RiscVSim.Input\RiscVSim.Input.csproj" />
+    <ProjectReference Include="..\RiscVSim.Rv32I\RiscVSim.Rv32I.csproj" />
+    <ProjectReference Include="..\RiscVSim.RV64I\RiscVSim.RV64I.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,10 @@
 ﻿using RiscVSim.Environment;
+using RiscVSim.Environment.Exception;
 using RiscVSim.Environment.Hart;
 using RiscVSim.Input.OpCode;
 using RiscVSim.Input.Rv;
+using RiscVSim.Rv32I;
+using RiscVSim.RV64I;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,41 +40,62 @@ namespace RiscVSim
                 Console.WriteLine("## STOP : File does not exists");
             }
 
-            throw new NotImplementedException("To be fixed later!!");
+            var hart = Build(config);
+            hart.Configure(config);
 
-            //var hart = HartFactory.CreateHart(config);
-            //hart.Configure(config);
+            if (config.RvMode)
+            {
+                // Read the RV files
+                ReadRv(config, hart);
+            }
+            else
+            {
+                // If the input format is not the "rv format" use the default opcode one
+                ReadOpcode(config, hart);
+            }
 
-            //if (config.RvMode)
-            //{
-            //    // Read the RV files
-            //    ReadRv(config, hart);
-            //}
-            //else
-            //{
-            //    // If the input format is not the "rv format" use the default opcode one
-            //    ReadOpcode(config, hart);
-            //}
+            //
+            //  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
+            //
 
-            ////
-            ////  !Vamos!  Alonsy! Let's go! Auf gehts! ..... Start the simulation.
-            ////
+            var task1 = Task.Run(() => hart.Start());
+            Task.WaitAll(new Task[] { task1 });
 
-            //var task1 = Task.Run(() => hart.Start());
-            //Task.WaitAll(new Task[] { task1 });
+            // Wait for the end of the task or any debug stop
 
-            //// Wait for the end of the task or any debug stop
+            Console.WriteLine("## Simulation stopped : {0}", DateTime.Now.ToUniversalTime());
 
-            //Console.WriteLine("## Simulation stopped : {0}", DateTime.Now.ToUniversalTime());
+            //
+            // Show the states of the register and memory (?)
+            //
+            var registerState = hart.GetRegisterStates();
+            Console.WriteLine(registerState);
 
-            ////
-            //// Show the states of the register and memory (?)
-            ////
-            //var registerState = hart.GetRegisterStates();
-            //Console.WriteLine(registerState);
+            var memoryState = hart.GetMemoryState();
+            Console.WriteLine(memoryState);
+        }
 
-            //var memoryState = hart.GetMemoryState();
-            //Console.WriteLine(memoryState);
+        private IHart Build(HartConfiguration config)
+        {
+            IHart hart = null;
+
+            var architecture = config.Architecture;
+            if (architecture == Architecture.Rv32E || architecture == Architecture.Rv32I)
+            {
+                hart = new HartCore32(architecture);
+            }
+
+            if (architecture == Architecture.Rv64I)
+            {
+                hart = new HartCore64();
+            }
+
+            if (hart == null)
+            {
+                throw new RiscVSimException("Unsupported architecture detected!");
+            }
+
+            return hart;
         }
 
         private void ReadRv(HartConfiguration config, IHart hart)
