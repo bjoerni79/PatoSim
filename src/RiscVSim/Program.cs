@@ -7,7 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiscVSim
+namespace RiscVSim.ConsoleApp
 {
     class Program
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim", "RiscVSim\RiscVSim.csproj", "{145B600C-F6D5-4524-AF0B-C0EF6B5912CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.ConsoleApp", "RiscVSim\RiscVSim.ConsoleApp.csproj", "{145B600C-F6D5-4524-AF0B-C0EF6B5912CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Environment", "RiscVSim.Environment\RiscVSim.Environment.csproj", "{5B19B57E-43A2-4AF7-A627-9907F61FC39E}"
 EndProject
@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Environment.Test",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Input", "RiscVSim.Input\RiscVSim.Input.csproj", "{A68250B9-C550-4C2A-A3FF-7DA7A8DF4823}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiscVSim.Rv32I", "RiscVSim.Rv32I\RiscVSim.Rv32I.csproj", "{B0C19678-D028-442E-8951-945881DA1960}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.Rv32I", "RiscVSim.Rv32I\RiscVSim.Rv32I.csproj", "{B0C19678-D028-442E-8951-945881DA1960}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiscVSim.RV64I", "RiscVSim.RV64I\RiscVSim.RV64I.csproj", "{60320C4E-95C9-4ABE-9B11-03E45D2A4FF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiscVSim.RV64I", "RiscVSim.RV64I\RiscVSim.RV64I.csproj", "{60320C4E-95C9-4ABE-9B11-03E45D2A4FF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

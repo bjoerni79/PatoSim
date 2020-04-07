@@ -11,7 +11,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiscVSim
+namespace RiscVSim.ConsoleApp
 {
     public class Host
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace RiscVSim
+namespace RiscVSim.ConsoleApp
 {
     public class SimConfiguration
     {
